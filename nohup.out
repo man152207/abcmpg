@@ -1,0 +1,228 @@
+  2025-06-16 10:06:17 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:06:18 App\Events\ChatMessageSent ............... 574.05ms DONE
+  2025-06-16 10:06:24 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:06:24 App\Events\ChatMessageSent ................ 69.18ms DONE
+  2025-06-16 10:14:03 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:14:04 App\Events\ChatMessageSent ............... 436.22ms DONE
+  2025-06-16 10:14:07 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:14:07 App\Events\ChatMessageSent ................ 66.81ms DONE
+  2025-06-16 10:15:01 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:15:01 App\Events\ChatMessageSent ............... 200.15ms DONE
+  2025-06-16 10:16:43 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:16:44 App\Events\ChatMessageSent ............... 421.17ms DONE
+  2025-06-16 10:18:20 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:18:20 App\Events\ChatMessageSent ............... 200.49ms DONE
+  2025-06-16 10:18:32 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:18:32 App\Events\ChatMessageSent ................ 69.39ms DONE
+  2025-06-16 10:18:56 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:18:56 App\Events\ChatMessageSent ................ 69.77ms DONE
+  2025-06-16 10:21:53 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:21:53 App\Events\ChatMessageSent ............... 481.01ms DONE
+  2025-06-16 10:26:57 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:26:57 App\Events\ChatMessageSent ............... 425.95ms DONE
+  2025-06-16 10:27:06 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:27:06 App\Events\ChatMessageSent ................ 67.04ms DONE
+  2025-06-16 10:27:21 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:27:21 App\Events\ChatMessageSent ................ 69.50ms DONE
+  2025-06-16 10:27:42 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:27:42 App\Events\ChatMessageSent ................ 70.22ms DONE
+  2025-06-16 10:28:06 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:28:07 App\Events\ChatMessageSent ................ 68.37ms DONE
+  2025-06-16 10:28:28 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:28:28 App\Events\ChatMessageSent ................ 67.88ms DONE
+  2025-06-16 10:28:34 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:28:34 App\Events\ChatMessageSent ................ 70.55ms DONE
+  2025-06-16 10:28:55 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:28:55 App\Events\ChatMessageSent ................ 68.08ms DONE
+  2025-06-16 10:29:28 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:29:28 App\Events\ChatMessageSent ................ 80.12ms DONE
+  2025-06-16 10:30:04 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:30:04 App\Events\ChatMessageSent ................ 69.71ms DONE
+  2025-06-16 10:30:22 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:30:22 App\Events\ChatMessageSent ................ 68.39ms DONE
+  2025-06-16 10:30:28 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:30:28 App\Events\ChatMessageSent ................ 69.33ms DONE
+  2025-06-16 10:30:37 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:30:37 App\Events\ChatMessageSent ................ 69.77ms DONE
+  2025-06-16 10:30:43 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:30:43 App\Events\ChatMessageSent ................ 68.72ms DONE
+  2025-06-16 10:31:04 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:31:04 App\Events\ChatMessageSent ................ 70.56ms DONE
+  2025-06-16 10:31:13 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:31:13 App\Events\ChatMessageSent ................ 68.41ms DONE
+  2025-06-16 10:31:28 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:31:29 App\Events\ChatMessageSent ................ 68.78ms DONE
+  2025-06-16 10:31:38 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:31:38 App\Events\ChatMessageSent ................ 69.38ms DONE
+  2025-06-16 10:32:20 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:32:20 App\Events\ChatMessageSent ................ 67.99ms DONE
+  2025-06-16 10:32:26 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:32:26 App\Events\ChatMessageSent ................ 67.15ms DONE
+  2025-06-16 10:32:32 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:32:32 App\Events\ChatMessageSent ................ 68.08ms DONE
+  2025-06-16 10:32:38 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:32:38 App\Events\ChatMessageSent ................ 67.56ms DONE
+  2025-06-16 10:33:05 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:33:05 App\Events\ChatMessageSent ................ 66.39ms DONE
+  2025-06-16 10:33:08 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:33:08 App\Events\ChatMessageSent ................ 66.35ms DONE
+  2025-06-16 10:33:11 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:33:11 App\Events\ChatMessageSent ................ 67.50ms DONE
+  2025-06-16 10:35:17 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:35:18 App\Events\ChatMessageSent ............... 430.05ms DONE
+  2025-06-16 10:35:51 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:35:51 App\Events\ChatMessageSent ................ 68.49ms DONE
+  2025-06-16 10:35:57 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:35:57 App\Events\ChatMessageSent ................ 67.01ms DONE
+  2025-06-16 10:36:12 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:36:12 App\Events\ChatMessageSent ................ 67.65ms DONE
+  2025-06-16 10:36:36 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:36:36 App\Events\ChatMessageSent ................ 70.05ms DONE
+  2025-06-16 10:40:03 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:40:03 App\Events\ChatMessageSent ............... 263.31ms DONE
+  2025-06-16 10:43:03 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:43:04 App\Events\ChatMessageSent ............... 330.94ms DONE
+  2025-06-16 10:43:07 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:43:07 App\Events\ChatMessageSent ................ 68.89ms DONE
+  2025-06-16 10:43:13 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:43:13 App\Events\ChatMessageSent ................ 68.64ms DONE
+  2025-06-16 10:43:19 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:43:19 App\Events\ChatMessageSent ................ 69.22ms DONE
+  2025-06-16 10:43:31 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:43:31 App\Events\ChatMessageSent ................ 71.71ms DONE
+  2025-06-16 10:49:01 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:49:02 App\Events\ChatMessageSent ............... 363.17ms DONE
+  2025-06-16 10:50:38 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:50:38 App\Events\ChatMessageSent ............... 203.24ms DONE
+  2025-06-16 10:51:20 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:51:20 App\Events\ChatMessageSent ................ 68.32ms DONE
+  2025-06-16 10:54:05 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 10:54:05 App\Events\ChatMessageSent ............... 410.36ms DONE
+  2025-06-16 11:12:39 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:12:40 App\Events\ChatMessageSent ............... 430.78ms DONE
+  2025-06-16 11:12:46 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:12:46 App\Events\ChatMessageSent ................ 70.18ms DONE
+  2025-06-16 11:13:07 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:13:07 App\Events\ChatMessageSent ................ 69.03ms DONE
+  2025-06-16 11:13:43 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:13:43 App\Events\ChatMessageSent ................ 68.44ms DONE
+  2025-06-16 11:15:04 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:15:04 App\Events\ChatMessageSent ............... 319.68ms DONE
+  2025-06-16 11:15:10 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:15:10 App\Events\ChatMessageSent ................ 67.57ms DONE
+  2025-06-16 11:15:13 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:15:13 App\Events\ChatMessageSent ................ 67.46ms DONE
+  2025-06-16 11:15:13 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:15:13 App\Events\ChatMessageSent ................ 67.64ms DONE
+  2025-06-16 11:29:56 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:29:56 App\Events\ChatMessageSent ............... 475.37ms DONE
+  2025-06-16 11:30:29 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:30:29 App\Events\ChatMessageSent ................ 67.89ms DONE
+  2025-06-16 11:30:35 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 11:30:35 App\Events\ChatMessageSent ................ 68.91ms DONE
+  2025-06-16 13:09:18 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:09:18 App\Events\ChatMessageSent ............... 426.26ms DONE
+  2025-06-16 13:09:54 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:09:54 App\Events\ChatMessageSent ................ 67.27ms DONE
+  2025-06-16 13:10:00 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:10:00 App\Events\ChatMessageSent ................ 69.65ms DONE
+  2025-06-16 13:10:36 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:10:36 App\Events\ChatMessageSent ................ 66.58ms DONE
+  2025-06-16 13:10:45 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:10:45 App\Events\ChatMessageSent ................ 66.90ms DONE
+  2025-06-16 13:10:51 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:10:51 App\Events\ChatMessageSent ................ 70.93ms DONE
+  2025-06-16 13:10:57 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:10:57 App\Events\ChatMessageSent ................ 68.24ms DONE
+  2025-06-16 13:11:10 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:11:10 App\Events\ChatMessageSent ................ 67.06ms DONE
+  2025-06-16 13:11:16 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:11:16 App\Events\ChatMessageSent ................ 67.38ms DONE
+  2025-06-16 13:11:31 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:11:31 App\Events\ChatMessageSent ................ 68.57ms DONE
+  2025-06-16 13:11:40 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:11:40 App\Events\ChatMessageSent ................ 65.81ms DONE
+  2025-06-16 13:12:07 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:12:07 App\Events\ChatMessageSent ................ 67.56ms DONE
+  2025-06-16 13:12:13 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:12:13 App\Events\ChatMessageSent ................ 71.48ms DONE
+  2025-06-16 13:12:25 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 13:12:25 App\Events\ChatMessageSent ................ 66.60ms DONE
+  2025-06-16 13:41:20 App\Events\AdUpdated ........................... RUNNING
+  2025-06-16 13:41:20 App\Events\AdUpdated ..................... 470.36ms DONE
+  2025-06-16 13:46:15 App\Events\AdUpdated ........................... RUNNING
+  2025-06-16 13:46:15 App\Events\AdUpdated ..................... 358.78ms DONE
+  2025-06-16 14:12:16 App\Events\AdCreated ........................... RUNNING
+  2025-06-16 14:12:17 App\Events\AdCreated ..................... 402.50ms DONE
+  2025-06-16 14:16:05 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:16:05 App\Events\ChatMessageSent ............... 538.62ms DONE
+  2025-06-16 14:16:14 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:16:14 App\Events\ChatMessageSent ................ 70.97ms DONE
+  2025-06-16 14:21:20 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:21:21 App\Events\ChatMessageSent ............... 575.53ms DONE
+  2025-06-16 14:21:54 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:21:54 App\Events\ChatMessageSent ................ 67.33ms DONE
+  2025-06-16 14:25:42 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:25:43 App\Events\ChatMessageSent ............... 424.86ms DONE
+  2025-06-16 14:34:01 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:34:01 App\Events\ChatMessageSent ............... 486.35ms DONE
+  2025-06-16 14:34:55 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:34:56 App\Events\ChatMessageSent ............... 195.89ms DONE
+  2025-06-16 14:49:20 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:49:20 App\Events\ChatMessageSent ............... 269.38ms DONE
+  2025-06-16 14:49:29 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:49:29 App\Events\ChatMessageSent ................ 70.60ms DONE
+  2025-06-16 14:50:02 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:50:03 App\Events\ChatMessageSent ................ 71.28ms DONE
+  2025-06-16 14:50:21 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:50:21 App\Events\ChatMessageSent ................ 68.45ms DONE
+  2025-06-16 14:55:33 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:55:33 App\Events\ChatMessageSent ............... 263.98ms DONE
+  2025-06-16 14:55:39 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 14:55:39 App\Events\ChatMessageSent ................ 66.65ms DONE
+  2025-06-16 15:21:22 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:21:22 App\Events\ChatMessageSent ............... 465.63ms DONE
+  2025-06-16 15:25:31 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:25:34 App\Events\ChatMessageSent ..................... 2s DONE
+  2025-06-16 15:28:28 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:28:29 App\Events\ChatMessageSent ............... 369.87ms DONE
+  2025-06-16 15:29:11 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:29:11 App\Events\ChatMessageSent ................ 71.44ms DONE
+  2025-06-16 15:29:56 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:29:56 App\Events\ChatMessageSent ................ 68.42ms DONE
+  2025-06-16 15:30:14 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:30:14 App\Events\ChatMessageSent ................ 69.70ms DONE
+  2025-06-16 15:30:23 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:30:23 App\Events\ChatMessageSent ................ 70.07ms DONE
+  2025-06-16 15:31:29 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:31:29 App\Events\ChatMessageSent ............... 374.92ms DONE
+  2025-06-16 15:32:12 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:32:12 App\Events\ChatMessageSent ................ 69.39ms DONE
+  2025-06-16 15:32:27 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:32:27 App\Events\ChatMessageSent ................ 68.17ms DONE
+  2025-06-16 15:33:03 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:33:03 App\Events\ChatMessageSent ................ 69.08ms DONE
+  2025-06-16 15:54:34 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:54:34 App\Events\ChatMessageSent ............... 479.83ms DONE
+  2025-06-16 15:54:34 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:54:34 App\Events\ChatMessageSent ................ 67.81ms DONE
+  2025-06-16 15:54:40 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 15:54:40 App\Events\ChatMessageSent ................ 67.41ms DONE
+  2025-06-16 22:34:24 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-16 22:34:25 App\Events\ChatMessageSent ............... 433.41ms DONE
+  2025-06-17 10:57:25 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-17 10:57:25 App\Events\ChatMessageSent ............... 427.17ms DONE
+  2025-06-17 15:40:13 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-17 15:40:13 App\Events\ChatMessageSent ............... 460.81ms DONE
+  2025-06-17 16:06:05 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-17 16:06:06 App\Events\ChatMessageSent ............... 349.94ms DONE
+  2025-06-17 17:14:44 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-17 17:14:44 App\Events\ChatMessageSent ............... 422.25ms DONE
+  2025-06-18 10:16:55 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-18 10:16:56 App\Events\ChatMessageSent ............... 434.22ms DONE
+  2025-06-18 10:53:18 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-18 10:53:19 App\Events\ChatMessageSent ............... 461.12ms DONE
+  2025-06-19 15:07:24 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-19 15:07:24 App\Events\ChatMessageSent ............... 427.63ms DONE
+  2025-06-19 15:08:00 App\Events\ChatMessageSent ..................... RUNNING
+  2025-06-19 15:08:00 App\Events\ChatMessageSent ................ 68.38ms DONE
