@@ -46,8 +46,14 @@ use App\Http\Controllers\CustomerPackageController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\Reception\RecpReportController;
 use App\Http\Controllers\FacebookWebhookController;
-
-
+use App\Http\Controllers\AddonController;
+use App\Http\Controllers\Admin\BonusSeasonController;
+use App\Http\Controllers\Admin\BonusClaimController;
+use App\Http\Controllers\Admin\Smmx\SmmxOnboardingController;
+use App\Http\Controllers\Admin\Smmx\SmmxDeliverableController;
+use App\Http\Controllers\Admin\Smmx\SmmxReportController;
+use App\Http\Controllers\Admin\Smmx\SmmxCustomerPanelController;
+use App\Http\Controllers\Admin\Smmx\SmmxCalendarPlannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -193,7 +199,6 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/packages/sync-now', function () { \Artisan::call('mpg:sync-packages'); return back()->with('status', 'Packages synced!'); })
     ->middleware(['auth:admin']);
 
-
     Route::post('/admin/customer/{id}/toggle-requires-bill', [CustomerController::class, 'toggleRequiresBill'])
         ->name('admin.customer.toggleRequiresBill');
     Route::post('/activity/ping', [ActivityController::class, 'ping'])->name('activity.ping');
@@ -302,17 +307,43 @@ Route::prefix('admin/recp')
 
     });
 
-    // ADMIN CRM FOLLOW-UPS
+   // ADMIN CRM FOLLOW-UPS
     Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
-    Route::get('/followups', [\App\Http\Controllers\Admin\FollowupController::class, 'index'])->name('followups.index');
 
-    // Data APIs (same page AJAX)
-    Route::get('/followups/data', [\App\Http\Controllers\Admin\FollowupController::class, 'data'])->name('followups.data');
-    Route::post('/followups/contact', [\App\Http\Controllers\Admin\FollowupController::class, 'storeContact'])->name('followups.contact.store');
-    Route::post('/followups/followup', [\App\Http\Controllers\Admin\FollowupController::class, 'storeFollowup'])->name('followups.followup.store');
-    Route::post('/followups/contact/inline', [\App\Http\Controllers\Admin\FollowupController::class, 'updateInline'])->name('followups.contact.inline');
-    Route::post('/followups/contact/snooze', [\App\Http\Controllers\Admin\FollowupController::class, 'snooze'])->name('followups.contact.snooze');
-    });
+    // 🔹 Bonus Season CRUD (Admin)
+    Route::get('/bonus-season', [BonusSeasonController::class, 'show'])
+        ->name('bonus-season.show');
+    Route::post('/bonus-season', [BonusSeasonController::class, 'store'])
+        ->name('bonus-season.store');
+    Route::post('/bonus-season/deactivate', [BonusSeasonController::class, 'deactivate'])
+        ->name('bonus-season.deactivate');
+
+    // 🔹 Customer ko bonus claim (Admin panel बाट trigger हुने)
+    Route::post('/customers/{customer}/bonus-claim', [BonusClaimController::class, 'claim'])
+        ->name('customers.bonus.claim');
+
+    // 🔹 Admin ले claim status अपडेट गर्ने (pending → approved/rejected ... आदि)
+    Route::patch('/bonus-claims/{claim}/status', [BonusClaimController::class, 'updateStatus'])
+        ->name('bonus-claims.status');
+
+    // 🔹 Admin ले "Mark Completed" गर्ने
+    Route::patch('/bonus-claims/{bonusClaim}/complete', [BonusClaimController::class, 'markCompleted'])
+        ->name('bonus-claims.complete');
+
+    // 🔹 Followups (CRM)
+    Route::get('/followups', [\App\Http\Controllers\Admin\FollowupController::class, 'index'])
+        ->name('followups.index');
+    Route::get('/followups/data', [\App\Http\Controllers\Admin\FollowupController::class, 'data'])
+        ->name('followups.data');
+    Route::post('/followups/contact', [\App\Http\Controllers\Admin\FollowupController::class, 'storeContact'])
+        ->name('followups.contact.store');
+    Route::post('/followups/followup', [\App\Http\Controllers\Admin\FollowupController::class, 'storeFollowup'])
+        ->name('followups.followup.store');
+    Route::post('/followups/contact/inline', [\App\Http\Controllers\Admin\FollowupController::class, 'updateInline'])
+        ->name('followups.contact.inline');
+    Route::post('/followups/contact/snooze', [\App\Http\Controllers\Admin\FollowupController::class, 'snooze'])
+        ->name('followups.contact.snooze');
+});
 
 
     //dailycardsspend
@@ -388,6 +419,49 @@ Route::get('/admin/dashboard/export_customers', [CustomerController::class, 'exp
     Route::get('/admin/dashboard/user/details/{id}', [AdminController::class, 'showUserDetails'])->name('admin.user.details');
 
     Route::get('admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+    
+    // SMMX - Social Media Management Module
+    Route::prefix('admin/smmx')->name('admin.smmx.')->middleware(['auth:admin'])->group(function () {
+    Route::get('/customers', [SmmxCustomerPanelController::class, 'index'])->name('customers.index');
+    Route::get('/customers/{customer}', [SmmxCustomerPanelController::class, 'show'])->name('customers.show');
+    Route::post('/customers/{customer}/worklog', [SmmxCustomerPanelController::class, 'storeWorkLog'])->name('customers.worklog.store');
+    Route::delete('/customers/{customer}/worklog/{id}', [SmmxCustomerPanelController::class, 'deleteWorkLog'])->name('customers.worklog.delete');
+    //Calender 
+    
+    Route::get('/calendar', [SmmxCalendarPlannerController::class, 'index'])->name('calendar.index');
+    Route::get('/calendar/create', [SmmxCalendarPlannerController::class, 'create'])->name('calendar.create');
+    Route::post('/calendar', [SmmxCalendarPlannerController::class, 'store'])->name('calendar.store');
+    Route::get('/calendar/{id}/edit', [SmmxCalendarPlannerController::class, 'edit'])->name('calendar.edit');
+    Route::put('/calendar/{id}', [SmmxCalendarPlannerController::class, 'update'])->name('calendar.update');
+    Route::delete('/calendar/{id}', [SmmxCalendarPlannerController::class, 'destroy'])->name('calendar.destroy');
+
+    Route::get('/calendar-generate', [SmmxCalendarPlannerController::class, 'generateForm'])->name('calendar.generate.form');
+    Route::post('/calendar-generate', [SmmxCalendarPlannerController::class, 'generateDraft'])->name('calendar.generate');
+
+    Route::post('/calendar-copy-previous', [SmmxCalendarPlannerController::class, 'copyPreviousMonth'])->name('calendar.copy.previous');
+
+    // Onboarding
+    Route::get('/onboarding', [SmmxOnboardingController::class, 'index'])->name('onboarding.index');
+    Route::get('/onboarding/create', [SmmxOnboardingController::class, 'create'])->name('onboarding.create');
+    Route::post('/onboarding', [SmmxOnboardingController::class, 'store'])->name('onboarding.store');
+    Route::get('/onboarding/{id}', [SmmxOnboardingController::class, 'show'])->name('onboarding.show');
+    Route::get('/onboarding/{id}/edit', [SmmxOnboardingController::class, 'edit'])->name('onboarding.edit');
+    Route::put('/onboarding/{id}', [SmmxOnboardingController::class, 'update'])->name('onboarding.update');
+    Route::delete('/onboarding/{id}', [SmmxOnboardingController::class, 'destroy'])->name('onboarding.destroy');
+
+    // Deliverables
+    Route::get('/deliverables', [SmmxDeliverableController::class, 'index'])->name('deliverables.index');
+    Route::get('/deliverables/create', [SmmxDeliverableController::class, 'create'])->name('deliverables.create');
+    Route::post('/deliverables', [SmmxDeliverableController::class, 'store'])->name('deliverables.store');
+    Route::get('/deliverables/{id}', [SmmxDeliverableController::class, 'show'])->name('deliverables.show');
+    Route::get('/deliverables/{id}/edit', [SmmxDeliverableController::class, 'edit'])->name('deliverables.edit');
+    Route::put('/deliverables/{id}', [SmmxDeliverableController::class, 'update'])->name('deliverables.update');
+    Route::delete('/deliverables/{id}', [SmmxDeliverableController::class, 'destroy'])->name('deliverables.destroy');
+
+    // Reports
+    Route::get('/reports', [SmmxReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/{id}', [SmmxReportController::class, 'show'])->name('reports.show');
+    });
     
     // Ad routes
     Route::post('/admin/dashboard/ads', [AdController::class, 'storeAd'])->name('storeAd');
@@ -610,7 +684,7 @@ Route::get('/admin/dashboard/export_customers', [CustomerController::class, 'exp
     //end here
 
 });
-
+    Route::get('/khaja', function () { return view('khaja'); })->name('khaja');
 // pdf route start here
 Route::get('/receipt/show/{id}', [ReceiptController::class, 'show']);
 Route::get('/receipt/pdf_gen/{id}', [ReceiptController::class, 'create_pdf']);
@@ -618,6 +692,13 @@ Route::get('/invoice/show_invoice/{id}', [ReceiptController::class, 'show_invoic
 Route::get('/invoice/pdf_gen_invoice/{id}', [ReceiptController::class, 'create_pdf_invoice'])->name('invoice.download');
 //end here
 
+Route::prefix('admin/us-calendar')->middleware(['auth:admin'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\UsCalendarController::class, 'index'])->name('admin.uscalendar.index');
+});
+Route::get('/us/timezones', [\App\Http\Controllers\Api\UsApiController::class, 'timezones']);
+Route::get('/us/holidays', [\App\Http\Controllers\Api\UsApiController::class, 'holidays']);
+Route::get('/us/banking', [\App\Http\Controllers\Api\UsApiController::class, 'bankStatus']);
+Route::get('/us/emergency', [\App\Http\Controllers\Api\UsApiController::class, 'emergency']);
 
 
 // Route::get('/admin/dashboard/customer_list_js', function () {
@@ -627,3 +708,4 @@ Route::get('/invoice/pdf_gen_invoice/{id}', [ReceiptController::class, 'create_p
 //         'data' => $customers
 //     ]);
 // });
+

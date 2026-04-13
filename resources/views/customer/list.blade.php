@@ -5,469 +5,1276 @@
 <!-- Bootstrap CSS for styling and responsiveness -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <style>
-    /* Custom Styles for a Compact Layout */
+    :root {
+        --primary-color: #093b7b;
+        --primary-light: rgba(9, 59, 123, 0.1);
+        --secondary-color: #17a2b8;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --warning-color: #ffc107;
+        --light-bg: #f8f9fa;
+        --dark-text: #343a40;
+        --border-color: #e0e6ef;
+    }
+
     body {
-        font-family: 'Roboto', sans-serif;
-        background-color: #e9ecef;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f8fafc;
+        line-height: 1.5;
     }
-    .card {
-        border: none;
+
+    /* Header Styles - More Compact */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #0d4fa0 100%);
+        color: white;
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 3px 15px rgba(9, 59, 123, 0.15);
+    }
+
+    .page-header h1 {
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .page-header .subtitle {
+        opacity: 0.9;
+        font-size: 0.85rem;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        min-height: auto;
+    }
+
+    .header-left {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Header Button - More Prominent */
+    .btn-add-customer {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        color: var(--primary-color);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 0.6rem 1.25rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        height: fit-content;
+    }
+
+    .btn-add-customer:hover {
+        background: white;
+        color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border-color: white;
+    }
+
+    @media (max-width: 767.98px) {
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .btn-add-customer {
+            align-self: flex-start;
+            width: auto;
+        }
+    }
+
+    /* Stats Cards - More Compact */
+    .stats-card {
+        background: white;
         border-radius: 10px;
-        background-color: #ffffff;
-        padding: 10px;
-        margin-bottom: 10px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
     }
-    .card-header2 {
-        background-color: #093b7b;
-        color: white;
-        font-size: 20px;
-        padding: 10px;
-        border-radius: 10px 10px 0 0;
+
+    .stats-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
-    .card-body2 {
-        padding: 10px;
+
+    .stats-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
-    .btn {
-        border-radius: 20px;
-        font-weight: bold;
-        padding: 5px 10px;
+
+    .stats-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
     }
-    .btn-outline-secondary {
-        border-radius: 20px;
+
+    .stats-icon.primary {
+        background: rgba(9, 59, 123, 0.1);
+        color: var(--primary-color);
     }
-    .table-responsive {
-        margin-top: 10px;
+
+    .stats-icon.success {
+        background: rgba(40, 167, 69, 0.1);
+        color: var(--success-color);
     }
-    .table thead th {
-        background-color: #093b7b;
-        color: white;
-        border: none;
-        font-weight: bold;
-        font-size: 16px;
-        padding: 10px;
+
+    .stats-icon.info {
+        background: rgba(23, 162, 184, 0.1);
+        color: var(--secondary-color);
     }
-    .table thead th, .table tbody td {
-        padding: 10px;
-        vertical-align: middle;
-        font-size: 15px;
+
+    .stats-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .stats-number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--dark-text);
+        line-height: 1.2;
+    }
+
+    .stats-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        margin-top: 0.125rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .table tbody tr:nth-child(even) {
-        background-color: #f8f9fa;
-    }
-    .table tbody tr:nth-child(odd) {
-        background-color: #d1ecf1;
-    }
-    .table tbody td {
-        color: #495057;
-    }
-    .table tbody tr:hover {
-        background-color: #cfe2f3;
-    }
-    .form-control {
-        border-radius: 20px;
-        background-color: #f1f1f1;
-        padding: 5px 10px;
-    }
-    .input-group-text {
-        border-radius: 20px;
-        background-color: #093b7b;
-        color: #ffffff;
-        padding: 5px 10px;
-    }
-    .form-custom-style .form-group {
-        margin-bottom: 10px;
-    }
-    .form-custom-style .form-label {
-        color: #093b7b;
-    }
-    .form-custom-style .form-control {
-        background-color: #ffffff;
-        color: #495057;
-    }
-    .btn-primary {
-        color: #fff;
-        background-color: #093b7b;
-        border-color: #093b7b;
-    }
-    .btn-primary:hover {
-        background-color: #062c56;
-        border-color: #062c56;
-    }
-    .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-    .btn-info {
-        background-color: #17a2b8;
-        border-color: #17a2b8;
-    }
-    .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-    .view-profile-btn {
-        display: inline-flex;
-        align-items: center;
-        padding: 5px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        text-decoration: none;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .view-profile-btn:hover {
-        background-color: #0056b3;
-    }
-    .view-profile-btn i {
-        margin-right: 0;
-    }
-    .total-count-display {
-        font-size: 16px;
-        font-weight: bold;
-        color: #ffffff;
-        padding-right: 10px;
-    }
-    .profile-picture {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-    /* Responsive Styles for Table Header and Search Bar */
-    @media screen and (max-width: 768px) {
-        .card-header2 h3 {
-            font-size: 18px;
-        }
-        .btn {
-            width: 100%;
-            margin-top: 5px;
-        }
-        .table thead {
-            display: none;
-            width: 100%;
-            overflow-x: auto;
-        }
-        .table thead th {
-            display: inline-block;
-            width: auto;
-            font-size: 14px;
-            text-align: left;
-            white-space: nowrap;
-            padding: 8px 5px;
-        }
-        .input-group {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        .input-group-prepend, .input-group-append {
-            width: 100%;
-            display: flex;
-        }
-        .input-group-prepend select, .input-group-append button, .form-control {
-            width: 100%;
-            margin-bottom: 5px;
-        }
-        .table tbody tr {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        .table tbody td {
-            display: block;
-            text-align: left;
-            font-size: 12px;
-            white-space: normal;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 8px 5px;
-        }
-        .profile-picture {
-            width: 40px;
-            height: 40px;
-        }
-        .table tbody td:nth-child(2) {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .table tbody td:last-child {
-            display: flex;
-            flex-direction: column;
-        }
-        .table tbody td:last-child a,
-        .table tbody td:last-child form {
-            margin-bottom: 5px;
-            width: 100%;
-        }
-        .card-header2 .d-flex {
-            flex-direction: column;
-        }
-        .total-count-display {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        #exportButton {
-            width: 100%;
-        }
-    }
-    .search-bar-container {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-    .search-bar-container .input-group {
-        display: flex;
-        flex-wrap: nowrap;
-        width: 100%;
-    }
-    .search-bar-container .input-group-prepend select,
-    .search-bar-container .form-control,
-    .search-bar-container .input-group-append button {
-        border-radius: 20px;
-        padding: 10px;
-        font-size: 14px;
-        margin-right: 5px;
-    }
-    .search-bar-container .form-control {
-        flex: 2;
-        min-width: 150px;
-    }
-    .search-bar-container .input-group-append button {
-        flex-shrink: 0;
-        background-color: #093b7b;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
+
+    /* Export Button Card */
+    .export-card {
+        background: white;
+        border-radius: 10px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border-color);
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    .search-bar-container .input-group-append button:hover {
-        background-color: #062c56;
+
+    .btn-export {
+        background: linear-gradient(135deg, var(--success-color) 0%, #20c997 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-shadow: 0 3px 10px rgba(40, 167, 69, 0.2);
     }
-    @media screen and (max-width: 576px) {
-        .search-bar-container {
+
+    .btn-export:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        color: white;
+    }
+
+    /* Search Container - More Compact */
+    .search-container {
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border-color);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input-container {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .date-filter-container {
+        width: 220px;
+    }
+
+    .search-button-container {
+        width: auto;
+    }
+
+    .search-container .input-group-text {
+        background: var(--light-bg);
+        border: 1px solid #ced4da;
+        border-right: none;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .search-container .form-control {
+        border-left: none;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        height: calc(1.5em + 0.75rem + 2px);
+    }
+
+    .search-container .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        height: calc(1.5em + 0.75rem + 2px);
+    }
+
+    @media (max-width: 767.98px) {
+        .search-row {
             flex-direction: column;
-            align-items: stretch;
         }
-        .search-bar-container .form-control,
-        .search-bar-container .input-group-append button {
-            margin-right: 0;
-            margin-bottom: 5px;
+        
+        .search-input-container,
+        .date-filter-container,
+        .search-button-container {
             width: 100%;
         }
-        .search-bar-container .form-control {
-            min-width: unset;
+    }
+
+    /* Main Content Card */
+    .main-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: white;
+        border-bottom: 2px solid var(--light-bg);
+        padding: 0.875rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header-custom h5 {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Table Styles - Slightly Larger Font */
+    .customer-table {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .customer-table thead th {
+        background: #f8fafd;
+        color: var(--primary-color);
+        font-weight: 600;
+        border-bottom: 2px solid var(--border-color);
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        white-space: nowrap;
+    }
+
+    .customer-table tbody tr {
+        transition: all 0.2s ease;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .customer-table tbody tr:hover {
+        background: rgba(9, 59, 123, 0.03);
+    }
+
+    .customer-table tbody td {
+        padding: 0.875rem 1rem;
+        vertical-align: middle;
+        color: var(--dark-text);
+        border-top: none;
+        line-height: 1.4;
+    }
+
+    /* Profile Image */
+    .profile-img {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .profile-img:hover {
+        transform: scale(1.05);
+        border-color: var(--primary-color);
+    }
+
+    /* Customer Info */
+    .customer-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .customer-name {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        font-size: 1.1rem;
+        margin-bottom: 0.125rem;
+        line-height: 1.3;
+    }
+
+    .customer-name:hover {
+        color: #0d4fa0;
+        text-decoration: underline;
+    }
+
+    .customer-email {
+        font-size: 0.8rem;
+        color: #6c757d;
+        word-break: break-all;
+        line-height: 1.3;
+        font-size: 15px;
+    }
+
+    /* Badges */
+    .badge-admin {
+        background: rgba(23, 162, 184, 0.1);
+        color: var(--secondary-color);
+        font-weight: 500;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        border: 1px solid rgba(23, 162, 184, 0.2);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.375rem;
+        flex-wrap: nowrap;
+    }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background: white;
+        color: #6c757d;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+    }
+
+    .btn-action:hover {
+        background: var(--light-bg);
+        color: var(--primary-color);
+        border-color: var(--primary-light);
+        transform: translateY(-1px);
+    }
+
+    .btn-action.view:hover {
+        background: rgba(0, 123, 255, 0.1);
+        color: #007bff;
+        border-color: rgba(0, 123, 255, 0.2);
+    }
+
+    .btn-action.edit:hover {
+        background: rgba(40, 167, 69, 0.1);
+        color: var(--success-color);
+        border-color: rgba(40, 167, 69, 0.2);
+    }
+
+    .btn-action.delete:hover {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+        border-color: rgba(220, 53, 69, 0.2);
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 0.375rem;
+        min-width: 160px;
+    }
+
+    .dropdown-item {
+        padding: 0.375rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        color: var(--dark-text);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-item i {
+        width: 18px;
+        margin-right: 0.5rem;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(9, 59, 123, 0.08);
+        color: var(--primary-color);
+    }
+
+    .dropdown-item.text-danger:hover {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+    }
+
+    /* Mobile Card View */
+    @media (max-width: 767.98px) {
+        .mobile-customer-card {
+            background: white;
+            border-radius: 10px;
+            padding: 0.875rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-customer-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .mobile-card-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .mobile-profile-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-customer-info {
+            flex: 1;
+        }
+
+        .mobile-customer-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1rem;
+            margin-bottom: 0.125rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .mobile-customer-name:hover {
+            text-decoration: underline;
+        }
+
+        .mobile-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin: 0.75rem 0;
+        }
+
+        .mobile-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-bottom: 0.125rem;
+            font-weight: 500;
+        }
+
+        .meta-value {
+            font-size: 0.875rem;
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+
+        .mobile-actions {
+            display: flex;
+            gap: 0.375rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .mobile-actions .btn {
+            flex: 1;
+            font-size: 0.8rem;
+            padding: 0.375rem;
+        }
+
+        .page-header {
+            padding: 0.75rem 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.25rem;
         }
     }
-    .clickonname {
+
+    /* WhatsApp Link */
+    .whatsapp-link {
+        color: #25D366;
         text-decoration: none;
-        font-family: 'Arial', sans-serif;
-        font-weight: bold;
-        color: #2c3e50;
-        font-size: 16px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s ease;
+        font-size: 17px;
+    }
+
+    .whatsapp-link:hover {
+        color: #128C7E;
+        text-decoration: underline;
+    }
+
+    .whatsapp-link i {
+        margin-right: 0.375rem;
+        font-size: 1rem;
+    }
+
+    /* Impersonate Link */
+    .impersonate-link {
+        color: var(--secondary-color);
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+    }
+
+    .impersonate-link:hover {
+        color: #138496;
+        text-decoration: underline;
+    }
+
+    .impersonate-link i {
+        margin-left: 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    /* Date Range Picker */
+    .daterangepicker-input {
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        padding: 0.5rem 0.75rem;
+        background: white;
+        font-size: 0.9rem;
+    }
+
+    /* Pagination */
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .pagination .page-link {
+        color: var(--primary-color);
+        border-radius: 6px;
+        margin: 0 2px;
+        border: 1px solid var(--border-color);
+        padding: 0.375rem 0.75rem;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    .pagination .page-link:hover {
+        background-color: var(--light-bg);
+        color: var(--primary-color);
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #0d4fa0 100%);
+        color: white;
+        border-radius: 12px 12px 0 0;
+        border-bottom: none;
+        padding: 1rem;
+    }
+
+    .modal-header .close {
+        color: white;
+        opacity: 0.8;
+        text-shadow: none;
+        font-size: 1.25rem;
+    }
+
+    .modal-header .close:hover {
+        opacity: 1;
+    }
+
+    .modal-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 6px;
+        border: 1px solid #e0e6ef;
+        padding: 0.5rem 0.75rem;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(9, 59, 123, 0.15);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-text);
+        margin-bottom: 0.375rem;
+        font-size: 0.9rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+        color: #dee2e6;
+    }
+
+    .empty-state h4 {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .empty-state p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
         display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 2px solid rgba(9, 59, 123, 0.1);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
     }
-    .clickonname:hover {
-        color: #2980b9;
-        text-decoration: none;
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
     }
-    .clickonname:visited {
-        color: #8e44ad;
-        text-decoration: none;
+
+    /* Responsive Table Container */
+    .table-responsive-custom {
+        overflow-x: auto;
+        border-radius: 0 0 12px 12px;
     }
-    .table thead th, .table tbody td {
-        padding: 5px;
-        vertical-align: middle;
-        font-size: 15px;
+
+    /* Action Dropdown Fix */
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    /* Status Badge */
+    .status-badge {
+        padding: 0.125rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .status-active {
+        background: rgba(40, 167, 69, 0.1);
+        color: var(--success-color);
+    }
+
+    /* Action Separator */
+    .action-separator {
+        height: 1px;
+        background: var(--border-color);
+        margin: 0.375rem 0;
+    }
+
+    /* Utility Classes */
+    .text-ellipsis {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 280px;
     }
-    .daterangepicker-input {
-        border-radius: 20px;
-        padding: 5px 10px;
-        width: 100%;
+
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    /* Compact spacing between sections */
+    .compact-section {
+        margin-bottom: 0.75rem;
     }
 </style>
 
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="header-content">
+            <div class="header-left">
+                <h1><i class="fas fa-users mr-2"></i>Customer Management</h1>
+                <div class="subtitle">Manage all customer accounts and information</div>
+            </div>
+            <button class="btn btn-add-customer" data-toggle="modal" data-target="#addCustomerModal">
+                <i class="fas fa-plus mr-2"></i>Add New Customer
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid">
-    <div class="card my-2">
-        <div class="card-header2 d-flex justify-content-between align-items-center">
-            <h3>Customers Dashboard</h3>
-            <div class="d-flex align-items-center">
-                <span id="totalCount" class="total-count-display">Customers Count: {{ $totalCustomers }}</span>
-                <button id="exportButton" class="btn btn-success ml-2"><i class="fas fa-file-export"></i> Export</button>
+    <!-- Stats Section - More Compact -->
+    <div class="row compact-section">
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-content">
+                    <div class="stats-icon primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-text">
+                        <div class="stats-number">{{ $totalCustomers }}</div>
+                        <div class="stats-label">Total Customers</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-body2">
-            <form action="{{ route('search_customer') }}" method="get" class="mb-2 form-inline">
-                @csrf
-                <div class="search-bar-container">
-                    <div class="input-group w-100">
-                        <input type="text" name="search" placeholder="Search by Name, Display Name, Phone, or Secondary Phone" class="form-control">
-                        <input type="text" name="date_range" id="dateRangePicker" class="form-control daterangepicker-input" placeholder="Select Date Range">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-outline-secondary">
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-content">
+                    <div class="stats-icon success">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stats-text">
+                        <div class="stats-number">{{ $customers->count() }}</div>
+                        <div class="stats-label">On This Page</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-content">
+                    <div class="stats-icon info">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="stats-text">
+                        <div class="stats-number">{{ $admins->count() }}</div>
+                        <div class="stats-label">Administrators</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="export-card">
+                <button id="exportButton" class="btn btn-export">
+                    <i class="fas fa-file-export mr-2"></i>Export Customers
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section - More Compact -->
+    <div class="search-container compact-section">
+        <form action="{{ route('search_customer') }}" method="get" id="searchForm">
+            @csrf
+            <div class="search-row">
+                <div class="search-input-container">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-light border-right-0">
                                 <i class="fas fa-search"></i>
-                            </button>
+                            </span>
+                        </div>
+                        <input type="text" name="search" class="form-control border-left-0" 
+                               placeholder="Search customers..." 
+                               value="{{ request()->get('search') }}">
+                    </div>
+                </div>
+                
+                <div class="date-filter-container">
+                    <div class="input-group">
+                        <input type="text" name="date_range" id="dateRangePicker" 
+                               class="form-control daterangepicker-input" 
+                               placeholder="Date range" 
+                               value="{{ request()->get('date_range') }}">
+                        <div class="input-group-append">
+                            <a href="{{ url('/admin/dashboard/customer') }}" class="btn btn-outline-secondary" 
+                               type="button" title="Clear all filters">
+                                <i class="fas fa-times"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </form>
-            <div class="table-responsive">
-                @php
-                    use Carbon\Carbon;
-                @endphp
-                <table class="table">
+                
+                <div class="search-button-container">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-card">
+        <div class="card-header-custom">
+            <h5><i class="fas fa-list mr-2"></i>Customer List</h5>
+            <div class="text-muted small">
+                <span class="d-none d-md-inline">Showing </span>{{ $customers->firstItem() ?? 0 }}-{{ $customers->lastItem() ?? 0 }} of {{ $customers->total() }}
+            </div>
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="d-none d-md-block">
+            <div class="table-responsive-custom">
+                <table class="table table-hover customer-table">
                     <thead>
-                      <tr>
-                          <th></th>
-                          <th>Name</th>
-                          <th>Display Name</th>
-                          <th>Added By</th>
-                          <th>USD Rate</th>
-                          <th>Email</th>
-                          <th>Address</th>
-                          <th>Phone</th>
-                          <th>Secondary Phone</th>
-                           <th>Created On</th>
-                          <th></th>
-                          <th>Action</th>
-                      </tr>
+                        <tr>
+                            <th style="width: 50px;" class="ps-4">Customer</th>
+                            <th style="width: 70px;" >Contact Information</th>
+                            <th style="width: 90px;" class="text-center nowrap">USD Rate</th>
+                            <th style="width: 120px;">Phone</th>
+                            <th style="width: 100px;">Created</th>
+                            <th style="width: 100px;">Added By</th>
+                            <th style="width: 90px;" class="text-center pe-4">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <!-- Add New Customer Form Row -->
+                        @forelse ($customers as $customer)
                         <tr>
-                            <form method="post" action="{{ url('/admin/dashboard/customer/add') }}">
-                                @csrf
-                                <td></td>
-                                <td><input type="text" class="form-control" name="name" placeholder="Name" required></td>
-                                <td><input type="text" class="form-control" name="display_name" placeholder="Display Name"></td>
-                                    <td>
-      @php
-        // current admin name/id सुरक्षित fallback
-        $defaultAdminId = optional($currentAdmin)->id;
-        $defaultAdminName = optional($currentAdmin)->name ?? 'Unknown';
-      @endphp
-
-      <!-- देखिने भाग: dropdown बाट change गर्न मिल्ने -->
-      <select name="created_by" class="form-control">
-        @foreach($admins as $admin)
-          <option value="{{ $admin->id }}"
-            {{ (isset($defaultAdminId) && $defaultAdminId == $admin->id) ? 'selected' : '' }}>
-            {{ $admin->name }}
-          </option>
-        @endforeach
-      </select>
-
-      <!-- चाहेमा: केवल देखाउन मात्र text (optional) -->
-      <!-- <small class="text-muted d-block mt-1">Default: {{ $defaultAdminName }}</small> -->
-    </td>
-
-                                <td><input type="number" class="form-control" name="usd_rate" placeholder="USD Rate" value="170" step="0.01" required></td>
-                                <td><input type="email" class="form-control" name="email" placeholder="Email" required></td>
-                                <td><input type="text" class="form-control" name="address" placeholder="Address" required></td>
-                                <td><input type="text" class="form-control" name="phone" placeholder="Phone" required></td>
-                                <td><input type="text" class="form-control" name="phone_2" placeholder="Secondary Phone"></td>
-                                
-                                <td class="sumAmountColumn"></td>
-                                <td></td>
-
-                                <td><button type="submit" class="btn btn-primary btn-block">Add</button></td>
-                            </form>
-                        </tr>
-                        <!-- Existing Customers -->
-                        @foreach ($customers as $customer)
-                        <tr>
-                            <td><a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}">
-                                @if($customer->profile_picture)
-                                    <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" alt="{{ $customer->name }}" class="profile-picture">
-                                @else
-                                    <i class="fas fa-user-circle" style="font-size: 50px; color: rgba(0, 0, 0, 0.7);"></i>
-                                @endif
-                            </a></td>
-                            <td>
-                                <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}" class="clickonname">
-                                    {{ $customer->name }}
-                                </a>
+                            <!-- Customer Profile -->
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}">
+                                        @if($customer->profile_picture)
+                                            <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" 
+                                                 alt="{{ $customer->name }}" 
+                                                 class="profile-img">
+                                        @else
+                                            <div class="profile-img bg-light d-flex align-items-center justify-content-center">
+                                                <i class="fas fa-user text-muted"></i>
+                                            </div>
+                                        @endif
+                                    </a>
+                                    <div class="ml-2">
+                                        <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}" 
+                                           class="customer-name text-ellipsis d-block">
+                                            {{ $customer->name }}
+                                        </a>
+                                        <div class="small text-muted">
+                                            ID: {{ $customer->id }}
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
+
+                            <!-- Contact Information -->
                             <td>
-                                <a href="{{ route('admin.customer.impersonate', $customer->id) }}" style="text-decoration: none;" target="_blank">
-                                    {{ $customer->display_name }}
-                                </a>
+                                <div class="customer-info">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <a href="{{ route('admin.customer.impersonate', $customer->id) }}" 
+                                           class="impersonate-link" target="_blank" title="Impersonate this customer">
+                                            {{ $customer->display_name }}
+                                            <i class="fas fa-external-link-alt ml-1"></i>
+                                        </a>
+                                    </div>
+                                    <div class="customer-email text-ellipsis" title="{{ $customer->email }}">
+                                        <i class="fas fa-envelope fa-xs mr-1"></i>{{ $customer->email }}
+                                    </div>
+                                    <div class="small text-muted mt-1 text-ellipsis" title="{{ $customer->address }}">
+                                        <i class="fas fa-map-marker-alt fa-xs mr-1"></i>{{ Str::limit($customer->address, 25) }}
+                                    </div>
+                                </div>
                             </td>
-                            <td>
-  @if($customer->createdByAdmin)
-      <span class="badge badge-info" title="Admin ID: {{ $customer->created_by }}">
-          {{ $customer->createdByAdmin->name }}
-      </span>
-  @else
-      <span class="text-muted">—</span>
-  @endif
+                            <td class="text-center nowrap">
+  {{ $customer->usd_rate ?? 170 }}
 </td>
-
-
-                            <td>{{ $customer->usd_rate ?? 170 }}</td>
-                            <td>{{ $customer->email }}</td>
-                            <td>{{ $customer->address }}</td>
+                                                       <!-- Phone -->
                             <td>
-                                <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode("
-                                *Welcome to MPG Solution!*
-                                We are delighted to inform you that you have been successfully integrated into our system.\n
-                                As a valued customer of MPG Solution, you now have access to a range of services including digital marketing, advertisement management, and dedicated customer support. Our team is here to ensure that you receive the best possible service and support for your business needs.\n\n
-                                For more information about our services and policies, please review the following:
-                                - Terms and Conditions: https://mpg.com.np/terms-services/
-                                - Privacy Policy: https://mpg.com.np/privacy-policy/\n
-                                _Our service hours are 9 AM to 5 PM, Sunday to Friday._
-                                Thank you for giving us the opportunity to serve you. We are excited to help your business grow with MPG Solution.
-                                ") }}" target="_blank" style="text-decoration: none; color: inherit;">
-                                    <strong id="phone-number" style="user-select: all;">{{ $customer->phone }}</strong>
-                                </a>
+                                <div class="d-flex flex-column">
+                                    <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode('*Welcome to MPG Solution!*
+We are delighted to inform you that you have been successfully integrated into our system.
+As a valued customer of MPG Solution, you now have access to a range of services including digital marketing, advertisement management, and dedicated customer support. Our team is here to ensure that you receive the best possible service and support for your business needs.
+
+For more information about our services and policies, please review the following:
+- Terms and Conditions: https://mpg.com.np/terms-services/
+- Privacy Policy: https://mpg.com.np/privacy-policy/
+
+_Our service hours are 9 AM to 5 PM, Sunday to Friday._
+Thank you for giving us the opportunity to serve you. We are excited to help your business grow with MPG Solution.') }}" 
+                                       target="_blank" class="whatsapp-link mb-1">
+                                        <i class="fab fa-whatsapp"></i>{{ $customer->phone }}
+                                    </a>
+                                    @if($customer->phone_2)
+                                    <div class="small text-muted">
+                                        <i class="fas fa-phone fa-xs mr-1"></i>{{ $customer->phone_2 }}
+                                    </div>
+                                    @endif
+                                </div>
                             </td>
-                            <td>{{ $customer->phone_2 }}</td>
-                            
-                                                            <td>
-        @if($customer->created_at)
-            {{ \Carbon\Carbon::parse($customer->created_at)->format('Y-m-d') }}
-        @else
-            <span class="text-muted">—</span>
-        @endif
-    </td>
-                                <td></td>
 
+                            <!-- Created Date -->
                             <td>
-                                <a href="{{ url('/admin/dashboard/customer/edit/' . $customer->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
-                                <form action="{{ url('/admin/dashboard/customer/delete/' . $customer->id) }}" method="get" style="display:inline;">
-                                    @csrf
-                                    @method('GET')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i> Delete</button>
-                                </form>
+                                @if($customer->created_at)
+                                    <div class="small">
+                                        <div class="font-weight-medium">{{ \Carbon\Carbon::parse($customer->created_at)->format('M d, Y') }}</div>
+                                        <div class="text-muted">{{ \Carbon\Carbon::parse($customer->created_at)->format('h:i A') }}</div>
+                                    </div>
+                                @else
+                                    <span class="text-muted small">—</span>
+                                @endif
+                            </td>
+
+ <!-- Added By -->
+                            <td>
+                                @if($customer->createdByAdmin)
+                                    <span class="badge-admin d-inline-block">
+                                        <i class="fas fa-user-shield fa-xs mr-1"></i>{{ Str::limit($customer->createdByAdmin->name, 10) }}
+                                    </span>
+                                @else
+                                    <span class="text-muted small">—</span>
+                                @endif
+                            </td>
+                            <!-- Actions -->
+                            <td class="pe-4">
+                                <div class="action-buttons justify-content-center">
+                                    <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}" 
+                                       class="btn btn-action view" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ url('/admin/dashboard/customer/edit/' . $customer->id) }}" 
+                                       class="btn btn-action edit" title="Edit Customer">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-action dropdown-toggle" 
+                                                type="button" data-toggle="dropdown" 
+                                                aria-haspopup="true" aria-expanded="false" title="More Actions">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="{{ route('admin.customer.impersonate', $customer->id) }}" 
+                                               target="_blank" class="dropdown-item">
+                                                <i class="fas fa-user-secret"></i>Impersonate
+                                            </a>
+                                            <a href="https://wa.me/+977{{ $customer->phone }}" 
+                                               target="_blank" class="dropdown-item">
+                                                <i class="fab fa-whatsapp"></i>Message
+                                            </a>
+                                            <div class="action-separator"></div>
+                                            <form action="{{ url('/admin/dashboard/customer/delete/' . $customer->id) }}" 
+                                                  method="get" class="d-inline">
+                                                @csrf
+                                                <button type="submit" 
+                                                        class="dropdown-item text-danger" 
+                                                        onclick="return confirm('Are you sure you want to delete this customer? This action cannot be undone.')">
+                                                    <i class="fas fa-trash-alt"></i>Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <div class="empty-state py-4">
+                                    <i class="fas fa-users fa-2x mb-3"></i>
+                                    <h4>No customers found</h4>
+                                    <p class="mb-0">Try adjusting your search or add a new customer.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-            {{ $customers->links('pagination::bootstrap-5', ['paginator' => $customers->appends(request()->query()), 'perPage' => 10]) }}
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="d-md-none">
+            @forelse ($customers as $customer)
+            <div class="mobile-customer-card">
+                <div class="mobile-card-header">
+                    <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}">
+                        @if($customer->profile_picture)
+                            <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" 
+                                 alt="{{ $customer->name }}" 
+                                 class="mobile-profile-img">
+                        @else
+                            <div class="mobile-profile-img bg-light d-flex align-items-center justify-content-center">
+                                <i class="fas fa-user text-muted"></i>
+                            </div>
+                        @endif
+                    </a>
+                    <div class="mobile-customer-info">
+                        <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}" 
+                           class="mobile-customer-name">
+                            {{ $customer->name }}
+                        </a>
+                        <div class="small text-muted mb-1">
+                            <a href="{{ route('admin.customer.impersonate', $customer->id) }}" 
+                               class="impersonate-link" target="_blank">
+                                {{ $customer->display_name }}
+                                <i class="fas fa-external-link-alt fa-xs ml-1"></i>
+                            </a>
+                        </div>
+                        <div class="small">
+                            @if($customer->createdByAdmin)
+                                <span class="badge-admin">
+                                    <i class="fas fa-user-shield fa-xs mr-1"></i>{{ Str::limit($customer->createdByAdmin->name, 12) }}
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-meta-grid">
+                    <div class="mobile-meta-item">
+                        <span class="meta-label">Phone</span>
+                        <a href="https://wa.me/+977{{ $customer->phone }}" 
+                           target="_blank" class="meta-value whatsapp-link">
+                            <i class="fab fa-whatsapp mr-1"></i>{{ $customer->phone }}
+                        </a>
+                    </div>
+                    <div class="mobile-meta-item">
+                        <span class="meta-label">Created</span>
+                        <span class="meta-value">
+                            @if($customer->created_at)
+                                {{ \Carbon\Carbon::parse($customer->created_at)->format('M d') }}
+                            @else
+                                —
+                            @endif
+                        </span>
+                    </div>
+                    <div class="mobile-meta-item">
+                        <span class="meta-label">Email</span>
+                        <span class="meta-value text-ellipsis">{{ Str::limit($customer->email, 15) }}</span>
+                    </div>
+                    <div class="mobile-meta-item">
+                        <span class="meta-label">USD Rate</span>
+                        <span class="meta-value">{{ $customer->usd_rate ?? 170 }}</span>
+                    </div>
+                </div>
+
+                <div class="mobile-actions">
+                    <a href="{{ url('/admin/dashboard/customer/details/' . $customer->id) }}" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{{ url('/admin/dashboard/customer/edit/' . $customer->id) }}" 
+                       class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" 
+                                type="button" data-toggle="dropdown">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="{{ route('admin.customer.impersonate', $customer->id) }}" 
+                               target="_blank" class="dropdown-item">
+                                <i class="fas fa-user-secret mr-2"></i>Impersonate
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form action="{{ url('/admin/dashboard/customer/delete/' . $customer->id) }}" 
+                                  method="get" class="d-inline">
+                                @csrf
+                                <button type="submit" 
+                                        class="dropdown-item text-danger" 
+                                        onclick="return confirm('Are you sure you want to delete this customer?')">
+                                    <i class="fas fa-trash-alt mr-2"></i>Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="empty-state px-3 py-4">
+                <i class="fas fa-users fa-2x mb-3"></i>
+                <h4>No customers found</h4>
+                <p class="mb-0">Try adjusting your search or add a new customer.</p>
+            </div>
+            @endforelse
+        </div>
+
+        <!-- Pagination -->
+        @if($customers->hasPages())
+        <div class="card-footer bg-white border-top py-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                    <span class="d-none d-md-inline">Showing </span>{{ $customers->firstItem() ?? 0 }}-{{ $customers->lastItem() ?? 0 }} of {{ $customers->total() }}
+                </div>
+                <div>
+                    {{ $customers->links('pagination::bootstrap-5', ['paginator' => $customers->appends(request()->query()), 'perPage' => 10]) }}
+                </div>
+            </div>
+        </div>
+        @endif
+    </div>
+</div>
+
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCustomerModalLabel">
+                    <i class="fas fa-user-plus mr-2"></i>Add New Customer
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="{{ url('/admin/dashboard/customer/add') }}" id="addCustomerForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Full Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required placeholder="Enter customer's full name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="display_name" class="form-label">Display Name</label>
+                            <input type="text" class="form-control" id="display_name" name="display_name" placeholder="Optional display name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="customer@example.com">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number *</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required placeholder="98XXXXXXXX">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone_2" class="form-label">Secondary Phone</label>
+                            <input type="text" class="form-control" id="phone_2" name="phone_2" placeholder="Optional secondary number">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="usd_rate" class="form-label">USD Exchange Rate *</label>
+                            <input type="number" class="form-control" id="usd_rate" name="usd_rate" value="170" step="0.01" required>
+                            <small class="text-muted">Default exchange rate for this customer</small>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="address" class="form-label">Address *</label>
+                            <input type="text" class="form-control" id="address" name="address" required placeholder="Enter complete address">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="created_by" class="form-label">Assign Admin *</label>
+                            <select class="form-control" id="created_by" name="created_by" required>
+                                @foreach($admins as $admin)
+                                    <option value="{{ $admin->id }}"
+                                        {{ (isset($currentAdmin) && $currentAdmin->id == $admin->id) ? 'selected' : '' }}>
+                                        {{ $admin->name }} ({{ $admin->email }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">This admin will be responsible for this customer</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i>Save Customer
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.0/daterangepicker.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Export button functionality
     const exportButton = document.getElementById('exportButton');
     if (exportButton) {
         exportButton.addEventListener('click', function() {
@@ -477,22 +1284,78 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize Date Range Picker
     $('#dateRangePicker').daterangepicker({
-        locale: { format: 'YYYY-MM-DD' },
+        locale: { 
+            format: 'YYYY-MM-DD',
+            cancelLabel: 'Clear',
+            applyLabel: 'Apply',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        },
         autoUpdateInput: false,
         ranges: {
             'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
             'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-            'Last 3 Months': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month')],
-            'All Time': [moment().subtract(10, 'years'), moment()]
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
     }, function(start, end, label) {
         $('#dateRangePicker').val(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
     });
 
-    // Clear date range picker input when reset
+    // Clear date range picker when cancel is clicked
     $('#dateRangePicker').on('cancel.daterangepicker', function() {
         $(this).val('');
+    });
+
+    // Auto-focus search input on page load
+    $('input[name="search"]').focus();
+
+    // Add Customer Form Validation
+    $('#addCustomerForm').on('submit', function(e) {
+        const phoneInput = $('#phone');
+        const emailInput = $('#email');
+        let isValid = true;
+
+        // Simple phone validation
+        if (!phoneInput.val().match(/^[0-9]{10}$/)) {
+            alert('Please enter a valid 10-digit phone number.');
+            phoneInput.focus();
+            isValid = false;
+        }
+
+        // Simple email validation
+        if (!emailInput.val().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            alert('Please enter a valid email address.');
+            emailInput.focus();
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    // Mobile card dropdown fix
+    $(document).on('click', '.dropdown-toggle', function(e) {
+        e.stopPropagation();
+        $(this).dropdown('toggle');
+        return false;
+    });
+
+    // Close dropdowns when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('.dropdown-menu').removeClass('show');
+        }
+    });
+
+    // Add animation to stats cards on page load
+    $('.stats-card').each(function(i) {
+        $(this).delay(i * 100).animate({
+            opacity: 1
+        }, 300);
     });
 });
 </script>

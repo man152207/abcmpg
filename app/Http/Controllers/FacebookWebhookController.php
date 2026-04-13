@@ -47,6 +47,16 @@ class FacebookWebhookController extends Controller
                     $text     = $event['message']['text'] ?? null;
 
                     if ($senderId && $text) {
+                        $normalizedText = strtolower(trim($text));
+
+                        if ($normalizedText === 'unsubscribe') {
+                            // TODO: चाहे DB मा मार्क गरिराख्न सक्नुहुन्छ
+                            // e.g. Subscriber::updateOrCreate(['fb_id' => $senderId], ['is_subscribed' => false]);
+                    
+                            Log::info("FB user {$senderId} requested unsubscribe, no reply sent.");
+                            // कुनै reply नपठाउने, यो message लाई skip
+                            continue;
+                        }
 
                         // (optional) local conversation context
                         $conversationContext = $this->getConversationContext($senderId, $text);
@@ -126,7 +136,7 @@ class FacebookWebhookController extends Controller
         return null;
     }
 
-    // common headers (this is the missing part 👇)
+    // common headers (this is the missing part ðŸ‘‡)
     $headers = [
         'Authorization' => 'Bearer '.$apiKey,
         'Content-Type'  => 'application/json',
@@ -218,12 +228,24 @@ class FacebookWebhookController extends Controller
                     // newest first
                     foreach ($messages as $m) {
                         if (($m['role'] ?? '') === 'assistant') {
-                            foreach (($m['content'] ?? []) as $p) {
-                                if (($p['type'] ?? '') === 'text') {
-                                    return trim($p['text']['value']);
-                                }
-                            }
-                        }
+    foreach (($m['content'] ?? []) as $p) {
+        if (($p['type'] ?? '') === 'text') {
+            $replyText = trim($p['text']['value']);
+
+            // 1) INTERNAL REASONING ... Output: block हटाउने
+            $replyText = preg_replace('/INTERNAL REASONING:.*?Output:/is', '', $replyText);
+
+            // 2) सुरुमा "Output:" मात्र बसेको भए हटाउने
+            $replyText = preg_replace('/^Output:\s*/i', '', $replyText);
+
+            // final trim
+            $replyText = trim($replyText);
+
+            return $replyText;
+        }
+    }
+}
+
                     }
                 }
 

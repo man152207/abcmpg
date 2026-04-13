@@ -15,8 +15,9 @@
     </div>
 
     <div class="crm-content mpg-layout">
+        {{-- FILTER BAR --}}
         <div class="crm-header-bar mpg-layout">
-            <form id="filterForm" class="form-row align-items-end">
+            <form id="filterForm" class="form-row align-items-end w-100">
                 <div class="col-md-2 col-sm-6 mb-2">
                     <label class="small">From</label>
                     <input type="date" class="form-control mpg-form-control" name="from">
@@ -25,19 +26,20 @@
                     <label class="small">To</label>
                     <input type="date" class="form-control mpg-form-control" name="to">
                 </div>
+
                 <div class="col-md-3 col-sm-6 mb-2">
-    <label class="small">Status</label>
-    <select class="form-control mpg-form-select" name="status" id="statusMulti">
-        <option value="">All</option>
-        <option>New</option>
-        <option>Warm</option>
-        <option>Follow-up Due</option>
-        <option>Negotiation</option>
-        <option>Won</option>
-        <option>Lost</option>
-        <option>Dormant</option>
-    </select>
-</div>
+                    <label class="small">Status</label>
+                    <select class="form-control mpg-form-select" name="status" id="statusSelect">
+                        <option value="">All</option>
+                        <option>New</option>
+                        <option>Warm</option>
+                        <option>Follow-up Due</option>
+                        <option>Negotiation</option>
+                        <option>Won</option>
+                        <option>Lost</option>
+                        <option>Dormant</option>
+                    </select>
+                </div>
 
                 <div class="col-md-2 col-sm-6 mb-2">
                     <label class="small">Channel</label>
@@ -49,84 +51,87 @@
                         <option>SMS</option>
                     </select>
                 </div>
-                <div class="col-md-1 col-sm-6 mb-2">
-                    <label class="small">Assignee</label>
-                    <input type="number" class="form-control mpg-form-control" name="assignee" placeholder="ID">
+
+                <div class="col-md-3 col-sm-12 mb-2">
+                    <label class="small">Search</label>
+                    <input type="text" name="search" id="searchBox" class="form-control mpg-form-control" placeholder="Search name/phone/city/tags (Ctrl+K)">
                 </div>
-                <div class="col-md-2 col-sm-6 mb-2">
-                    <label class="small">Priority</label>
-                    <select class="form-control mpg-form-select" name="priority">
-                        <option value="">All</option>
-                        <option>High</option>
-                        <option>Medium</option>
-                        <option>Low</option>
-                    </select>
-                </div>
-                <div class="col-md-4 col-sm-12 mb-2">
-                    <div class="custom-control custom-checkbox d-inline mr-3">
-                        <input type="checkbox" class="custom-control-input" id="dueToday">
-                        <label class="custom-control-label" for="dueToday">Due Today</label>
-                    </div>
-                    <div class="custom-control custom-checkbox d-inline mr-3">
-                        <input type="checkbox" class="custom-control-input" id="overdue">
-                        <label class="custom-control-label" for="overdue">Overdue</label>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-12 mb-2">
-                    <input type="text" name="search" id="searchBox" class="form-control mpg-form-control" placeholder="Search name/phone/city/tags (⌘/Ctrl+K)">
-                </div>
-                <div class="col-md-4 col-sm-12 mb-2 text-right">
-                    <button class="btn btn-info mpg-btn-primary" id="btnApply"><i class="fas fa-filter mr-1"></i> Apply</button>
+
+                <div class="col-md-12 mb-2 text-right">
+                    <button class="btn btn-info mpg-btn-primary" id="btnApply">
+                        <i class="fas fa-filter mr-1"></i> Apply
+                    </button>
                     <button type="reset" class="btn btn-secondary mpg-btn-secondary" id="btnReset">Reset</button>
-                    <button class="btn btn-secondary mpg-btn-secondary" id="btnExport"><i class="fas fa-download mr-1"></i> Export (.csv)</button>
+                    <button class="btn btn-secondary mpg-btn-secondary" id="btnExport">
+                        <i class="fas fa-download mr-1"></i> Export (.csv)
+                    </button>
                 </div>
             </form>
         </div>
 
-        <div class="mb-2" id="statusPills"></div>
+        <div id="loader" class="mpg-loader" style="display:none;">
+            Loading...
+        </div>
 
+        {{-- TABLE --}}
         <div class="crm-table-container mpg-layout">
             <div class="crm-table-wrapper">
-                <div id="loader" class="p-3" style="display:none">
-                    <div style="height:18px;width:40%;background:#e2e8f0;border-radius:8px"></div>
-                    <div class="mt-2" style="height:56px;background:#f1f5f9;border-radius:12px"></div>
-                    <div class="mt-2" style="height:56px;background:#f1f5f9;border-radius:12px"></div>
-                    <div class="mt-2" style="height:56px;background:#f1f5f9;border-radius:12px"></div>
-                </div>
                 <table class="table table-hover mpg-table" id="tblContacts">
                     <thead>
                         <tr>
-                            <th style="width: 20%;">Customer</th>
-                            <th style="width: 15%;">Phone</th>
-                            <th style="width: 10%;">Status</th>
-                            <th style="width: 15%;">Next Follow-Up</th>
-                            <th style="width: 15%;">Last Contact</th>
+                            <th style="width: 22%;">Customer</th>
+                            <th style="width: 12%;">Phone</th>
+                            <th style="width: 12%;">Status</th>
+                            <th style="width: 16%;">Next Follow-Up</th>
+                            <th style="width: 16%;">Last Contact</th>
                             <th style="width: 10%;">Channel</th>
-                            <th style="width: 10%;">Assigned</th>
+                            <th style="width: 12%;">Assigned</th>
                             <th style="width: 10%;">Priority</th>
-                            <th style="width: 15%;">Actions</th>
+                            <th style="width: 10%;">Actions</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
+
             <div class="crm-pagination p-2" id="pager"></div>
         </div>
     </div>
 
-    <!-- Profile Drawer -->
+    {{-- PROFILE / EDIT MODAL --}}
     <div class="modal fade" id="profileDrawer" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="card-header" style="background: linear-gradient(90deg, #093b7b 0%, #646564 100%); color: #ffffff; padding: 16px; border-radius: 8px 8px 0 0;">
+                <div class="card-header mpg-modal-head">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="h5 mb-0" id="ocName">Customer</span>
                         <button class="btn-close text-white" data-dismiss="modal"></button>
                     </div>
                 </div>
+
                 <div class="modal-body p-4">
+                    <div class="border rounded p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Primary Phone</div>
+                                <div class="h6 mb-0" id="ocPhone">—</div>
+                                <div class="small mt-1 text-muted">Last Contact: <span id="ocLast">—</span></div>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <a id="ocWaLink" class="btn btn-success mpg-btn-success" target="_blank">
+                                    <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                                </a>
+                                <a id="ocMsgLink" class="btn btn-info mpg-btn-primary" target="_blank">
+                                    <i class="fab fa-facebook-messenger mr-1"></i> Messenger
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-2">Edit Lead</h6>
+
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="text-muted small">Status</label>
                             <select class="form-control mpg-form-select" id="ocStatus">
                                 <option>New</option>
@@ -138,7 +143,8 @@
                                 <option>Dormant</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+
+                        <div class="col-md-4 mb-3">
                             <label class="text-muted small">Priority</label>
                             <select class="form-control mpg-form-select" id="ocPriority">
                                 <option>High</option>
@@ -146,59 +152,38 @@
                                 <option>Low</option>
                             </select>
                         </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted small">Assign To</label>
+                            <select class="form-control mpg-form-select" id="ocAssign"></select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Next Follow-Up</label>
+                            <input id="ocNext" type="datetime-local" class="form-control mpg-form-control">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Tags</label>
+                            <input id="ocTags" class="form-control mpg-form-control" placeholder="comma,separated,tags">
+                        </div>
+
                         <div class="col-md-12 mb-3">
-                            <label class="text-muted small">Assign To (Admin ID)</label>
-                            <input id="ocAssign" class="form-control mpg-form-control" placeholder="e.g., 1">
+                            <label class="text-muted small">Notes</label>
+                            <textarea id="ocNotes" class="form-control mpg-form-control" rows="2" placeholder="Short note..."></textarea>
                         </div>
-                    </div>
 
-                    <div class="border rounded p-3 mb-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-muted small">Primary Phone</div>
-                                <div class="h6 mb-0" id="ocPhone">—</div>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <a id="ocWaLink" class="btn btn-info mpg-btn-primary" target="_blank"><i class="fab fa-whatsapp mr-1"></i> WhatsApp</a>
-                                <a id="ocMsgLink" class="btn btn-info mpg-btn-primary" target="_blank"><i class="fab fa-facebook-messenger mr-1"></i> Messenger</a>
-                            </div>
-                        </div>
-                        <div class="small mt-1">
-                            <span id="ocConsent" class="mr-2 d-none"><i class="fas fa-shield-alt text-success mr-1"></i> Consent</span>
-                            <span class="text-muted">Last Contact: <span id="ocLast">—</span></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <div class="text-muted small">Service Interest</div>
-                            <div id="ocService">—</div>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <div class="text-muted small">Budget</div>
-                            <div id="ocBudget">—</div>
-                        </div>
-                        <div class="col-md-4 mb-2">
-                            <div class="text-muted small">City</div>
-                            <div id="ocCity">—</div>
-                        </div>
-                        <div class="col-md-4 mb-2">
-                            <div class="text-muted small">Source</div>
-                            <div id="ocSource">—</div>
-                        </div>
-                        <div class="col-md-4 mb-2">
-                            <div class="text-muted small">Tags</div>
-                            <div id="ocTags">—</div>
-                        </div>
-                        <div class="col-md-12 mb-2">
-                            <div class="text-muted small">Notes</div>
-                            <div id="ocNotes">—</div>
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-info mpg-btn-primary" id="btnSaveProfile">
+                                <i class="fas fa-save mr-1"></i> Save Changes
+                            </button>
                         </div>
                     </div>
 
                     <hr>
 
-                    <h6 class="mb-3">Add Follow-Up</h6>
+                    <h6 class="mb-2">Add Follow-Up</h6>
+
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <label class="small text-muted">Channel</label>
@@ -226,33 +211,34 @@
                             </select>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <textarea id="fuNote" class="form-control mpg-form-control" rows="2" placeholder="Short note..."></textarea>
+                            <textarea id="fuNote" class="form-control mpg-form-control" rows="2" placeholder="Short follow-up note..."></textarea>
                         </div>
-                        <div class="col-md-12 d-flex align-items-center justify-content-between">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="fuRem">
-                                <label class="custom-control-label" for="fuRem">Set reminder</label>
-                            </div>
-                            <div>
-                                <button class="btn btn-secondary mpg-btn-secondary crm-btn-sm" onclick="snoozeLocal(1);return false;">Snooze +1d</button>
+
+                        <div class="col-md-12 d-flex justify-content-between align-items-center">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-secondary mpg-btn-secondary crm-btn-sm" onclick="snoozeLocal(1);return false;">+1d</button>
                                 <button class="btn btn-secondary mpg-btn-secondary crm-btn-sm" onclick="snoozeLocal(3);return false;">+3d</button>
                                 <button class="btn btn-secondary mpg-btn-secondary crm-btn-sm" onclick="snoozeLocal(7);return false;">+7d</button>
-                                <button class="btn btn-info mpg-btn-primary crm-btn-sm" id="btnSaveFU"><i class="fas fa-save mr-1"></i> Save</button>
                             </div>
+                            <button class="btn btn-info mpg-btn-primary crm-btn-sm" id="btnSaveFU">
+                                <i class="fas fa-save mr-1"></i> Save Follow-Up
+                            </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- New Lead Modal -->
+    {{-- NEW LEAD MODAL --}}
     <div class="modal fade" id="modalNewLead" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="card-header" style="background: linear-gradient(90deg, #093b7b 0%, #646564 100%); color: #ffffff; padding: 16px; border-radius: 8px 8px 0 0;">
+                <div class="card-header mpg-modal-head">
                     <h5 class="modal-title mb-0"><i class="fas fa-user-plus mr-1"></i> New Lead</h5>
                 </div>
+
                 <div class="modal-body p-4">
                     <form id="formNewLead">
                         <div class="form-row">
@@ -260,14 +246,11 @@
                                 <label class="small">Full Name</label>
                                 <input name="name" class="form-control mpg-form-control" placeholder="e.g., Sita Gurung">
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="small">Phone <span class="text-danger">*</span></label>
                                 <input name="phone_primary" class="form-control mpg-form-control" required placeholder="98XXXXXXXX">
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="small">Alt. Phone</label>
-                                <input name="phone_alt" class="form-control mpg-form-control" placeholder="98XXXXXXXX">
-                            </div>
+
                             <div class="col-md-6 mb-3">
                                 <label class="small">Facebook Profile URL / Username</label>
                                 <input name="fb_profile_url" class="form-control mpg-form-control" placeholder="username or https://facebook.com/...">
@@ -276,17 +259,12 @@
                                 <label class="small">Messenger Username</label>
                                 <input name="messenger_username" class="form-control mpg-form-control" placeholder="e.g., page.username">
                             </div>
+
                             <div class="col-md-4 mb-3">
                                 <label class="small">City</label>
                                 <input name="city" class="form-control mpg-form-control" placeholder="Pokhara">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="small">Preferred Language</label>
-                                <select name="preferred_language" class="form-control mpg-form-select">
-                                    <option>Nepali</option>
-                                    <option>English</option>
-                                </select>
-                            </div>
+
                             <div class="col-md-4 mb-3">
                                 <label class="small">Source</label>
                                 <select name="source" class="form-control mpg-form-select">
@@ -296,35 +274,44 @@
                                     <option>Referral</option>
                                 </select>
                             </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="small">Preferred Language</label>
+                                <select name="preferred_language" class="form-control mpg-form-select">
+                                    <option>Nepali</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+
                             <div class="col-md-6 mb-3">
                                 <label class="small">Service Interest</label>
-                                <input name="service_interest" class="form-control mpg-form-control" placeholder="Hair Keratin / Real Estate / ...">
+                                <input name="service_interest" class="form-control mpg-form-control" placeholder="Real Estate / Salon / ...">
                             </div>
+
                             <div class="col-md-6 mb-3">
-                                <label class="small">Budget Range</label>
+                                <label class="small">Budget</label>
                                 <input name="budget_range" class="form-control mpg-form-control" placeholder="Rs 3,000 – 6,000">
                             </div>
+
                             <div class="col-md-12 mb-3">
                                 <label class="small">Tags</label>
                                 <input name="tags" class="form-control mpg-form-control" placeholder="comma,separated,tags">
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" id="consentNew" name="whatsapp_opt_in">
-                                    <label class="custom-control-label" for="consentNew">WhatsApp/Messenger consent obtained</label>
-                                </div>
-                            </div>
+
                             <div class="col-md-12 mb-3">
                                 <label class="small">Quick Note</label>
-                                <textarea name="notes_summary" class="form-control mpg-form-control" rows="2" placeholder="e.g., Asked to call after 5 PM"></textarea>
+                                <textarea name="notes_summary" class="form-control mpg-form-control" rows="2" placeholder="e.g., Call after 5 PM"></textarea>
                             </div>
                         </div>
                     </form>
                 </div>
+
                 <div class="modal-footer">
-                    <span class="text-muted mr-auto small">Tip: Press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd> to save</span>
+                    <span class="text-muted mr-auto small">Tip: Ctrl/⌘ + Enter to save</span>
                     <button class="btn btn-secondary mpg-btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-info mpg-btn-primary" id="btnSaveLead"><i class="fas fa-save mr-1"></i> Save Lead</button>
+                    <button class="btn btn-info mpg-btn-primary" id="btnSaveLead">
+                        <i class="fas fa-save mr-1"></i> Save Lead
+                    </button>
                 </div>
             </div>
         </div>
@@ -336,7 +323,14 @@
 
 @push('scripts')
 <script>
+/**
+ * ✅ IMPORTANT (New entry always TOP):
+ * Backend मा `admin.followups.data` query मा orderByDesc('id') वा created_at desc राख्नुपर्छ।
+ * Frontend sort ले page भित्र मात्र top बनाउँछ। Pagination मा 100% guarantee backend बाटै हुन्छ।
+ */
+
 const CSRF = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 let CURRENT = null;
 let LAST_PARAMS = '';
 let ADMINS = [];
@@ -346,110 +340,230 @@ function toast(msg, type='success') {
     showNotification(msg, type === 'error' ? '#dc2626' : '#38a169');
 }
 
-function relTime(iso) {
-    if (!iso) return '—';
-    const d = new Date(iso);
-    const diff = (Date.now() - d.getTime()) / 1000;
-    const abs = Math.abs(diff);
-    const units = [[60, 's'], [60, 'm'], [24, 'h'], [7, 'd'], [4.345, 'w'], [12, 'mo']];
-    let n = abs, label = 'y', i = 0;
-    for (; i < units.length && n >= units[i][0]; i++) {
-        n /= units[i][0];
-        label = units[i][1];
+function showLoader(on) {
+    document.getElementById('loader').style.display = on ? 'block' : 'none';
+}
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+function parseISO(iso){
+    if(!iso) return null;
+    const s = String(iso).includes('T') ? String(iso) : String(iso).replace(' ', 'T');
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return null;
+    return d;
+}
+
+// ✅ Clear date format: YYYY-MM-DD HH:MM
+function formatDT(iso) {
+    const d = parseISO(iso);
+    if(!d) return (iso ? String(iso) : '—');
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+
+// datetime-local value: YYYY-MM-DDTHH:MM
+function toInputDT(iso){
+    if(!iso) return '';
+    const s = String(iso).replace(' ', 'T');
+    return s.slice(0, 16);
+}
+
+function isOverdue(nextIso){
+    const d = parseISO(nextIso);
+    return d ? (d.getTime() < Date.now()) : false;
+}
+
+function statusOptions(selected){
+    const list = ['New','Warm','Follow-up Due','Negotiation','Won','Lost','Dormant'];
+    return list.map(s => `<option ${String(selected)===String(s)?'selected':''}>${s}</option>`).join('');
+}
+
+function priorityOptions(selected){
+    const list = ['High','Medium','Low'];
+    return list.map(s => `<option ${String(selected)===String(s)?'selected':''}>${s}</option>`).join('');
+}
+
+function adminOptions(selectedId){
+    const opts = ['<option value="">—</option>']
+        .concat(ADMINS.map(a =>
+            `<option value="${a.id}" ${String(a.id)===String(selectedId)?'selected':''}>${a.name}</option>`
+        ));
+    return opts.join('');
+}
+
+function buildParams(url = null){
+    const params = new URLSearchParams();
+    const f = document.getElementById('filterForm');
+
+    const from = f.from.value;
+    const to = f.to.value;
+    const status = document.getElementById('statusSelect').value;
+    const channel = f.channel.value;
+    const search = f.search.value;
+
+    if (from) params.append('from', from);
+    if (to) params.append('to', to);
+
+    // Backward compatible: status or status[]
+    if (status) {
+        params.append('status', status);
+        params.append('status[]', status);
     }
-    n = Math.floor(n);
-    const when = diff > 0 ? `${n}${label} ago` : `in ${n}${label}`;
-    return `${d.toLocaleString()} · <span class="text-muted">${when}</span>`;
+
+    if (channel) params.append('channel', channel);
+    if (search) params.append('search', search);
+
+    return url ? url : (`{{ route('admin.followups.data') }}?` + params.toString());
 }
 
-function adminOptions(selectedId) {
-    return ADMINS.map(a => `<option value="${a.id}" ${String(a.id) === String(selectedId) ? 'selected' : ''}>${a.name}</option>`).join('');
+function loadData(url = null){
+    const endpoint = buildParams(url);
+    LAST_PARAMS = endpoint;
+
+    showLoader(true);
+    fetch(endpoint, { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+        .then(r => r.json())
+        .then(render)
+        .catch(() => toast('Failed to load', 'error'))
+        .finally(() => showLoader(false));
 }
 
-function pillHtml(counts) {
-    const names = ['New', 'Warm', 'Follow-up Due', 'Negotiation', 'Won', 'Lost', 'Dormant'];
-    let h = '<ul class="nav nav-pills flex-wrap">';
-    names.forEach(n => {
-        const c = counts[n] || 0;
-        h += `<li class="nav-item mr-2 mb-2"><a href="#" data-status="${n}" class="nav-link ${n === 'New' ? 'active' : ''}">${n} <span class="badge badge-light ml-1">${c}</span></a></li>`;
+function inlineUpdate(id, field, value, reload=true){
+    return fetch(`{{ route('admin.followups.contact.inline') }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': CSRF,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ id, field, value })
+    }).then(async r => {
+        const j = await r.json().catch(() => ({ ok:false }));
+        if (!j.ok) throw new Error('Update failed');
+        if (reload) loadData();
+        return true;
+    }).catch(() => {
+        toast('Update failed', 'error');
+        return false;
     });
-    h += '</ul>';
-    return h;
 }
 
-function rowHtml(c) {
+function rowHtml(c){
     CONTACTS[c.id] = c;
+
     const lf = c.latest_follow_up;
-    const channel = lf ? lf.contact_channel : '-';
-    const last = c.last_contact_at ? relTime(c.last_contact_at) : '—';
-    const statusBadge = (c.status === 'Follow-up Due') ? 'badge-danger' : (c.status === 'New' ? 'badge-info' : (c.status === 'Warm' ? 'badge-primary' : 'badge-secondary'));
-    const dueFlag = c.next_followup_at && new Date(c.next_followup_at) < new Date() ? '<span class="badge badge-danger ml-2">Overdue</span>' : '';
-    const msgHref = c.messenger_username ? `https://m.me/${c.messenger_username}` : (c.fb_profile_url || '#');
-    const assignedName = c.assigned_name || (c.assigned_to || '');
+    const channel = lf ? (lf.contact_channel || '-') : '-';
+
+    const msgHref = c.messenger_username
+        ? `https://m.me/${c.messenger_username}`
+        : (c.fb_profile_url || '#');
+
+    const overdueBadge = isOverdue(c.next_followup_at)
+        ? `<span class="badge badge-danger ml-2">Overdue</span>`
+        : '';
+
+    const assignedName = c.assigned_name || (c.assigned_to || '—');
 
     return `
-    <tr data-id="${c.id}" class="${c.status === 'New' ? 'crm-row-pending' : c.status === 'Warm' ? 'crm-row-in-progress' : c.status === 'Follow-up Due' ? 'crm-row-waiting-payment' : ''}">
-        <td class="crm-contact-col">
-            <a href="#" class="crm-contact-col" onclick="openProfile(${c.id});return false;">${c.name || '—'}</a>
-            <div class="small text-muted">${c.tags || ''} ${c.city ? ('• ' + c.city) : ''}</div>
+    <tr data-id="${c.id}">
+        <td>
+            <a href="#" class="crm-contact-link" onclick="openProfile(${c.id});return false;">
+                ${c.name || '—'}
+            </a>
+            <div class="small text-muted">
+                ${(c.tags || '')}${c.city ? (' • ' + c.city) : ''}
+            </div>
         </td>
+
         <td>
             <span class="mr-2">${c.phone_primary || '—'}</span>
-            ${c.phone_primary ? `<i class="fas fa-copy" style="cursor:pointer" title="Copy" onclick="navigator.clipboard.writeText('${c.phone_primary}');toast('Copied');"></i>` : ''}
+            ${c.phone_primary ? `<i class="fas fa-copy mpg-copy" title="Copy" onclick="navigator.clipboard.writeText('${c.phone_primary}');toast('Copied');"></i>` : ''}
         </td>
-        <td><span class="badge ${statusBadge}">${c.status}</span></td>
-        <td class="crm-input-row">
-            <input type="datetime-local" class="form-control mpg-form-control-sm" value="${c.next_followup_at ? c.next_followup_at.replace(' ', 'T').slice(0, 16) : ''}" onchange="inlineUpdate(${c.id}, 'next_followup_at', this.value)">${dueFlag}
-        </td>
-        <td>${last}</td>
-        <td>${channel}</td>
+
         <td>
-            <select class="form-control mpg-form-select-sm" onchange="inlineUpdate(${c.id}, 'assigned_to', this.value)">${adminOptions(c.assigned_to)}</select>
-            <small class="text-muted d-block mt-1">Now: ${assignedName || '—'}</small>
-        </td>
-        <td>
-            <select class="form-control mpg-form-select-sm" onchange="inlineUpdate(${c.id}, 'priority', this.value)">
-                <option ${c.priority === 'High' ? 'selected' : ''}>High</option>
-                <option ${c.priority === 'Medium' ? 'selected' : ''}>Medium</option>
-                <option ${c.priority === 'Low' ? 'selected' : ''}>Low</option>
+            <select class="form-control mpg-form-select-sm"
+                    onchange="inlineUpdate(${c.id}, 'status', this.value)">
+                ${statusOptions(c.status)}
             </select>
         </td>
+
+        <td class="crm-input-row">
+            <input type="datetime-local"
+                class="form-control mpg-form-control-sm"
+                value="${toInputDT(c.next_followup_at)}"
+                onchange="inlineUpdate(${c.id}, 'next_followup_at', this.value ? (this.value.replace('T',' ') + ':00') : null)">
+            <div class="small text-muted mt-1">
+                ${c.next_followup_at ? formatDT(c.next_followup_at) : '—'} ${overdueBadge}
+            </div>
+        </td>
+
+        <td>
+            <div>${c.last_contact_at ? formatDT(c.last_contact_at) : '—'}</div>
+        </td>
+
+        <td>${channel}</td>
+
+        <td>
+            <select class="form-control mpg-form-select-sm"
+                    onchange="inlineUpdate(${c.id}, 'assigned_to', this.value)">
+                ${adminOptions(c.assigned_to)}
+            </select>
+            <small class="text-muted d-block mt-1">Now: ${assignedName}</small>
+        </td>
+
+        <td>
+            <select class="form-control mpg-form-select-sm"
+                    onchange="inlineUpdate(${c.id}, 'priority', this.value)">
+                ${priorityOptions(c.priority)}
+            </select>
+        </td>
+
         <td>
             <div class="btn-group btn-group-sm">
-                <button class="btn btn-info mpg-btn-primary crm-btn-sm" onclick="openProfile(${c.id})" title="View"><i class="fas fa-eye"></i></button>
-                <a class="btn btn-success mpg-btn-success crm-btn-sm" target="_blank" href="https://wa.me/977${c.phone_primary}?text=${encodeURIComponent('Namaste ' + (c.name || 'Sir/Madam') + ', ' + (c.service_interest || 'your inquiry') + ' ko barema chito call garna milcha?')}">
-                    <i class="fab fa-whatsapp"></i></a>
-                <a class="btn btn-info mpg-btn-primary crm-btn-sm" target="_blank" href="${msgHref}"><i class="fab fa-facebook-messenger"></i></a>
-                <div class="btn-group">
-                    <button class="btn btn-secondary mpg-btn-secondary crm-btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#" onclick="setStatus(${c.id}, 'Warm');return false;">Mark Warm</a>
-                        <a class="dropdown-item" href="#" onclick="setStatus(${c.id}, 'Negotiation');return false;">Mark Negotiation</a>
-                        <a class="dropdown-item" href="#" onclick="setStatus(${c.id}, 'Won');return false;">Mark Won</a>
-                        <a class="dropdown-item" href="#" onclick="setStatus(${c.id}, 'Lost');return false;">Mark Lost</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" onclick="snooze(${c.id}, 1);return false;">Snooze +1d</a>
-                        <a class="dropdown-item" href="#" onclick="snooze(${c.id}, 3);return false;">Snooze +3d</a>
-                        <a class="dropdown-item" href="#" onclick="snooze(${c.id}, 7);return false;">+7d</a>
-                    </div>
-                </div>
+                <!-- ✅ Edit button -->
+                <button class="btn btn-secondary mpg-btn-secondary crm-btn-sm"
+                        onclick="openProfile(${c.id});return false;" title="Edit">
+                    <i class="fas fa-pen"></i>
+                </button>
+
+                <a class="btn btn-success mpg-btn-success crm-btn-sm" target="_blank"
+                   href="https://wa.me/977${c.phone_primary || ''}?text=${encodeURIComponent('Namaste ' + (c.name || 'Sir/Madam') + ', ' + (c.service_interest || 'your inquiry') + ' ko barema chito call garna milcha?')}">
+                   <i class="fab fa-whatsapp"></i>
+                </a>
+
+                <a class="btn btn-info mpg-btn-primary crm-btn-sm" target="_blank" href="${msgHref}">
+                    <i class="fab fa-facebook-messenger"></i>
+                </a>
             </div>
         </td>
     </tr>`;
 }
 
-function render(data) {
+function render(data){
     ADMINS = data.admins || [];
-    document.getElementById('statusPills').innerHTML = pillHtml(data.counts || {});
+
     const tbody = document.querySelector('#tblContacts tbody');
-    const rows = (data.data?.data || []).map(rowHtml).join('');
-    tbody.innerHTML = rows || '<tr><td colspan="9" class="text-center text-muted">No records</td></tr>';
+    const rowsRaw = (data.data?.data || []);
+
+    // ✅ Newest first (frontend backup)
+    const rowsSorted = rowsRaw.slice().sort((a,b) => {
+        const bid = Number(b.id)||0, aid = Number(a.id)||0;
+        if (bid !== aid) return bid - aid;
+        // fallback created_at
+        const bd = parseISO(b.created_at), ad = parseISO(a.created_at);
+        return (bd?bd.getTime():0) - (ad?ad.getTime():0);
+    });
+
+    tbody.innerHTML = rowsSorted.length
+        ? rowsSorted.map(rowHtml).join('')
+        : '<tr><td colspan="9" class="text-center text-muted">No records</td></tr>';
 
     const p = data.data;
     const pager = document.getElementById('pager');
+
     if (p && p.total > p.per_page) {
         let h = `<div class="d-flex justify-content-between align-items-center">
-            <div>Showing ${p.from}–${p.to} of ${p.total}</div><div>`;
+            <div class="small text-muted">Showing ${p.from}–${p.to} of ${p.total}</div><div>`;
         if (p.prev_page_url) h += `<button class="btn btn-outline-secondary mpg-btn-outline-secondary mr-2" onclick="loadData('${p.prev_page_url}')">Prev</button>`;
         if (p.next_page_url) h += `<button class="btn btn-outline-secondary mpg-btn-outline-secondary" onclick="loadData('${p.next_page_url}')">Next</button>`;
         h += `</div></div>`;
@@ -459,192 +573,139 @@ function render(data) {
     }
 }
 
-function showLoader(on) {
-    document.getElementById('loader').style.display = on ? 'block' : 'none';
-}
-
-function getStatuses() {
-    const val = document.getElementById('statusMulti').value;
-    // यदि "All" (value="") छ भने filter नपठाउने
-    return val ? [val] : [];
-}
-
-function buildParams(url = null) {
-    const params = new URLSearchParams();
-    const f = document.getElementById('filterForm');
-    getStatuses().forEach(s => params.append('status[]', s));
-    const ch = f.channel.value, pr = f.priority.value, asg = f.assignee.value, stext = f.search.value, from = f.from.value, to = f.to.value;
-    if (ch) params.append('channel', ch);
-    if (pr) params.append('priority', pr);
-    if (asg) params.append('assignee', asg);
-    if (stext) params.append('search', stext);
-    if (from) params.append('from', from);
-    if (to) params.append('to', to);
-    if (document.getElementById('dueToday').checked) params.append('due_today', 1);
-    if (document.getElementById('overdue').checked) params.append('overdue', 1);
-    return url ? url : (`{{ route('admin.followups.data') }}?` + params.toString());
-}
-
-function loadData(url = null) {
-    const endpoint = buildParams(url);
-    LAST_PARAMS = endpoint;
-    showLoader(true);
-    fetch(endpoint, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-        .then(r => r.json()).then(render)
-        .catch(() => toast('Failed to load', 'error'))
-        .finally(() => showLoader(false));
-}
-
-function inlineUpdate(id, field, value) {
-    fetch(`{{ route('admin.followups.contact.inline') }}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'X-Requested-With': 'XMLHttpRequest' },
-        body: JSON.stringify({ id, field, value })
-    }).then(async r => {
-        const j = await r.json().catch(() => ({ ok: false }));
-        if (j.ok) {
-            toast('Updated');
-            loadData();
-        } else {
-            toast('Update failed', 'error');
-        }
-    }).catch(() => toast('Update failed', 'error'));
-}
-
-function setStatus(id, status) {
-    inlineUpdate(id, 'status', status);
-}
-
-function snooze(id, days) {
-    fetch(`{{ route('admin.followups.contact.snooze') }}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'X-Requested-With': 'XMLHttpRequest' },
-        body: JSON.stringify({ id, days })
-    }).then(async r => {
-        const j = await r.json().catch(() => ({ ok: false }));
-        if (j.ok) {
-            toast('Snoozed');
-            loadData();
-        } else {
-            toast('Snooze failed', 'error');
-        }
-    }).catch(() => toast('Snooze failed', 'error'));
-}
-
-function openProfile(id) {
+function openProfile(id){
     const c = CONTACTS[id];
-    if (!c) {
-        toast('Data missing', 'error');
-        return;
-    }
-    CURRENT = { id, name: c.name, phone_primary: c.phone_primary };
+    if (!c) return toast('Data missing', 'error');
+
+    CURRENT = { id };
 
     document.getElementById('ocName').textContent = c.name || 'Customer';
     document.getElementById('ocPhone').textContent = c.phone_primary || '—';
+    document.getElementById('ocLast').textContent = c.last_contact_at ? formatDT(c.last_contact_at) : '—';
+
     document.getElementById('ocStatus').value = c.status || 'New';
     document.getElementById('ocPriority').value = c.priority || 'Medium';
-    document.getElementById('ocAssign').value = c.assigned_to || '';
-    document.getElementById('ocService').textContent = c.service_interest || '—';
-    document.getElementById('ocBudget').textContent = c.budget_range || '—';
-    document.getElementById('ocCity').textContent = c.city || '—';
-    document.getElementById('ocSource').textContent = c.source || '—';
-    document.getElementById('ocTags').textContent = c.tags || '—';
-    document.getElementById('ocNotes').textContent = c.notes_summary || '—';
-    document.getElementById('ocLast').textContent = c.last_contact_at ? new Date(c.last_contact_at).toLocaleString() : '—';
-    const consent = String(c.whatsapp_opt_in || '0') === '1';
-    document.getElementById('ocConsent').classList.toggle('d-none', !consent);
 
-    document.getElementById('ocWaLink').href = `https://wa.me/977${c.phone_primary}?text=${encodeURIComponent('Namaste ' + (c.name || 'Sir/Madam') + ', ' + (c.service_interest || 'your inquiry') + ' ko barema chito call garna milcha?')}`;
+    const assign = document.getElementById('ocAssign');
+    assign.innerHTML = adminOptions(c.assigned_to);
+
+    document.getElementById('ocTags').value = c.tags || '';
+    document.getElementById('ocNotes').value = c.notes_summary || '';
+
+    document.getElementById('ocNext').value = toInputDT(c.next_followup_at);
+
+    document.getElementById('ocWaLink').href =
+        `https://wa.me/977${c.phone_primary || ''}?text=${encodeURIComponent('Namaste ' + (c.name || 'Sir/Madam') + ', ' + (c.service_interest || 'your inquiry') + ' ko barema chito call garna milcha?')}`;
+
     const msgHref = c.messenger_username ? `https://m.me/${c.messenger_username}` : (c.fb_profile_url || '#');
     document.getElementById('ocMsgLink').href = msgHref;
 
+    // default planned +2d
     const d = new Date();
     d.setDate(d.getDate() + 2);
-    document.getElementById('fuPlanned').value = d.toISOString().slice(0, 16);
+    document.getElementById('fuPlanned').value = d.toISOString().slice(0,16);
 
     $('#profileDrawer').modal('show');
 }
 
-function snoozeLocal(days) {
+async function saveProfile(){
+    if (!CURRENT) return toast('Open a contact first', 'error');
+
+    const id = CURRENT.id;
+    const status = document.getElementById('ocStatus').value;
+    const priority = document.getElementById('ocPriority').value;
+    const assigned = document.getElementById('ocAssign').value || null;
+
+    const nextVal = document.getElementById('ocNext').value;
+    const nextDb = nextVal ? (nextVal.replace('T',' ') + ':00') : null;
+
+    const tags = document.getElementById('ocTags').value || '';
+    const notes = document.getElementById('ocNotes').value || '';
+
+    try {
+        showLoader(true);
+
+        await inlineUpdate(id, 'status', status, false);
+        await inlineUpdate(id, 'priority', priority, false);
+        await inlineUpdate(id, 'assigned_to', assigned, false);
+        await inlineUpdate(id, 'next_followup_at', nextDb, false);
+        await inlineUpdate(id, 'tags', tags, false);
+        await inlineUpdate(id, 'notes_summary', notes, false);
+
+        toast('Saved');
+        $('#profileDrawer').modal('hide');
+        loadData();
+    } catch (e) {
+        toast('Save failed', 'error');
+    } finally {
+        showLoader(false);
+    }
+}
+
+function snoozeLocal(days){
     const el = document.getElementById('fuPlanned');
     const d = new Date();
     d.setDate(d.getDate() + days);
-    el.value = d.toISOString().slice(0, 16);
+    el.value = d.toISOString().slice(0,16);
 }
 
-function exportCSV() {
-    fetch(LAST_PARAMS, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-        .then(r => r.json()).then(j => {
-            const rows = j.data?.data || [];
-            const head = ['Name', 'Phone', 'Status', 'Next Follow-Up', 'Last Contact', 'Channel', 'Assigned Name', 'Assigned ID', 'Priority', 'City', 'Tags', 'Service'];
-            const csv = [head.join(',')].concat(rows.map(r => [
-                r.name || '', r.phone_primary || '', r.status || '', r.next_followup_at || '', r.last_contact_at || '',
-                (r.latest_follow_up?.contact_channel) || '', r.assigned_name || '', r.assigned_to || '', r.priority || '',
-                r.city || '', (r.tags || '').replace(/,/g, ';'), r.service_interest || ''
-            ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))).join('\n');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `followups_${Date.now()}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }).catch(() => toast('Export failed', 'error'));
-}
-document.getElementById('btnExport').addEventListener('click', exportCSV);
-
-document.getElementById('btnSaveLead').addEventListener('click', saveLead);
-document.getElementById('formNewLead').addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        saveLead();
-    }
-});
-async function saveLead() {
+async function saveLead(){
     const f = document.getElementById('formNewLead');
     const formData = new FormData(f);
-    formData.set('whatsapp_opt_in', document.getElementById('consentNew').checked ? '1' : '0');
+
     try {
         const r = await fetch(`{{ route('admin.followups.contact.store') }}`, {
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': CSRF, 'X-Requested-With': 'XMLHttpRequest' },
             body: formData
         });
+
         const ct = r.headers.get('content-type') || '';
-        const j = ct.includes('application/json') ? await r.json() : { ok: false, msg: 'Non-JSON', status: r.status };
-        if (r.status === 401) {
-            toast('Please login again', 'error');
-            return;
-        }
-        if (r.status === 419) {
-            toast('CSRF mismatch. Refresh page.', 'error');
-            return;
-        }
+        const j = ct.includes('application/json') ? await r.json() : { ok:false };
+
+        if (r.status === 401) return toast('Please login again', 'error');
+        if (r.status === 419) return toast('CSRF mismatch. Refresh page.', 'error');
         if (r.status === 422) {
             const first = j?.errors ? Object.values(j.errors)[0]?.[0] : 'Validation failed';
-            toast(first, 'error');
-            return;
+            return toast(first, 'error');
         }
+
         if (j.ok) {
             toast('Lead saved');
             $('#modalNewLead').modal('hide');
             f.reset();
+
+            // ✅ reload first page (backend sorted desc भए new entry top आउने)
             loadData();
         } else {
             toast(j.msg || 'Save failed', 'error');
-            console.error('SaveLead error', j);
         }
     } catch (e) {
-        console.error(e);
         toast('Network/Server error', 'error');
     }
 }
 
-document.getElementById('btnSaveFU').addEventListener('click', async function() {
-    if (!CURRENT) {
-        toast('Open a contact first', 'error');
-        return;
+document.getElementById('btnSaveProfile').addEventListener('click', function(e){
+    e.preventDefault();
+    saveProfile();
+});
+
+document.getElementById('btnSaveLead').addEventListener('click', function(e){
+    e.preventDefault();
+    saveLead();
+});
+
+document.getElementById('formNewLead').addEventListener('keydown', function(e){
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        saveLead();
     }
+});
+
+document.getElementById('btnSaveFU').addEventListener('click', async function(e){
+    e.preventDefault();
+    if (!CURRENT) return toast('Open a contact first', 'error');
+
     const payload = {
         crm_contact_id: CURRENT.id,
         contact_channel: document.getElementById('fuChannel').value,
@@ -652,28 +713,29 @@ document.getElementById('btnSaveFU').addEventListener('click', async function() 
         done_at: new Date().toISOString(),
         outcome: document.getElementById('fuOutcome').value || null,
         note: document.getElementById('fuNote').value || '',
-        reminder_set: document.getElementById('fuRem').checked ? 1 : 0
+        reminder_set: 0
     };
+
     try {
         const r = await fetch(`{{ route('admin.followups.followup.store') }}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'X-Requested-With': 'XMLHttpRequest' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': CSRF,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
             body: JSON.stringify(payload)
         });
-        const j = await r.json().catch(() => ({ ok: false }));
-        if (r.status === 401) {
-            toast('Please login again', 'error');
-            return;
-        }
-        if (r.status === 419) {
-            toast('CSRF mismatch. Refresh page.', 'error');
-            return;
-        }
+
+        const j = await r.json().catch(() => ({ ok:false }));
+
+        if (r.status === 401) return toast('Please login again', 'error');
+        if (r.status === 419) return toast('CSRF mismatch. Refresh page.', 'error');
         if (r.status === 422) {
             const first = j?.errors ? Object.values(j.errors)[0]?.[0] : 'Validation failed';
-            toast(first, 'error');
-            return;
+            return toast(first, 'error');
         }
+
         if (j.ok) {
             toast('Follow-up saved');
             $('#profileDrawer').modal('hide');
@@ -682,32 +744,58 @@ document.getElementById('btnSaveFU').addEventListener('click', async function() 
             toast(j.msg || 'Failed', 'error');
         }
     } catch (e) {
-        console.error(e);
         toast('Failed', 'error');
     }
 });
 
+function exportCSV(e){
+    e.preventDefault();
+    fetch(LAST_PARAMS, { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+        .then(r => r.json()).then(j => {
+            const rows = (j.data?.data || []).slice().sort((a,b)=> (Number(b.id)||0)-(Number(a.id)||0));
+            const head = ['Name','Phone','Status','Next Follow-Up','Last Contact','Channel','Assigned Name','Assigned ID','Priority','City','Tags','Service'];
+            const csv = [head.join(',')].concat(rows.map(r => [
+                r.name || '',
+                r.phone_primary || '',
+                r.status || '',
+                r.next_followup_at ? formatDT(r.next_followup_at) : '',
+                r.last_contact_at ? formatDT(r.last_contact_at) : '',
+                (r.latest_follow_up?.contact_channel) || '',
+                r.assigned_name || '',
+                r.assigned_to || '',
+                r.priority || '',
+                r.city || '',
+                (r.tags || '').replace(/,/g,';'),
+                r.service_interest || ''
+            ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','))).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `followups_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }).catch(()=> toast('Export failed', 'error'));
+}
+
+document.getElementById('btnExport').addEventListener('click', exportCSV);
+
 let tSearch;
-document.getElementById('searchBox').addEventListener('input', function() {
+document.getElementById('searchBox').addEventListener('input', function(){
     clearTimeout(tSearch);
-    tSearch = setTimeout(() => { loadData(); }, 350);
+    tSearch = setTimeout(() => loadData(), 350);
 });
-document.getElementById('btnApply').addEventListener('click', function(e) {
+
+document.getElementById('btnApply').addEventListener('click', function(e){
     e.preventDefault();
     loadData();
 });
-document.getElementById('btnReset').addEventListener('click', function() {
-    setTimeout(() => { loadData(); }, 50);
+
+document.getElementById('btnReset').addEventListener('click', function(){
+    setTimeout(() => loadData(), 50);
 });
-document.addEventListener('click', function(e) {
-    const a = e.target.closest('#statusPills a[data-status]');
-    if (!a) return;
-    e.preventDefault();
-    const s = a.getAttribute('data-status');
-    const sel = document.getElementById('statusMulti');
-    Array.from(sel.options).forEach(o => o.selected = (o.value === s));
-    loadData();
-});
+
 document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -715,17 +803,13 @@ document.addEventListener('keydown', (e) => {
     }
     if (e.key.toLowerCase() === 'n') {
         const t = e.target;
-        const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName);
-        if (!typing) {
-            $('#modalNewLead').modal('show');
-        }
+        const typing = ['INPUT','TEXTAREA','SELECT'].includes(t.tagName);
+        if (!typing) $('#modalNewLead').modal('show');
     }
 });
 
-document.getElementById('sidebarToggle').addEventListener('click', function() {
-    document.querySelector('.main-sidebar').classList.toggle('sidebar-open');
-    document.querySelector('.crm-nav').classList.toggle('crm-collapsed');
-    document.querySelector('.crm-content').classList.toggle('crm-full-width');
+document.getElementById('sidebarToggle').addEventListener('click', function(){
+    document.querySelector('.main-sidebar')?.classList.toggle('sidebar-open');
 });
 
 loadData();
@@ -734,220 +818,144 @@ loadData();
 
 @section('js_')
 <style>
-/* ===== MPG CRM – Modern SaaS Theme (scoped) ===== */
 :root {
   --mpg-bg: #f6f8fb;
   --mpg-card: #ffffff;
-  --mpg-text: #1f2937;        /* slate-800 */
-  --mpg-text-muted: #6b7280;  /* gray-500 */
-  --mpg-border: #e5e7eb;      /* gray-200 */
-  --mpg-line: #e2e8f0;        /* slate-200 */
+  --mpg-text: #1f2937;
+  --mpg-muted: #6b7280;
+  --mpg-border: #e5e7eb;
 
-  /* Brand */
-  --mpg-grad-start: #0ea5e9;  /* sky-500 */
-  --mpg-grad-mid:   #14b8a6;  /* teal-500 */
-  --mpg-grad-end:   #0ea5e9;  /* loop for subtle weave */
-  --mpg-primary:    #0ea5e9;
-  --mpg-primary-600:#0284c7;
-  --mpg-secondary:  #6b7280;
-  --mpg-success:    #10b981;
-  --mpg-danger:     #ef4444;
-  --mpg-warning:    #f59e0b;
+  --mpg-primary: #0ea5e9;
+  --mpg-success: #10b981;
+  --mpg-danger: #ef4444;
 
-  /* Radius & shadow */
-  --mpg-radius-xs: 6px;
-  --mpg-radius:    10px;
-  --mpg-radius-lg: 14px;
-  --mpg-shadow-sm: 0 1px 2px rgba(16,24,40,.06), 0 1px 1px rgba(16,24,40,.04);
-  --mpg-shadow:    0 10px 15px -3px rgba(16,24,40,.12), 0 4px 6px -2px rgba(16,24,40,.08);
-  --mpg-shadow-soft: 0 4px 16px rgba(2, 132, 199, .08);
-
-  /* Sizing */
-  --mpg-font: 15px;
-  --mpg-line: 1.45;
-  --mpg-pad: 12px;
-  --mpg-gap: 12px;
-  --mpg-anim: .18s ease;
+  --r: 12px;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.06);
 }
 
-/* Base */
 .crm-container.mpg-layout{
-  display:flex;flex-direction:column;min-height:100vh;background:var(--mpg-bg);color:var(--mpg-text);
-  font-size:var(--mpg-font);line-height:var(--mpg-line);
+  min-height:100vh;
+  background:var(--mpg-bg);
+  color:var(--mpg-text);
 }
 
-/* Top bar with professional gradient */
 .crm-nav.mpg-layout{
-  background: linear-gradient(100deg, var(--mpg-grad-start) 0%, var(--mpg-grad-mid) 55%, var(--mpg-grad-end) 100%);
-  padding: 10px 20px;border-bottom:1px solid rgba(255,255,255,.15);
-  position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:10px;
-  box-shadow: var(--mpg-shadow-sm);
+  background: linear-gradient(100deg, #0ea5e9 0%, #14b8a6 55%, #0ea5e9 100%);
+  padding: 10px 18px;
+  position: sticky; top: 0; z-index: 1000;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow-sm);
 }
-.crm-nav .crm-admin-info{color:#fff;font-weight:600;}
-.crm-sidebar-toggle{
-  color:#fff;background:transparent;border:0;padding:6px 10px;font-size:20px;border-radius:var(--mpg-radius-xs);
-  transition: transform var(--mpg-anim), box-shadow var(--mpg-anim), background var(--mpg-anim);
-}
-.crm-sidebar-toggle:hover{transform:translateY(-1px);box-shadow:var(--mpg-shadow-sm);background:rgba(255,255,255,.12)}
-.crm-nav .btn-info.mpg-layout{
-  background:#ffffff1a;border:1px solid #ffffff33;color:#fff;border-radius:999px;padding:6px 14px;
-}
-.crm-nav .btn-info.mpg-layout:hover{background:#ffffff2b;box-shadow:var(--mpg-shadow-sm)}
+.crm-admin-info{ color:#fff; font-weight:700; }
+.crm-sidebar-toggle{ background:transparent; border:0; color:#fff; font-size:20px; }
 
-/* Content wrapper */
-.crm-content.mpg-layout{padding:24px;min-height:calc(100vh - 64px)}
+.crm-content.mpg-layout{ padding: 18px; }
 
-/* Cards / surfaces */
 .crm-header-bar{
-  background:var(--mpg-card);border-radius:var(--mpg-radius);padding:12px 14px;margin-bottom:12px;
-  box-shadow:var(--mpg-shadow-sm);display:flex;justify-content:space-between;align-items:center;gap:10px;
-}
-.crm-header-bar h2{margin:0;font-size:18px;font-weight:700;color:#0f172a;display:flex;gap:8px;align-items:center}
-
-/* Form elements */
-.mpg-form-control,.mpg-form-select,
-.mpg-form-control-sm,.mpg-form-select-sm, .form-control{
-  border:1px solid var(--mpg-border);border-radius:var(--mpg-radius-xs);background:#fff;
-  padding:8px 10px;font-size:14px;line-height:1.35;transition:border-color var(--mpg-anim), box-shadow var(--mpg-anim);
-}
-.mpg-form-control:focus,.mpg-form-select:focus,
-.mpg-form-control-sm:focus,.mpg-form-select-sm:focus,
-.form-control:focus{
-  border-color:var(--mpg-primary);box-shadow:0 0 0 3px rgba(14,165,233,.15);outline:0;
+  background:var(--mpg-card);
+  border:1px solid var(--mpg-border);
+  border-radius: var(--r);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
 }
 
-/* Buttons – uniform height/spacing */
-.btn{border-radius:10px;font-weight:600;letter-spacing:.2px;transition:transform var(--mpg-anim), box-shadow var(--mpg-anim), background var(--mpg-anim)}
-.btn, .btn-sm{line-height:1.2}
-.btn, .btn-sm, .crm-btn-sm{height:36px;display:inline-flex;align-items:center;gap:8px}
+.mpg-form-control,.mpg-form-select,.form-control{
+  border:1px solid var(--mpg-border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.mpg-form-control:focus,.mpg-form-select:focus,.form-control:focus{
+  outline: 0;
+  border-color: var(--mpg-primary);
+  box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+}
 
+.btn{ border-radius: 10px; font-weight: 600; }
 .mpg-btn-primary,.btn-info{
-  background:linear-gradient(135deg, var(--mpg-primary) 0%, #22d3ee 100%);border:1px solid rgba(14,165,233,.35);color:#fff;
+  background: linear-gradient(135deg, var(--mpg-primary) 0%, #22d3ee 100%);
+  border: 0; color: #fff;
 }
-.mpg-btn-primary:hover,.btn-info:hover{transform:translateY(-1px);box-shadow:var(--mpg-shadow-soft)}
+.mpg-btn-secondary,.btn-secondary{
+  background:#f3f4f6; border:1px solid var(--mpg-border); color:#111827;
+}
+.mpg-btn-success,.btn-success{
+  background:var(--mpg-success); border:0; color:#fff;
+}
+.btn-outline-secondary{
+  border-radius:10px;
+}
 
-.mpg-btn-secondary,.btn-secondary{background:#f3f4f6;border:1px solid var(--mpg-border);color:#111827}
-.mpg-btn-secondary:hover,.btn-secondary:hover{background:#eef2f7;box-shadow:var(--mpg-shadow-sm)}
-
-.mpg-btn-success,.btn-success{background:var(--mpg-success);border-color:var(--mpg-success)}
-.mpg-btn-success:hover,.btn-success:hover{filter:brightness(.95);box-shadow:var(--mpg-shadow-sm)}
-
-.mpg-btn-outline-secondary{border:1px solid var(--mpg-secondary);color:var(--mpg-secondary);background:#fff}
-.mpg-btn-outline-secondary:hover{background:var(--mpg-secondary);color:#fff}
-
-.crm-btn-sm{height:32px;padding:4px 10px;border-radius:9px}
-
-/* Table container */
 .crm-table-container{
-  background:var(--mpg-card);border-radius:var(--mpg-radius);box-shadow:var(--mpg-shadow-sm);padding:8px;overflow:hidden;
+  background:var(--mpg-card);
+  border:1px solid var(--mpg-border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
-.crm-table-wrapper{width:100%;max-height:calc(100vh - 260px);overflow:auto;border-radius:var(--mpg-radius)}
+.crm-table-wrapper{ overflow:auto; }
 
-/* Table styling */
-.mpg-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
 .mpg-table thead th{
-  position:sticky;top:0;z-index:5;background:#f8fafc;border-bottom:1px solid var(--mpg-line);
-  color:#0f172a;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.4px;padding:10px 8px;
+  background:#f8fafc;
+  border-bottom:1px solid var(--mpg-border);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.35px;
+  padding:10px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 .mpg-table tbody td{
-  padding:10px 8px;border-bottom:1px solid var(--mpg-line);font-size:14px;color:var(--mpg-text);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  border-bottom:1px solid #edf2f7;
+  padding:10px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mpg-table tbody tr:hover{ background:#f1f5f9; }
+
+.badge{ border-radius:999px; padding:.35em .6em; font-weight:700; color:#fff; }
+.badge-danger{ background: var(--mpg-danger); }
+.badge-info{ background: var(--mpg-primary); }
+.badge-primary{ background:#60a5fa; }
+.badge-secondary{ background:#94a3b8; }
+
+.crm-contact-link{ font-weight: 700; color:#0f172a; }
+.crm-contact-link:hover{ color: var(--mpg-primary); text-decoration:none; }
+
+.mpg-copy{ cursor:pointer; color:#64748b; }
+.mpg-copy:hover{ color:#0f172a; }
+
+.mpg-loader{
+  background:#ffffff;
+  border:1px solid var(--mpg-border);
+  border-radius: 10px;
+  padding:10px 12px;
+  margin-bottom: 10px;
+  color: var(--mpg-muted);
 }
 
-/* Stripes & subtle hover */
-.mpg-table tbody tr:nth-child(odd){background:#ffffff}
-.mpg-table tbody tr:nth-child(even){background:#fbfdff}
-.mpg-table tbody tr:hover{background:#f1f5f9}
-
-/* Status row tints (very light) */
-.crm-row-pending{background:linear-gradient(0deg, #fff, #fff) !important}
-.crm-row-in-progress{background:linear-gradient(0deg, #f0f9ff, #ffffff) !important}
-.crm-row-waiting-payment{background:linear-gradient(0deg, #fff5f5, #ffffff) !important}
-
-/* Badges */
-.badge-info{background:var(--mpg-primary)}
-.badge-primary{background:#60a5fa}
-.badge-danger{background:var(--mpg-danger)}
-.badge-secondary{background:#94a3b8}
-.badge{border-radius:999px;padding:.35em .6em;font-weight:600}
-
-/* Pills (status tabs) */
-#statusPills .nav-link{
-  border-radius:999px;background:#eef2f7;color:#111827;padding:6px 12px;font-weight:600;transition:box-shadow var(--mpg-anim), transform var(--mpg-anim);
-}
-#statusPills .nav-link:hover{transform:translateY(-1px);box-shadow:var(--mpg-shadow-sm)}
-#statusPills .nav-link.active{background:linear-gradient(135deg,var(--mpg-primary),#22c55e);color:#fff}
-
-/* Copyable contact & links */
-.crm-contact-col{color:#0f172a;font-weight:600}
-.crm-contact-col:hover{color:var(--mpg-primary)}
-
-/* Pagination */
-.crm-pagination{display:flex;justify-content:center;margin-top:10px}
-
-/* Drawer / Modals */
-.modal-content{border:none;border-radius:var(--mpg-radius-lg);box-shadow:var(--mpg-shadow)}
-.card-header{
-  border-radius:var(--mpg-radius-lg) var(--mpg-radius-lg) 0 0 !important;
-  background: linear-gradient(120deg, var(--mpg-grad-start), var(--mpg-grad-mid));
-  color:#fff;border:none;
+.mpg-modal-head{
+  background: linear-gradient(90deg, #093b7b 0%, #646564 100%);
+  color:#fff;
+  padding: 14px 16px;
 }
 
-/* Inputs in table (inline edit) */
-.mpg-form-control-sm, .mpg-form-select-sm{height:34px}
-
-/* Loader – skeleton shimmer */
-#loader > div{
-  position:relative;overflow:hidden;background:#eef2f7;border-radius:12px;
+.crm-btn-sm{ height:32px; padding:4px 10px; border-radius:10px; }
+.mpg-form-control-sm, .mpg-form-select-sm{
+  height:34px;
+  padding:6px 8px;
+  font-size:13px;
+  border-radius:10px;
 }
-#loader > div::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
-  animation:mpg-shimmer 1.3s infinite;
-}
-@keyframes mpg-shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.crm-input-row input[type="datetime-local"]{ min-width: 220px; }
 
-/* Sidebar responsiveness (collapsible on mobile) */
-@media (max-width: 992px){
-  .crm-content.mpg-layout{padding:16px}
-  .crm-header-bar{flex-direction:column;align-items:stretch;gap:10px}
-  .crm-header-bar form{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .mpg-form-control,.mpg-form-select{width:100%}
-  .crm-nav{padding:10px 14px}
-
-  /* slide-in sidebar if your template exposes .main-sidebar */
-  .main-sidebar{position:fixed;inset:0 auto 0 0;width:260px;transform:translateX(-100%);transition:transform .22s ease;z-index:1100;box-shadow:var(--mpg-shadow)}
-  .main-sidebar.sidebar-open{transform:translateX(0)}
-  .crm-content.crm-full-width{margin-left:0}
-
-  /* table horizontal scroll for small screens */
-  .crm-table-wrapper{overflow:auto}
-  .mpg-table{min-width:900px}
-}
-
-/* Tiny screens: single column filters */
-@media (max-width: 576px){
-  .crm-header-bar form{grid-template-columns:1fr}
-  .btn, .btn-sm, .crm-btn-sm{width:100%}
-  .crm-nav .btn-info.mpg-layout{width:100%}
-}
-
-/* Utilities */
-.text-muted{color:var(--mpg-text-muted)!important}
-.small{font-size:.86em}
-.kbd, kbd{background:#111827;color:#fff;border-radius:6px;padding:2px 6px}
-
-/* Export/Action dropdown caret spacing */
-.dropdown-menu{border-radius:12px;border:1px solid var(--mpg-border);box-shadow:var(--mpg-shadow-sm)}
-.dropdown-item{padding:8px 12px}
-.dropdown-item:hover{background:#f3f4f6}
-
-/* Inputs in inline rows stay compact */
-.crm-input-row input[type="datetime-local"]{min-width:230px}
-.modal-backdrop.show {
-    opacity: .5;
-    display: none;
+@media (max-width: 768px){
+  .crm-content.mpg-layout{ padding: 14px; }
+  .mpg-table{ min-width: 1100px; }
 }
 </style>
-
 @endsection

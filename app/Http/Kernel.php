@@ -70,14 +70,15 @@ class Kernel extends HttpKernel
     // existing custom
     'admin' => \App\Http\Middleware\AuthAdmin::class,
     'impersonate' => \App\Http\Middleware\ImpersonationMiddleware::class,
-
-    // ✅ NEW: department alias (uses EnsureReception, param supported)
     'department' => \App\Http\Middleware\EnsureReception::class,
+
+    // ✅ NEW
+    'api.key' => \App\Http\Middleware\CheckApiKey::class,
 ];
 
-    
     protected $routeMiddleware = [
     'impersonate' => \App\Http\Middleware\ImpersonationMiddleware::class,
+    'api.key' => \App\Http\Middleware\CheckApiKey::class,
 ];
 
 }

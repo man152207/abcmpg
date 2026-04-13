@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\QueryException;
+use App\Models\BonusSeason;
 
 /**
  * Controller for managing advertisements (ads) and related functionalities.
@@ -354,23 +355,26 @@ public function destroy($id)
     try {
         $ad = Ad::findOrFail($id);
 
-        // (optional) validation, चाहनुहुन्छ भने राख्नुहोस्
+        // ✅ 1) पुरानो payment (update अघि)
+        $oldPayment = $ad->Payment;
+
         $request->validate([
             'USD'             => 'required|numeric',
             'Rate'            => 'required|numeric',
             'NRP'             => 'required|numeric',
             'Ad_Account'      => 'required',
-            'Payment'         => 'required',
+            'Payment'         => 'required|in:Pending,Paused,FPY Received,eSewa Received,Baki,Paid,Refunded,Cancelled,Overpaid,PV Adjusted,Informed',
             'Duration'        => 'required|integer',
             'Quantity'        => 'required|integer',
             'Ad_Nature_Page'  => 'required',
             'Status'          => 'required',
             'advance'         => 'nullable|numeric',
             'addons_selected' => 'nullable|string',
+            'redirect_to'     => 'nullable|string',
         ]);
 
         // advance logic
-        $advance = in_array($request->Payment, ["Baki", "Refunded", "Overpaid"])
+        $advance = in_array($request->Payment, ["Baki", "Refunded", "Overpaid"], true)
             ? $request->advance
             : null;
 
@@ -379,13 +383,12 @@ public function destroy($id)
         if ($request->filled('addons_selected')) {
             $decoded = json_decode($request->input('addons_selected'), true);
             if (is_array($decoded)) {
-                $newAddons = $decoded; // replace strategy
+                $newAddons = $decoded;
             }
         }
 
         // payload
         $payload = [
-            'customer'        => $ad->customer, // फोन change गर्दैनौं
             'USD'             => $request->USD,
             'Rate'            => $request->Rate,
             'NRP'             => $request->NRP,
@@ -396,31 +399,53 @@ public function destroy($id)
             'Ad_Nature_Page'  => $request->Ad_Nature_Page,
             'Status'          => $request->Status,
             'advance'         => $advance,
-            'is_complete'     => $ad->is_complete,
         ];
 
-        // add_on सम्हाल्ने (नयाँ चयन आएमा replace)
         if ($newAddons !== null) {
             $payload['add_on'] = $newAddons;
         }
 
-        // updated_by column छ भने मात्र राख्नुहोस् (नत्र यो लाइन हटाइदिनुस्)
-        // $payload['updated_by'] = auth('admin')->id();
-
-        // एकचोटि मात्र update
+        // ✅ 2) update
         $ad->update($payload);
-$redirectTo = $request->input('redirect_to');
 
-if ($redirectTo) {
-    return redirect($redirectTo)->with('success', 'Ad updated successfully');
-}
+        // ✅ 3) payment change detect (update पछि)
+        $newPayment = $request->Payment;
+
+        // ✅ 4) mail trigger list
+        $triggerPayments = [
+            'Paid',
+            'FPY Received',
+            'eSewa Received',
+            'PV Adjusted',
+            'Overpaid',
+        ];
+
+        // ✅ 5) mail send (only when changed + triggers)
+        if ($oldPayment !== $newPayment) {
+            $customer = Customer::where('phone', $ad->customer)->first();
+
+            if (
+                in_array($newPayment, $triggerPayments, true) &&
+                $customer && !empty($customer->email) &&
+                $ad->Status != "On schedule"
+            ) {
+                Mail::to($customer->email)->send(new AdReceipt($ad->fresh()));
+            }
+        }
+
+        // ✅ 6) redirect (यही नै missing थियो)
+        $redirectTo = $request->input('redirect_to');
+        if (!empty($redirectTo)) {
+            return redirect($redirectTo)->with('success', 'Ad updated successfully');
+        }
+
         return redirect()->route('ads.show')->with('success', 'Ad updated successfully');
+
     } catch (\Throwable $th) {
         Log::error('Error in update: ' . $th->getMessage());
         return redirect()->back()->with('error', 'विज्ञापन अपडेट गर्न असफल! कृपया पुन: प्रयास गर्नुहोस्।');
     }
 }
-
 
     /**
      * Search ads based on query and date range.
@@ -550,60 +575,94 @@ if ($redirectTo) {
      * @return \Illuminate\View\View
      */
     public function summarydashboard()
-    {
-        $currentMonth = Carbon::now()->format('Y-m');
-        $currentMonthStart = Carbon::now()->startOfMonth();
-        $currentMonthEnd = Carbon::now()->endOfMonth();
-        $previousMonthStart = Carbon::now()->subMonth()->startOfMonth();
-        $previousMonthEnd = Carbon::now()->subMonth()->endOfMonth();
+{
+    $currentMonth       = Carbon::now()->format('Y-m');
+    $currentMonthStart  = Carbon::now()->startOfMonth();
+    $currentMonthEnd    = Carbon::now()->endOfMonth();
+    $previousMonthStart = Carbon::now()->subMonth()->startOfMonth();
+    $previousMonthEnd   = Carbon::now()->subMonth()->endOfMonth();
 
-        $data = [
-    'monthlyAdIncomeSummaries' => Ad::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
-        ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
-        ->first(),
-    'previousMonthlyAdIncomeSummaries' => Ad::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
-        ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
-        ->first(),
-    'monthlyClientSummaries' => Client::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
-        ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
-        ->first(),
-    'previousMonthlyClientSummaries' => Client::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
-        ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
-        ->first(),
-    'monthlyExp' => Other_Exp::selectRaw('SUM(amount) as totalAmt')
-        ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
-        ->first(),
-    'previousMonthlyExp' => Other_Exp::selectRaw('SUM(amount) as totalAmt')
-        ->whereBetween('date', [$previousMonthStart, $previousMonthEnd])
-        ->first(),
-    'Cardsummary' => Card::selectRaw('SUM(USD) as totalUSD')->first(),
-    'previousCardsummary' => Card::selectRaw('SUM(USD) as totalUSD')->first(),
-    'totalOtherIncome' => OtherIncome::where('income_type', 'Other Income')
-        ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
-        ->sum('amount'),
-    'totalOpeningBalance' => OtherIncome::where('income_type', 'Opening Balance')
-        ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
-        ->sum('amount'),
-    'totalNRP' => Ad::whereIn('Payment', ['Pending', 'Paused', 'Informed'])->sum('NRP'),
-    'totalAdvance' => Ad::where('Payment', 'Baki')->sum('advance'),
-    'currentMonthExpenses' => Other_Exp::selectRaw('DATE_FORMAT(date, "%Y-%m") as month, SUM(amount) as total_amount')
-        ->whereRaw('DATE_FORMAT(date, "%Y-%m") = ?', [$currentMonth])
-        ->groupBy('month')
-        ->first(),
-    'other_incomes' => OtherIncome::all(),
-    'customers' => Client::all(),
-];
+    // 🔹 पुरानो summary data जस्ताको तस्तै
+    $data = [
+        'monthlyAdIncomeSummaries' => Ad::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->first(),
+        'previousMonthlyAdIncomeSummaries' => Ad::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->first(),
+        'monthlyClientSummaries' => Client::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->first(),
+        'previousMonthlyClientSummaries' => Client::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->first(),
+        'monthlyExp' => Other_Exp::selectRaw('SUM(amount) as totalAmt')
+            ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
+            ->first(),
+        'previousMonthlyExp' => Other_Exp::selectRaw('SUM(amount) as totalAmt')
+            ->whereBetween('date', [$previousMonthStart, $previousMonthEnd])
+            ->first(),
+        'Cardsummary' => Card::selectRaw('SUM(USD) as totalUSD')->first(),
+        'previousCardsummary' => Card::selectRaw('SUM(USD) as totalUSD')->first(),
+        'totalOtherIncome' => OtherIncome::where('income_type', 'Other Income')
+            ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
+            ->sum('amount'),
+        'totalOpeningBalance' => OtherIncome::where('income_type', 'Opening Balance')
+            ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
+            ->sum('amount'),
+        'totalNRP' => Ad::whereIn('Payment', ['Pending', 'Paused', 'Informed'])->sum('NRP'),
+        'totalAdvance' => Ad::where('Payment', 'Baki')->sum('advance'),
+        'currentMonthExpenses' => Other_Exp::selectRaw('DATE_FORMAT(date, "%Y-%m") as month, SUM(amount) as total_amount')
+            ->whereRaw('DATE_FORMAT(date, "%Y-%m") = ?', [$currentMonth])
+            ->groupBy('month')
+            ->first(),
+        'other_incomes' => OtherIncome::all(),
+        'customers' => Client::all(),
+    ];
 
-        $data['totalToBeReceived'] = $data['totalNRP'] + $data['totalAdvance'];
-        $data['formattedTotalToBeReceived'] = number_format($data['totalToBeReceived'], 2, ".", ",");
-        $data['totalIncome'] = $data['totalOtherIncome'] + $data['totalOpeningBalance'];
-        $data['combinedNPRBalance'] = ($data['monthlyAdIncomeSummaries']->totalNRP ?? 0)
-            - (($data['monthlyClientSummaries']->totalNRP ?? 0) + ($data['monthlyExp']->totalAmt ?? 0))
-            + ($data['totalOtherIncome'] ?? 0);
-        $data['finalNPRBalance'] = $data['combinedNPRBalance'] + $data['totalOpeningBalance'] - $data['totalToBeReceived'];
+    // 🔹 Bonus Season + Total Bonus गणना (USD मा – card ले यो नै देख्छ)
+    $activeBonusSeason = BonusSeason::where('is_active', true)->first();
+    $totalBonusCredit  = 0;
 
-        return view('admin.dashboard', $data);
+    if ($activeBonusSeason) {
+        // DB मा छ भने field नाम adjust गर्नुहोस् (start_date / end_date / bonus_rate आदि)
+        $seasonStart = Carbon::parse($activeBonusSeason->start_date)->startOfDay();
+        $seasonEnd   = Carbon::parse($activeBonusSeason->end_date)->endOfDay();
+
+        // यदि bonus प्रतिशत field छ भने; नभए default 1% मानिदिएको
+        $bonusRate = $activeBonusSeason->bonus_rate ?? 1; // 1 = 1%
+
+        // प्रति ग्राहक प्रति महिना spend → threshold पुगेपछि मात्र bonus
+        $rows = Ad::selectRaw('customer, DATE_FORMAT(created_at, "%Y-%m") as ym, SUM(USD) as total_usd')
+            ->whereBetween('created_at', [$seasonStart, $seasonEnd])
+            ->groupBy('customer', 'ym')
+            ->get();
+
+        foreach ($rows as $row) {
+            // उदाहरण: 300 USD भन्दा माथि भएमा 1% bonus
+            if ($row->total_usd >= 300) {
+                $totalBonusCredit += $row->total_usd * ($bonusRate / 100);
+            }
+        }
     }
+
+    // View मा पठाउने extra keys
+    $data['activeBonusSeason'] = $activeBonusSeason;
+    $data['totalBonusCredit']  = $totalBonusCredit;
+
+    // 🔹 पहिलेदेखि भएको additional calculations
+    $data['totalToBeReceived']         = $data['totalNRP'] + $data['totalAdvance'];
+    $data['formattedTotalToBeReceived'] = number_format($data['totalToBeReceived'], 2, ".", ",");
+    $data['totalIncome']               = $data['totalOtherIncome'] + $data['totalOpeningBalance'];
+    $data['combinedNPRBalance']        = ($data['monthlyAdIncomeSummaries']->totalNRP ?? 0)
+        - (($data['monthlyClientSummaries']->totalNRP ?? 0) + ($data['monthlyExp']->totalAmt ?? 0))
+        + ($data['totalOtherIncome'] ?? 0);
+    $data['finalNPRBalance']           = $data['combinedNPRBalance']
+        + $data['totalOpeningBalance']
+        - $data['totalToBeReceived'];
+
+    return view('admin.dashboard', $data);
+}
 
     /**
      * Display the ad summary.

@@ -19,7 +19,6 @@ class FollowupController extends Controller
 
     public function data(Request $request)
 {
-    // Base with relations + LEFT JOIN admins to get assigned_name
     $q = CrmContact::query()
         ->with('latestFollowUp')
         ->leftJoin('admins', 'admins.id', '=', 'crm_contacts.assigned_to')
@@ -34,7 +33,6 @@ class FollowupController extends Controller
         ->when($request->filled('priority'), fn($x) => $x->where('crm_contacts.priority', $request->priority))
         ->when($request->filled('assignee'), fn($x) => $x->where('crm_contacts.assigned_to', $request->assignee))
 
-        // Text search (name/phone/city/tags)
         ->when($request->filled('search'), function ($x) use ($request) {
             $s = trim($request->search);
             $x->where(function ($z) use ($s) {
@@ -45,7 +43,6 @@ class FollowupController extends Controller
             });
         })
 
-        // Date filters on next_followup_at (From/To)
         ->when($request->filled('from'), fn($x) => $x->whereDate('crm_contacts.next_followup_at', '>=', $request->from))
         ->when($request->filled('to'), fn($x) => $x->whereDate('crm_contacts.next_followup_at', '<=', $request->to))
 
@@ -56,14 +53,31 @@ class FollowupController extends Controller
             $x->whereNotNull('crm_contacts.next_followup_at')->where('crm_contacts.next_followup_at', '<', now())
         );
 
-    $contacts = $q->orderByRaw("FIELD(crm_contacts.status,'Follow-up Due','New','Warm','Negotiation','Won','Lost','Dormant')")
-                  ->orderBy('crm_contacts.next_followup_at')
-                  ->paginate(30);
+    $now = now();
 
-    $counts = CrmContact::select('status', DB::raw('COUNT(*) as c'))->groupBy('status')->pluck('c','status');
+    // ✅ BEST: New top + Overdue next + then rest, all newest-first inside group
+    $contacts = $q
+        ->orderByRaw("
+            CASE
+                WHEN crm_contacts.status = 'New' THEN 0
+                WHEN crm_contacts.next_followup_at IS NOT NULL AND crm_contacts.next_followup_at < ? THEN 1
+                WHEN crm_contacts.status = 'Follow-up Due' THEN 2
+                WHEN crm_contacts.status = 'Warm' THEN 3
+                WHEN crm_contacts.status = 'Negotiation' THEN 4
+                WHEN crm_contacts.status = 'Won' THEN 5
+                WHEN crm_contacts.status = 'Lost' THEN 6
+                WHEN crm_contacts.status = 'Dormant' THEN 7
+                ELSE 8
+            END
+        ", [$now])
+        ->orderByDesc('crm_contacts.id')
+        ->paginate(30);
 
-    // provide admin list for dropdown (id -> name)
-    $admins = DB::table('admins')->select('id','name')->orderBy('name')->get();
+    $counts = CrmContact::select('status', DB::raw('COUNT(*) as c'))
+        ->groupBy('status')
+        ->pluck('c', 'status');
+
+    $admins = DB::table('admins')->select('id', 'name')->orderBy('name')->get();
 
     return response()->json([
         'ok'     => true,

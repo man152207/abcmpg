@@ -685,6 +685,323 @@
             @endforeach
         </div>
     </div>
+{{-- ================= BONUS SEASON CARD ================= --}}
+@php
+    use Carbon\Carbon;
+    use App\Models\BonusClaim;
+
+    /**
+     * 1) API बाट आएको summary लाई प्रायोरिटी
+     */
+    $rawSummary = (isset($bonusSummary) && is_array($bonusSummary))
+        ? $bonusSummary
+        : [];
+
+    /**
+     * 2) API summary नै नभएर fallback चाहियो भने
+     *    (activeBonusSeason + bonusCredit बाट)
+     */
+    if (empty($rawSummary) && !empty($activeBonusSeason)) {
+        $now   = Carbon::now();
+        $start = Carbon::parse($activeBonusSeason->start_date)->startOfDay();
+        $end   = Carbon::parse($activeBonusSeason->end_date)->endOfDay();
+
+        if (!empty($activeBonusSeason->claim_deadline)) {
+            $claimDeadline = Carbon::parse($activeBonusSeason->claim_deadline)->endOfDay();
+        } else {
+            $durationDays  = $start->diffInDays($end) + 1;
+            $claimDeadline = (clone $end)->addDays($durationDays)->endOfDay();
+        }
+
+        $totalBonus = (float) ($bonusCredit ?? 0);
+
+        $claimed = BonusClaim::where('customer_id', $customer->id)
+            ->where('bonus_season_id', $activeBonusSeason->id)
+            ->sum('amount_usd');
+
+        $claimable = max($totalBonus - $claimed, 0);
+        $hasClaim  = $claimed > 0;
+
+        if ($now->lt($end)) {
+            $status = 'running';
+        } elseif ($now->lte($claimDeadline)) {
+            $status = 'claim_window_open';
+        } else {
+            $status = 'expired';
+        }
+
+        if ($hasClaim) {
+            $status    = 'claimed';
+            $claimable = 0;
+        }
+
+        $rawSummary = [
+            'season_id'       => $activeBonusSeason->id,
+            'season_start'    => $start->toDateString(),
+            'season_end'      => $end->toDateString(),
+            'claim_deadline'  => $claimDeadline->toDateString(),
+            'total_bonus_usd' => $totalBonus,
+            'claimed_usd'     => $claimed,
+            'claimable_usd'   => $claimable,
+            'status'          => $status,
+            'can_claim'       => $status === 'claim_window_open' && $claimable > 0,
+            'info_message'    => $hasClaim
+                ? 'You have already claimed your bonus for this season.'
+                : 'Summary calculated from ads data (API summary temporarily unavailable).',
+            'bonus_percent'   => $activeBonusSeason->bonus_rate ?? 1,
+        ];
+    }
+
+    /**
+     * 3) Normalize: कार्ड सधैं render होस् भनेर default structure merge
+     *    (bonus season off / configure नभए पनि card देखिन्छ)
+     */
+    $bs = array_merge([
+        'season_id'       => null,
+        'season_start'    => null,
+        'season_end'      => null,
+        'claim_deadline'  => null,
+        'total_bonus_usd' => 0,
+        'claimed_usd'     => 0,
+        'claimable_usd'   => 0,
+        'status'          => 'none',
+        'can_claim'       => false,
+        'info_message'    => 'Currently there is no active bonus season. Your previous bonus claims are listed below.',
+        'bonus_percent'   => data_get($activeBonusSeason ?? null, 'bonus_rate', 1),
+    ], $rawSummary);
+
+    $seasonStart   = data_get($bs, 'season_start');
+    $seasonEnd     = data_get($bs, 'season_end');
+    $claimDeadline = data_get($bs, 'claim_deadline');
+
+    $status    = data_get($bs, 'status');
+    $canClaim  = (bool) data_get($bs, 'can_claim', false);
+    $claimable = (float) data_get($bs, 'claimable_usd', 0);
+
+    /**
+     * 4) Claim history – जति पटक bonus season चलेर claim भएको छ,
+     *    सबै BonusClaim rows यहाँ आउने (Already Claimed को list)
+     */
+    $claimHistory = BonusClaim::with('season')
+        ->where('customer_id', $customer->id)
+        ->orderByDesc('claimed_at')
+        ->get();
+
+    $totalClaimedAllSeasons = $claimHistory->sum('amount_usd');
+@endphp
+
+<div class="card animate__animated animate__fadeIn mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Bonus Season</h3>
+    </div>
+
+    @if($seasonStart && $seasonEnd)
+        <p class="mb-2 text-sm text-gray-600">
+            Season:
+            {{ \Carbon\Carbon::parse($seasonStart)->format('d M Y') }}
+            –
+            {{ \Carbon\Carbon::parse($seasonEnd)->format('d M Y') }}
+        </p>
+    @else
+        <p class="mb-2 text-sm text-gray-600">
+            No active season configured right now.
+        </p>
+    @endif
+
+    <div class="summary-grid mb-3">
+        @php
+            $bonusRate = data_get($bs, 'bonus_percent', 1);
+        @endphp
+
+        {{-- Total Bonus (current season) --}}
+        <div class="summary-card">
+            <div class="summary-label">Total Bonus ({{ $bonusRate }}%)</div>
+            <div class="summary-value" id="bonus-total">
+                ${{ number_format(data_get($bs,'total_bonus_usd',0), 2) }}
+            </div>
+        </div>
+
+        {{-- Already Claimed – current season --}}
+        <div class="summary-card">
+            <div class="summary-label">Already Claimed (This Season)</div>
+            <div class="summary-value" id="bonus-claimed">
+                ${{ number_format(data_get($bs,'claimed_usd',0), 2) }}
+            </div>
+        </div>
+
+        {{-- Available to Claim – केवल claim_window_open मा + fresh मात्र --}}
+        @if($status === 'claim_window_open' && $canClaim && $claimable > 0)
+            <div class="summary-card" id="bonus-available-card">
+                <div class="summary-label">Available to Claim (Current Season)</div>
+                <div class="summary-value" id="bonus-claimable">
+                    ${{ number_format($claimable, 2) }}
+                </div>
+            </div>
+        @endif
+    </div>
+
+    @if(!empty($bs['info_message']))
+        <p class="text-sm text-gray-700 mb-3">
+            {{ $bs['info_message'] }}
+        </p>
+    @endif
+
+    {{-- Status अनुसार message / claim UI --}}
+    @if($status === 'running')
+        <div class="p-3 rounded bg-indigo-50 text-xs text-gray-700 mb-4">
+            Currently bonus season is running.
+            You can claim your bonus only after the season ends.
+        </div>
+
+    @elseif($status === 'expired')
+        <div class="p-3 rounded bg-red-50 text-xs text-red-700 mb-4">
+            Bonus claim window has expired. Remaining bonus is no longer claimable.
+        </div>
+
+    @elseif($status === 'claimed')
+        <div class="p-3 rounded bg-green-50 text-xs text-green-700 mb-4">
+            You have already claimed your bonus for this season.
+            Thank you for advertising with us. 🎉
+        </div>
+
+    @elseif($status === 'none' || $status === 'upcoming')
+        <div class="p-3 rounded bg-gray-50 text-xs text-gray-600 mb-4">
+            No active bonus season to claim right now.
+            You will be notified when a new season starts.
+        </div>
+
+    @elseif($status === 'claim_window_open' && $canClaim && $claimable > 0)
+        {{-- claim_window_open & claimable > 0 => Claim UI --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end mb-4">
+            <div>
+                <label class="block text-xs font-medium mb-1">
+                    Partial Claim (USD) – खाली छाड्दा full claim हुन्छ
+                </label>
+                <input
+                    id="bonus-claim-amount"
+                    type="number"
+                    min="1"
+                    step="0.01"
+                    max="{{ $claimable }}"
+                    class="form-control"
+                    placeholder="e.g. 10.00">
+                <small class="text-gray-500 text-xs">
+                    Max claim now: ${{ number_format($claimable, 2) }}.
+                    @if($claimDeadline)
+                        Claim window closes on
+                        {{ \Carbon\Carbon::parse($claimDeadline)->format('d M Y') }}.
+                    @endif
+                </small>
+            </div>
+            <div class="flex flex-col md:flex-row gap-2">
+                <button
+                    id="btn-claim-bonus"
+                    class="btn btn-success w-full md:w-auto"
+                    data-season-id="{{ data_get($bs,'season_id') }}"
+                    data-max="{{ $claimable }}">
+                    Claim Bonus
+                </button>
+
+                <button
+                    id="btn-send-claim-details"
+                    class="btn btn-accent w-full md:w-auto"
+                    style="display:none;">
+                    Send Claim Details (WhatsApp)
+                </button>
+            </div>
+        </div>
+
+    @else
+        <div class="p-3 rounded bg-gray-50 text-xs text-gray-600 mb-4">
+            Currently bonus season is not running or there is no claimable bonus.
+        </div>
+    @endif
+
+    {{-- 🔁 Already Claimed – Full History (all seasons) --}}
+    @if($claimHistory->count())
+        <div class="mt-2">
+            <h4 class="text-sm font-semibold mb-2">Already Claimed – History (All Seasons)</h4>
+            <div class="overflow-x-auto">
+                <table class="table text-sm">
+                    <thead>
+                        <tr>
+                            <th>Season</th>
+                            <th>Period</th>
+                            <th>Claimed (USD)</th>
+                            <th>Mode</th>
+                            <th>Status</th>
+                            <th>Claimed At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+@foreach($claimHistory as $claim)
+    @php
+        $season = $claim->season;
+        $cs = $season?->start_date;
+        $ce = $season?->end_date;
+    @endphp
+    <tr data-claim-id="{{ $claim->id }}">
+        <td>
+            {{ $season->season_code ?? ('S' . $claim->bonus_season_id) }}
+        </td>
+        <td>
+            @if($cs && $ce)
+                {{ \Carbon\Carbon::parse($cs)->format('d M Y') }}
+                –
+                {{ \Carbon\Carbon::parse($ce)->format('d M Y') }}
+            @else
+                -
+            @endif
+        </td>
+        <td>${{ number_format($claim->amount_usd, 2) }}</td>
+        <td class="capitalize">{{ $claim->mode ?? '-' }}</td>
+
+        {{-- Status cell (JS बाट update गर्न सजिलो होस् भनेर class राखेको) --}}
+        <td class="capitalize claim-status">
+            {{ $claim->status ?? 'pending' }}
+        </td>
+
+        {{-- Claimed At cell --}}
+        <td class="claimed-at-cell">
+            {{ $claim->claimed_at
+                ? $claim->claimed_at->format('d M Y, g:i A')
+                : '-' }}
+        </td>
+
+        {{-- Action button: केवल pending भएमा देखाउने --}}
+        <td>
+            @if(($claim->status ?? 'pending') === 'pending')
+                <button
+    type="button"
+    class="btn btn-success btn-sm btn-mark-completed"
+    data-id="{{ $claim->id }}">
+    Mark Completed
+</button>
+            @else
+                <span class="text-xs text-gray-400">—</span>
+            @endif
+        </td>
+    </tr>
+@endforeach
+</tbody>
+
+                </table>
+            </div>
+            <p class="mt-2 text-xs text-gray-500">
+                Total claimed across all seasons:
+                ${{ number_format($totalClaimedAllSeasons, 2) }}.
+            </p>
+        </div>
+    @else
+        <p class="mt-2 text-xs text-gray-500">
+            You have not claimed any bonus yet.
+        </p>
+    @endif
+</div>
+{{-- =============== /BONUS SEASON CARD =============== --}}
+
+
 
     <!-- Main Content Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -1460,6 +1777,259 @@ $(document).ready(function() {
     }
   });
 })();
+</script>
+<script>
+// BONUS CLAIM – backend मा save + UI update + WhatsApp detail button
+document.addEventListener('DOMContentLoaded', function () {
+    const claimBtn    = document.getElementById('btn-claim-bonus');
+    const sendBtn     = document.getElementById('btn-send-claim-details');
+    const amountInput = document.getElementById('bonus-claim-amount');
+
+    // पछिल्लो सफल claim को summary store गर्न
+    let lastBonusClaim = null;
+
+    // यदि यो page मा claim button नै छैन भने, script यहीँबाट return
+    if (!claimBtn) {
+        return;
+    }
+
+    // ========== CLAIM BUTTON CLICK ==========
+    claimBtn.addEventListener('click', function () {
+        const max = parseFloat(this.dataset.max || '0');
+
+        if (!max || max <= 0) {
+            Swal.fire('Info', 'There is no bonus left to claim.', 'info');
+            return;
+        }
+
+        // default: full claim
+        let amount = max;
+
+        // यदि user ले input box मा partial amount भरेको छ भने
+        if (amountInput && amountInput.value) {
+            amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount <= 0) {
+                Swal.fire('Error', 'Please enter a valid amount.', 'error');
+                return;
+            }
+        }
+
+        if (amount > max) {
+            Swal.fire('Error', 'You cannot claim more than your available bonus.', 'error');
+            return;
+        }
+
+        const payload = { amount_usd: amount };
+
+        // UI: claiming चलिराखेको indication
+        claimBtn.disabled = true;
+        claimBtn.classList.add('opacity-60', 'cursor-not-allowed');
+        claimBtn.innerText = 'Claiming...';
+
+        fetch('{{ route("admin.customers.bonus.claim", $customer->id) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(async (res) => {
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || 'Failed to claim bonus.');
+            }
+            return data;
+        })
+        .then((data) => {
+            const s = data.data || {};
+
+            // यदि backend ले status = "claimed" पठायो भने Available card तुरुन्त hide गर्ने
+            if (s.status === 'claimed') {
+                const availCard = document.getElementById('bonus-available-card');
+                if (availCard) {
+                    availCard.style.display = 'none';
+                }
+            }
+
+            // ====== TOP SUMMARY CARD UPDATE ======
+            const totalEl     = document.getElementById('bonus-total');
+            const claimedEl   = document.getElementById('bonus-claimed');
+            const claimableEl = document.getElementById('bonus-claimable');
+
+            if (totalEl && typeof s.total_bonus_usd !== 'undefined') {
+                totalEl.textContent = '$' + parseFloat(s.total_bonus_usd).toFixed(2);
+            }
+            if (claimedEl && typeof s.claimed_usd !== 'undefined') {
+                claimedEl.textContent = '$' + parseFloat(s.claimed_usd).toFixed(2);
+            }
+            if (claimableEl && typeof s.claimable_usd !== 'undefined') {
+                claimableEl.textContent = '$' + parseFloat(s.claimable_usd).toFixed(2);
+            }
+
+            // यस claim को info store
+            const claimedAmount = data.claim && data.claim.amount_usd
+                ? parseFloat(data.claim.amount_usd)
+                : amount;
+
+            const mode = data.claim && data.claim.mode
+                ? data.claim.mode
+                : 'partial';
+
+            lastBonusClaim = {
+                amount: claimedAmount,
+                mode:   mode,
+                season_start: s.season_start || null,
+                season_end:   s.season_end   || null
+            };
+
+            // claimable बाँकी छ कि छैन check
+            const canClaim   = !!s.can_claim;
+            const claimable  = parseFloat(s.claimable_usd || 0);
+
+            if (!canClaim || claimable <= 0) {
+                claimBtn.textContent = 'Bonus Claimed';
+                claimBtn.disabled = true;
+                claimBtn.classList.add('opacity-60', 'cursor-not-allowed');
+            } else {
+                claimBtn.disabled = false;
+                claimBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+                claimBtn.textContent = 'Claim Bonus';
+            }
+
+            // Send Claim Details बटन देखाउने
+            if (sendBtn) {
+                sendBtn.style.display = 'inline-flex';
+            }
+
+            // input clear
+            if (amountInput) {
+                amountInput.value = '';
+            }
+
+            Swal.fire(
+                'Success',
+                'Bonus सफलतापूर्वक claim भयो। अब "Send Claim Details" ट्याप गरेर WhatsApp मा विवरण पठाउनुस्।',
+                'success'
+            ).then(() => {
+                // 👇 Reload गर्दा Already Claimed history table पनि तुरुन्त fresh हुन्छ
+                window.location.reload();
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            Swal.fire('Error', err.message || 'Failed to claim bonus.', 'error');
+        })
+        .finally(() => {
+            // यदि अझै claimable बाँकी छ भने button normal state मा फिर्ता
+            const claimableEl = document.getElementById('bonus-claimable');
+            const claimableVal = claimableEl
+                ? parseFloat((claimableEl.textContent || '0').replace(/[^0-9.]/g, ''))
+                : 0;
+
+            if (claimableVal > 0) {
+                claimBtn.disabled = false;
+                claimBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+                claimBtn.innerText = 'Claim Bonus';
+            }
+        });
+    });
+
+    // ========== SEND CLAIM DETAILS (WHATSAPP) ==========
+    if (sendBtn) {
+        sendBtn.addEventListener('click', function () {
+            if (!lastBonusClaim) {
+                Swal.fire('Info', 'कृपया पहिले bonus claim गर्नुस्।', 'info');
+                return;
+            }
+
+            const amount      = lastBonusClaim.amount || 0;
+            const mode        = (lastBonusClaim.mode || 'partial').toUpperCase();
+            const seasonStart = lastBonusClaim.season_start || '';
+            const seasonEnd   = lastBonusClaim.season_end   || '';
+
+            const text = `
+Bonus Claim Details:
+Customer: {{ $customer->display_name ?: $customer->name }}
+Phone: {{ $customer->phone }}
+Claimed Amount: $${amount.toFixed(2)}
+Mode: ${mode}
+Season: ${seasonStart} – ${seasonEnd}
+            `.trim();
+
+            const waUrl = 'https://wa.me/9856000601?text=' + encodeURIComponent(text);
+            window.open(waUrl, '_blank');
+        });
+    }
+});
+</script>
+<script>
+// BONUS CLAIM: Mark as Completed (status + UI दुबै अपडेट)
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.btn-mark-completed');
+    if (!btn) return;
+
+    const id  = btn.dataset.id;
+    const row = btn.closest('tr');   // यो row भित्रको status cell update गर्न
+
+    // Laravel route helper: /admin/bonus-claims/{id}/complete
+    const url = "{{ route('admin.bonus-claims.complete', ':id') }}".replace(':id', id);
+
+    btn.disabled = true;
+    btn.classList.add('opacity-60', 'cursor-not-allowed');
+    btn.textContent = 'Updating...';
+
+    fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+            throw new Error(data.message || 'Network / server error while updating.');
+        }
+
+        // ✅ Row को status cell update
+        if (row) {
+            const statusCell = row.querySelector('.claim-status');
+            if (statusCell) {
+                statusCell.textContent = 'completed';
+            }
+
+            const claimedAtCell = row.querySelector('.claimed-at-cell');
+            if (claimedAtCell) {
+                // backend बाट claimed_at change भए पनि,
+                // यूजरलाई तुरुन्त feel होस् भनेर client side time राखिदिन्छौं
+                claimedAtCell.textContent = (new Date()).toLocaleString();
+            }
+        }
+
+        // Button UI finalize
+        btn.textContent = 'Completed';
+        btn.disabled = true;
+        btn.classList.remove('btn-success');
+        btn.classList.add('btn-gray');
+
+        Swal.fire('Success', 'Marked as completed.', 'success');
+    })
+    .catch(err => {
+        console.error(err);
+        Swal.fire('Error', err.message || 'Network / server error while updating.', 'error');
+
+        // Error आए पछि button पुन: enable गरिदिने
+        btn.disabled = false;
+        btn.classList.remove('opacity-60', 'cursor-not-allowed');
+        btn.textContent = 'Mark Completed';
+    });
+});
 </script>
 
 @endsection

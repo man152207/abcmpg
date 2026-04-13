@@ -429,6 +429,26 @@ $accountBalance = $openingBalance + $totalIncome - $totalExpenses - $formattedTo
                         </div>
                         <i class="fa fa-credit-card"></i>
                     </div>
+                    <div class="summary-card">
+    <div>
+        <h6>Total Bonus (Active Season)</h6>
+
+        <span class="amount hidden-number">xxxx.xx</span>
+        <span class="amount revealed-number usd" style="display: none;">
+            @if(!empty($activeBonusSeason))
+                <span class="usd">
+                    $ {{ number_format($totalBonusCredit ?? 0, 2) }}
+                </span>
+            @else
+                <span class="usd">
+                    $ 0.00
+                </span>
+            @endif
+        </span>
+    </div>
+    <i class="fa fa-gift"></i>
+</div>
+
                 </div>
                 <!-- Second Row -->
                 <div class="card-row">

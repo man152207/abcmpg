@@ -17,9 +17,13 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['*'], // चाहियो भने ['GET'] मात्र राख्न सकिन्छ
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'https://mpgsolution.com',
+        'https://www.mpgsolution.com',
+        'https://www.mpg.com.np',
+    ],
 
     'allowed_origins_patterns' => [],
 

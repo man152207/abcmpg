@@ -60,22 +60,32 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 
 <meta name="current-admin" content="{{ auth('admin')->user()->name }}">
 <script src="{{ asset('js/fetchCustomerRate.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- jQuery (ONLY ONE) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<!-- Moment (ONLY ONE - daterangepicker needs it) -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+
+<!-- DateRangePicker -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<!-- Bootstrap 4.5.2 (ONLY ONE css + js) -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Font Awesome (Choose ONE) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- Select2 (Choose ONE version) -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
+<!-- Flatpickr (optional) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <style>
     table {
       border-collapse: collapse;
@@ -660,11 +670,12 @@ td:hover {
   animation: colorBlink 1s ease-in-out infinite;
 }
 
+#dropdownButton { animation: colorBlink 1s ease-in-out infinite; }
+
 @keyframes colorBlink {
   0%, 100% { background-color: #3b3933; }
-  50%      { background-color: #E6C87A
+  50%      { background-color: #E6C87A; }
 }
-
 
 /* Column sizing (no JS – label only) */
 #addonModal thead th:nth-child(1) { width: 44px; }    /* checkbox */
@@ -1058,10 +1069,10 @@ td:hover {
 
                 @if($customer)
                 <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode('
-*Your ad campaign has been applied as per your request.*
+*Your ad campaign has been set up.*
 The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
-You can make payments via eSewa: 9856000601. 
-*Please mention your _WhatsApp number_ in the payment _remarks section_.*
+eSewa payment: 9856000601
+_Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
                  <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
@@ -1302,10 +1313,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
                 @if($customer)
                 <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode('
-*Your ad campaign has been applied as per your request.*
+*Your ad campaign has been set up.*
 The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
-You can make payments via eSewa: 9856000601. 
-*Please mention your _WhatsApp number_ in the payment _remarks section_.*
+eSewa payment: 9856000601
+_Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
                  <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
@@ -1545,10 +1556,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
                 @if($customer)
                 <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode('
-*Your ad campaign has been applied as per your request.*
+*Your ad campaign has been set up.*
 The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
-You can make payments via eSewa: 9856000601. 
-*Please mention your _WhatsApp number_ in the payment _remarks section_.*
+eSewa payment: 9856000601
+_Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
                  <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
@@ -1787,10 +1798,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
                 @if($customer)
                 <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode('
-*Your ad campaign has been applied as per your request.*
+*Your ad campaign has been set up.*
 The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
-You can make payments via eSewa: 9856000601. 
-*Please mention your _WhatsApp number_ in the payment _remarks section_.*
+eSewa payment: 9856000601
+_Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
                  <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
@@ -2031,10 +2042,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
                 @if($customer)
                 <a href="https://wa.me/+977{{ $customer->phone }}?text={{ rawurlencode('
-*Your ad campaign has been applied as per your request.*
+*Your ad campaign has been set up.*
 The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
-You can make payments via eSewa: 9856000601. 
-*Please mention your _WhatsApp number_ in the payment _remarks section_.*
+eSewa payment: 9856000601
+_Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
                  <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
@@ -2304,7 +2315,6 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </div>
 
 <!-- jQuery (full or slim works; we use slim since we use fetch) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
 <!-- ✅ Popper v1 for Bootstrap 4.x -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
