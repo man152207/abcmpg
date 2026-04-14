@@ -1,0 +1,1 @@
+<?php /**PATH /home/mpgcomnp/app.mpg.com.np/resources/views/admin/adAccount/partials/adaccount_table.blade.php ENDPATH**/ ?>
