@@ -29,10 +29,10 @@ A comprehensive business management system built with Laravel 10 for MPG Solutio
   - DB_CONNECTION=pgsql, DB_HOST=helium, DB_PORT=5432, DB_DATABASE=heliumdb, DB_USERNAME=postgres
   - DB_PASSWORD set as Replit secret
 - **APP_URL:** Set to Replit dev domain via shared env var
-- **Note on cPanel MySQL:** The original production database is on cPanel MySQL (190.92.174.35).
-  Direct connection from Replit is NOT possible — the shared hosting provider blocks port 3306
-  externally at the firewall level even with Remote MySQL Access `%` wildcard enabled.
-  To use real data, export from cPanel phpMyAdmin and import into Replit PostgreSQL.
+- **cPanel MySQL (production):** The production database is on cPanel MySQL (190.92.174.35, db: mpgcomnp_wp146).
+  Connection requires the cPanel firewall to have port 3306 open to Replit's outbound IP.
+  Set `MYSQL_DATABASE_URL` (or individual `DB_HOST`/`DB_DATABASE`/`DB_USERNAME`/`DB_MYSQL_PASSWORD`)
+  to enable the `mysql` connection. Verify with `php scripts/verify-mysql.php`.
 
 ## Running the Application
 
@@ -58,6 +58,42 @@ php artisan serve --host=0.0.0.0 --port=5000
 - Many migrations had class naming conflicts (MySQL → PostgreSQL migration); fixed with anonymous classes and defensive column checks
 - TrustProxies set to `*` for Replit's proxy environment
 - Storage link already exists at `public/storage`
+
+## Database Migration (Replit PostgreSQL → cPanel MySQL)
+
+When the cPanel MySQL firewall is open and `MYSQL_DATABASE_URL` (or equivalent env vars) is set,
+migrate all production data from Replit PostgreSQL to cPanel MySQL:
+
+**Quick start:**
+```bash
+# 1. Verify MySQL connectivity
+php scripts/verify-mysql.php
+
+# 2. Run migrations on MySQL
+DB_CONNECTION=mysql php artisan migrate --force
+
+# 3. Copy all data from PostgreSQL to MySQL
+php artisan db:pgsql-to-mysql --clear
+
+# Or use the orchestrating shell script (all three steps):
+bash scripts/migrate-to-mysql.sh
+```
+
+**Command options:**
+```
+php artisan db:pgsql-to-mysql
+  --tables=tbl1,tbl2   # migrate specific tables only
+  --clear              # truncate MySQL tables before inserting
+  --dry-run            # preview row counts without writing
+  --chunk=500          # rows per INSERT batch (default 200)
+```
+
+- Both connections must be reachable: `pgsql` (Replit `DATABASE_URL`) and `mysql` (`MYSQL_DATABASE_URL`)
+- MySQL schema must exist first (`DB_CONNECTION=mysql php artisan migrate`)
+- FOREIGN_KEY_CHECKS is disabled during import and re-enabled after each table
+- Boolean/JSON/null coercion from PostgreSQL types to MySQL types is handled automatically
+
+---
 
 ## Database Import (cPanel → Replit PostgreSQL)
 
