@@ -2792,9 +2792,6 @@ html.mpg-layout, body.mpg-layout{
 .mpg-layout .main-header .nav-link[data-widget="pushmenu"]{
   position: relative;
 }
-.mpg-layout.sidebar-collapse .main-header .nav-link[data-widget="pushmenu"] i::before{
-  /* keep icon as-is; AdminLTE swaps fa-bars naturally */
-}
 
 /* Smooth width transition */
 .mpg-layout .main-sidebar,
