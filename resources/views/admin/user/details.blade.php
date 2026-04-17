@@ -2,51 +2,6 @@
 
 @section('content')
 
-<style>
-    body {
-        font-family: 'Roboto', sans-serif;
-        background-color: #e9ecef;
-    }
-    .card {
-        border: none;
-        border-radius: 10px;
-        background-color: #ffffff;
-        padding: 20px;
-        margin-bottom: 10px;
-    }
-    .card-header2 {
-        background-color: #093b7b;
-        color: white;
-        font-size: 20px;
-        padding: 10px;
-        border-radius: 10px 10px 0 0;
-    }
-    .card-body2 {
-        padding: 20px;
-    }
-    .user-activity label, .user-details label {
-        font-weight: bold;
-        color: #093b7b;
-    }
-    .row-custom {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .column-custom {
-        flex: 50%;
-        padding: 10px;
-    }
-    @media screen and (max-width: 768px) {
-        .column-custom {
-            flex: 100%;
-        }
-    }
-    @keyframes blink {
-        0% { opacity: 1; }
-        50% { opacity: 0; }
-        100% { opacity: 1; }
-    }
-</style>
 <div class="container-fluid">
     <div class="card my-2">
         <div class="card-header2 d-flex justify-content-between align-items-center">

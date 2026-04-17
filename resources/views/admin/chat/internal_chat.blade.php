@@ -5,114 +5,28 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
 <style>
-    :root {
-        --bg-color: #f0f2f5;
-        --text-color: #1c1e21;
-        --bubble-bg: #ffffff;
-        --bubble-bg-admin: #0084ff;
-        --bubble-text-admin: #ffffff;
-        --border-color: #e4e6eb;
-    }
-    [data-theme="dark"] {
-        --bg-color: #18191a;
-        --text-color: #e4e6eb;
-        --bubble-bg: #242526;
-        --bubble-bg-admin: #3a3b3c;
-        --bubble-text-admin: #e4e6eb;
-        --border-color: #3a3b3c;
-    }
-    .chat-container {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        height: calc(100vh - 117px);
-    }
-    .chat-message {
-        background-color: var(--bubble-bg);
-        border-radius: 18px;
-        padding: 8px 12px;
-        max-width: 70%;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        position: relative;
-        margin-bottom: 4px;
-    }
-    .chat-message.admin {
-        background-color: var(--bubble-bg-admin);
-        color: var(--bubble-text-admin);
-    }
-    .message-content p {
-        white-space: pre-wrap;
-    }
-    .message-image {
-        max-width: 100%;
-        max-height: 200px;
-        border-radius: 12px;
-        margin-top: 4px;
-    }
-    .reaction {
-        cursor: pointer;
-        padding: 4px 8px;
-        border-radius: 12px;
-        background-color: rgba(0, 0, 0, 0.1);
-        margin-right: 4px;
-        font-size: 14px;
-    }
-    .context-menu {
-        position: absolute;
-        background-color: var(--bubble-bg);
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-        padding: 8px 0;
-        min-width: 120px;
-    }
-    .context-menu button, .context-menu a {
-        display: block;
-        width: 100%;
-        padding: 8px 16px;
-        text-align: left;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--text-color);
-    }
-    .context-menu button:hover, .context-menu a:hover {
-        background-color: var(--border-color);
-    }
-    .input-container {
-        background-color: var(--bubble-bg);
-        border-radius: 20px;
-        padding: 8px 12px;
-    }
-    .input-container textarea {
-        height: auto;
-        max-height: 80px;
-    }
-    .message-input {
-        min-height: 28px;
-        max-height: 60px;
-        font-size: 13px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
-    .select2-container .select2-selection--single {
-        border-radius: 20px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 38px;
-    }
-    @media (max-width: 768px) {
-        .customer-list {
-            display: none;
-        }
-        .conversation-pane {
-            width: 100%;
-        }
-    }
+:root{
+  --bubble-bg:#f5f7fa;
+  --border-color:#e5e9f0;
+  --msg-admin-bg:#0f766e;
+  --msg-admin-text:#fff;
+  --msg-user-bg:#fff;
+  --msg-user-text:#0f172a;
+}
+.dark-mode{
+  --bubble-bg:#1e293b;
+  --border-color:#334155;
+  --msg-admin-bg:#0f766e;
+  --msg-user-bg:#273549;
+  --msg-user-text:#e2e8f0;
+}
+.chat-container{height:calc(100vh - 90px);min-height:500px;border:1px solid var(--border-color);border-radius:14px;overflow:hidden;background:#fff;}
+.customer-list{min-width:220px;}
+.chat-message.admin{background:var(--msg-admin-bg);color:var(--msg-admin-text);border-radius:14px 14px 4px 14px;padding:.6rem .85rem;max-width:70%;}
+.chat-message:not(.admin){background:var(--msg-user-bg);color:var(--msg-user-text);border:1px solid var(--border-color);border-radius:14px 14px 14px 4px;padding:.6rem .85rem;max-width:70%;}
+.message-image{max-width:220px;border-radius:10px;cursor:pointer;}
+.reaction{font-size:.85rem;cursor:pointer;background:#f1f5f9;border-radius:999px;padding:.1rem .4rem;display:inline-block;}
 </style>
 
 <div class="chat-container flex mx-auto rounded-xl shadow-lg overflow-hidden">

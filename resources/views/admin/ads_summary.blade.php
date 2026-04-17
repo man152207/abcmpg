@@ -37,109 +37,6 @@ for ($cursor = $startDate->copy(); $cursor->lte($endDate); $cursor->addDay()) {
 
 @section('content')
 
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    .dashboard-container {
-        display: flex;
-        flex-wrap: nowrap;
-        width: 100%;
-        height: 100%;
-    }
-
-    .dashboard-section {
-        flex-grow: 1;
-        width: 50%;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    .header {
-        background-color: #17a2b8;
-        color: white;
-        padding: 10px;
-        text-align: center;
-    }
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    th, td {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 10px;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #e0e0e0;
-    }
-
-    .pagination {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-    }
-
-    .pagination li {
-        margin: 0 5px;
-        list-style: none;
-        cursor: pointer;
-        padding: 5px 10px;
-        border: 1px solid #17a2b8;
-        color: #17a2b8;
-        border-radius: 4px;
-    }
-
-    .pagination li.active {
-        background-color: #17a2b8;
-        color: white;
-    }
-
-    .pagination li.disabled {
-        pointer-events: none;
-        color: #ccc;
-    }
-
-    canvas {
-        max-width: 100%;
-        height: auto;
-    }
-
-    @media (max-width: 768px) {
-        .dashboard-container {
-            flex-direction: column;
-        }
-
-        .dashboard-section {
-            width: 100%;
-        }
-    }
-</style>
-
 <div class="container mt-5">
     <div class="dashboard-container">
         <!-- Daily Ad Revenue Report Section -->
@@ -173,7 +70,7 @@ for ($cursor = $startDate->copy(); $cursor->lte($endDate); $cursor->addDay()) {
             <div class="header">
                 <h3>Monthly Summary</h3>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive tbl-cards">
                 <table>
                     <thead>
                         <tr>

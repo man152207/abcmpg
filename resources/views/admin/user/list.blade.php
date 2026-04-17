@@ -1,165 +1,150 @@
 @extends('admin.layout.layout')
 
 @section('content')
-<!-- Bootstrap CSS for styling and responsiveness -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+<div class="container-fluid py-2">
 
-<style>
-    /* Custom Styles for a Compact Layout */
-    body {
-        font-family: 'Roboto', sans-serif;
-        background-color: #e9ecef;
-    }
-    .card {
-        border: none;
-        border-radius: 10px;
-        background-color: #ffffff;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    .card-header2 {
-        background-color: #093b7b;
-        color: white;
-        font-size: 20px;
-        padding: 10px;
-        border-radius: 10px 10px 0 0;
-    }
-    .card-body2 {
-        padding: 10px;
-    }
-    .btn {
-        border-radius: 20px;
-        font-weight: bold;
-        padding: 5px 10px;
-    }
-    .table-responsive {
-        margin-top: 10px;
-    }
-    .table thead th {
-        background-color: #093b7b;
-        color: white;
-        font-weight: bold;
-        font-size: 16px;
-        padding: 10px;
-    }
-    .table tbody td {
-        padding: 10px;
-        font-size: 14px;
-    }
-    .profile-picture {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-</style>
-
-<div class="container-fluid">
-    <div class="card my-2">
-        <div class="card-header2 d-flex justify-content-between align-items-center">
-            <h3>Users Dashboard</h3>
-            <div class="d-flex align-items-center">
-                <!-- Total Users Count -->
-                <span id="totalCount" class="total-count-display">Users Count: {{ $users->total() }}</span>
-                <!-- Export Button -->
-                <button id="exportButton" class="btn btn-success ml-2"><i class="fas fa-file-export"></i> Export</button>
-            </div>
-        </div>
-        <div class="card-body2">
-            <!-- Search Form -->
-            <form action="{{ route('search_user') }}" method="get" class="mb-2 form-inline">
-                @csrf
-                <div class="input-group w-100">
-                    <input type="text" name="search" placeholder="Search by customer name" class="form-control">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-secondary">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Users Table -->
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Profile</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Departments</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($users as $user)
-                        <tr>
-                           <td>
-    <a href="{{ route('admin.user.details', $user->id) }}">
-        @php
-            $pp = $user->profile_picture;
-            $img = $pp
-                ? (\Illuminate\Support\Str::startsWith($pp, ['http://','https://'])
-                    ? $pp
-                    : asset('storage/'.$pp))
-                : null;
-        @endphp
-
-        @if($img)
-            <img src="{{ $img }}" alt="{{ $user->name }}" class="profile-picture">
-        @else
-            <i class="fas fa-user-circle" style="font-size: 50px; color: rgba(0, 0, 0, 0.7);"></i>
-        @endif
-    </a>
-</td>
-
-                            <td>
-                                <a href="{{ route('admin.user.details', $user->id) }}" class="clickonname">{{ $user->name }}</a>
-                            </td>
-                            <td>{{ $user->email }}</td>
-                            <td>
-                                <a href="https://wa.me/+977{{ $user->phone }}" target="_blank" style="text-decoration: none; color: inherit;">
-                                    <strong>{{ $user->phone }}</strong>
-                                </a>
-                            </td>
-                            <td style="max-width:280px;">
-    @php $deps = $user->departments ?? collect(); @endphp
-    @forelse($deps as $d)
-        <span class="badge badge-info mr-1 mb-1">{{ $d->name }}</span>
-    @empty
-        <span class="text-muted">—</span>
-    @endforelse
-</td>
-
-                            <td>
-                                <a href="{{ route('admin.user.details', $user->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
-                                
-                                @if($user->email !== 'info@adsmpg.com')
-                                    <form action="{{ route('admin.user.details', $user->id) }}" method="post" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')"><i class="fas fa-trash-alt"></i> Delete</button>
-                                    </form>
-                                    <a href="{{ route('admin.user.details', $user->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-key"></i> Edit Privilege</a>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <!-- Pagination Links -->
-            {{ $users->links('pagination::bootstrap-5') }}
-        </div>
+  {{-- Page Header --}}
+  <div class="page-header mb-3">
+    <div>
+      <h2 class="mb-0"><i class="fas fa-users-cog text-primary mr-2"></i>Team Members</h2>
+      <p class="text-muted small mb-0 mt-1">Manage admin users, roles and privileges</p>
     </div>
+    <div class="d-flex align-items-center gap-2 flex-wrap" style="gap:.5rem;">
+      <span class="mpg-chip mpg-chip-primary">
+        <i class="fas fa-user-check"></i>
+        {{ $users->total() }} {{ Str::plural('Member', $users->total()) }}
+      </span>
+      <button id="exportButton" class="btn btn-success btn-sm">
+        <i class="fas fa-file-export mr-1"></i>Export
+      </button>
+      @if(isset($isSuperAdmin) && $isSuperAdmin)
+        <a href="{{ route('admin.user.add') }}" class="btn btn-primary btn-sm">
+          <i class="fas fa-user-plus mr-1"></i>Add User
+        </a>
+      @endif
+    </div>
+  </div>
+
+  {{-- Search --}}
+  <div class="card mb-3">
+    <div class="card-body py-2">
+      <form action="{{ route('search_user') }}" method="get">
+        @csrf
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+          </div>
+          <input type="text" name="search" value="{{ request('search') }}"
+                 placeholder="Search by name, email or phone…" class="form-control">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">Search</button>
+            @if(request('search'))
+              <a href="{{ route('user.list') }}" class="btn btn-secondary">Clear</a>
+            @endif
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {{-- Users Table --}}
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title"><i class="fas fa-list mr-1"></i>Users</span>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive tbl-cards">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Departments</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($users as $user)
+            <tr>
+              <td>
+                @php
+                  $pp  = $user->profile_picture;
+                  $img = $pp
+                    ? (Str::startsWith($pp, ['http://','https://']) ? $pp : asset('storage/'.$pp))
+                    : null;
+                @endphp
+                <a href="{{ route('admin.user.details', $user->id) }}">
+                  @if($img)
+                    <img src="{{ $img }}" alt="{{ $user->name }}"
+                         style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--mpg-border);">
+                  @else
+                    <span style="display:inline-flex;align-items:center;justify-content:center;
+                                 width:40px;height:40px;border-radius:50%;
+                                 background:var(--mpg-primary-bg);color:var(--mpg-primary);font-weight:700;">
+                      {{ strtoupper(substr($user->name,0,1)) }}
+                    </span>
+                  @endif
+                </a>
+              </td>
+              <td>
+                <a href="{{ route('admin.user.details', $user->id) }}" class="fw-600">
+                  <strong>{{ $user->name }}</strong>
+                </a>
+              </td>
+              <td class="text-muted">{{ $user->email }}</td>
+              <td>
+                <a href="https://wa.me/+977{{ $user->phone }}" target="_blank"
+                   class="text-success font-weight-bold">
+                  <i class="fab fa-whatsapp mr-1"></i>{{ $user->phone }}
+                </a>
+              </td>
+              <td>
+                @php $deps = $user->departments ?? collect(); @endphp
+                @forelse($deps as $d)
+                  <span class="badge badge-info mr-1 mb-1">{{ $d->name }}</span>
+                @empty
+                  <span class="text-muted">—</span>
+                @endforelse
+              </td>
+              <td class="text-center" style="white-space:nowrap;">
+                <a href="{{ route('admin.user.details', $user->id) }}"
+                   class="btn btn-primary btn-sm mr-1" title="Edit">
+                  <i class="fas fa-edit"></i>
+                </a>
+                @if($user->email !== 'info@adsmpg.com')
+                  <a href="{{ route('admin.user.privilege', $user->id) }}"
+                     class="btn btn-warning btn-sm mr-1" title="Privilege">
+                    <i class="fas fa-key"></i>
+                  </a>
+                  <form action="{{ route('admin.user.details', $user->id) }}" method="post" class="d-inline">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete {{ addslashes($user->name) }}?')">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </form>
+                @endif
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+    @if($users->hasPages())
+    <div class="card-footer">
+      {{ $users->links('pagination::bootstrap-5') }}
+    </div>
+    @endif
+  </div>
+
 </div>
 
 <script>
-    document.getElementById('exportButton').addEventListener('click', function () {
-        window.location.href = '/export-users'; // Adjust the URL if needed
-    });
+document.getElementById('exportButton').addEventListener('click', function(){
+  window.location.href = '/export-users';
+});
 </script>
-
 @endsection

@@ -43,7 +43,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Customers List</h3>
                 </div>
-                <div class="card-body table-responsive">
+                <div class="card-body table-responsive tbl-cards">
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>

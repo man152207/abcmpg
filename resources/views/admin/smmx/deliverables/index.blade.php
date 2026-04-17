@@ -33,7 +33,7 @@
                     <a href="{{ route('admin.smmx.deliverables.create') }}" class="btn btn-primary btn-sm">Add New</a>
                 </div>
 
-                <div class="card-body table-responsive">
+                <div class="card-body table-responsive tbl-cards">
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>

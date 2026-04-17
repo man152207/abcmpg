@@ -3,89 +3,6 @@
 @section('content')
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
-    }
-
-    .card-header {
-        background-color: #093b7b;
-        color: white;
-    }
-
-    .card-header h3 {
-        margin: 0;
-    }
-
-    .dropdown-btn {
-        background-color: #646564;
-    }
-
-    .dropdown-menu {
-        background-color: #093b7b;
-    }
-
-    .dropdown-item {
-        color: white;
-    }
-
-    .dropdown-item:hover {
-        background-color: #646564;
-        color: #fff;
-    }
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    th,
-    td {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
-
-    th {
-        background-color: #093b7b;
-        color: white;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #e0e0e0;
-    }
-
-    .btn-primary {
-        background-color: #093b7b;
-        border-color: #093b7b;
-    }
-
-    .btn-primary:hover {
-        background-color: #646564;
-        border-color: #646564;
-    }
-
-    /* Style for the search form */
-    .search-form label {
-        color: #093b7b;
-        font-weight: bold;
-    }
-
-    .search-form .form-control {
-        border-color: #093b7b;
-    }
-
-    .search-form .btn-primary {
-        margin-top: 27px;
-    }
-
-</style>
-
 <div class="container-fluid">
     <div class="card">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
@@ -124,7 +41,7 @@
                     </div>
                 </div>
             </form>
-            <table class="table-responsive">
+            <table class="table-responsive tbl-cards">
                 <thead>
                     <tr>
                         <th>ID</th>

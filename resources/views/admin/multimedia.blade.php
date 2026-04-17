@@ -412,40 +412,6 @@
 @section('css_')
 <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
-<style>
-  .bg-warning-light { background-color: #fff3cd !important; }
-  .bg-info-light { background-color: #d1ecf1 !important; }
-  .bg-success-light { background-color: #d4edda !important; }
-  .bg-danger-light { background-color: #f8d7da !important; }
-  .table-hover tbody tr:hover { background-color: #f1f1f1; }
-  .card { border-radius: 0.5rem; }
-  .btn { transition: all 0.2s ease-in-out; }
-  .btn:hover { transform: translateY(-1px); }
-
-  /* modal split layout */
-  .mm-flex { display: flex; gap: 16px; min-height: 480px; }
-  .mm-left { flex: 1 1 60%; }
-  .mm-right { flex: 1 1 40%; display: flex; flex-direction: column; }
-  .mm-right .mm-project-wrap { flex: 1 1 auto; display: flex; flex-direction: column; }
-  .mm-right .mm-project-label { font-weight: 600; margin-bottom: 6px; }
-  .mm-right textarea { flex: 1 1 auto; min-height: 420px; resize: vertical; }
-
-  .auto-resize { resize: none; overflow: hidden; min-height: 38px; }
-
-  /* Select2 align */
-  .select2-container .select2-selection--single,
-  .select2-container .select2-selection--multiple {
-    min-height: 38px;
-    display: flex;
-    align-items: center;
-  }
-  .select2-container--default .select2-selection--single .select2-selection__arrow { height: 38px; }
-
-  @media (max-width: 992px) {
-    .mm-flex { flex-direction: column; }
-    .mm-right textarea { min-height: 260px; }
-  }
-</style>
 @endsection
 
 @section('js_')

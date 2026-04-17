@@ -1,36 +1,6 @@
 @extends('admin.layout.layout')
 
 @section('content')
-<style>
-  :root{
-    --fs-base: 14px;
-    --fs-sm: 13px;
-    --fs-lg: 16px;
-  }
-  .hidden{display:none}
-  .logpage{border:1px solid #000;background:#fff;padding:12px;margin-bottom:16px}
-  .sec-hd{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
-  .sec-hd h3{margin:0;font-size:var(--fs-lg);text-transform:uppercase;letter-spacing:.5px}
-  .hint{font-size:var(--fs-sm);color:#374151;background:#f9fafb;border:1px dashed #e5e7eb;padding:8px;border-radius:8px;margin:-4px 0 10px}
-  table.log{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff;font-size:var(--fs-base)}
-  table.log thead th{border-bottom:2px solid #000;font-size:var(--fs-sm);padding:8px;text-align:left}
-  table.log tbody td{border-bottom:1px dashed #000;padding:8px;vertical-align:top}
-  .cell{width:100%;border:none;outline:none;font:inherit;background:transparent;min-height:34px}
-  .cell::placeholder{color:#9ca3af}
-  .btn{padding:8px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#eef2ff;cursor:pointer;font-size:var(--fs-base)}
-  .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
-  .btn-danger{background:#ef4444;color:#fff;border-color:#ef4444}
-  .btn[disabled]{opacity:.5;cursor:not-allowed}
-  .pillbar{display:flex;gap:8px;flex-wrap:wrap}
-  .pill{padding:10px 14px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;cursor:pointer;font-weight:600}
-  .pill.active{background:#111827;color:#fff;border-color:#111827}
-  .meta-grid{display:flex;gap:12px;flex-wrap:wrap}
-  .meta-grid label{font-weight:600;font-size:var(--fs-sm);display:block;margin-bottom:6px}
-  .meta-grid input, .meta-grid select{height:38px;padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:var(--fs-base)}
-  .sticky-actions{position:sticky;bottom:0;background:#fff;padding:12px;border-top:1px solid #e5e7eb;display:flex;gap:10px}
-  .client-badge{font-size:12px; opacity:.8; margin-top:4px}
-</style>
-
 <form method="post" action="{{ route('admin.daily-logs.store') }}" id="dailyLogForm">
   @csrf
 

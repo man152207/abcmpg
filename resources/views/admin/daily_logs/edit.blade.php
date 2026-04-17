@@ -1,19 +1,6 @@
 @extends('admin.layout.layout')
 
 @section('content')
-<style>
-  .logpage{border:1px solid #000;background:#fff;padding:12px;margin-bottom:16px}
-  .sec-hd{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
-  .sec-hd h3{margin:0;font-size:16px;text-transform:uppercase}
-  table.log{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff}
-  table.log thead th{border-bottom:2px solid #000;font-size:12px;padding:6px;text-align:left}
-  table.log tbody td{border-bottom:1px dashed #000;font-size:12px;padding:6px;vertical-align:top}
-  .cell{width:100%;border:none;outline:none;font:inherit;background:transparent}
-  .btn{padding:6px 10px;border-radius:6px;border:1px solid #cbd5e1;background:#eef2ff;cursor:pointer}
-  .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
-  .btn-danger{background:#ef4444;color:#fff;border-color:#ef4444}
-</style>
-
 <form method="post" action="{{ route('admin.daily-logs.update',$log) }}">
   @csrf @method('PUT')
 

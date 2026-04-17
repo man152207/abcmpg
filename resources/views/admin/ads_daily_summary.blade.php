@@ -2,88 +2,11 @@
 @section('title', 'Daily Summary | MPG Solution')
 @section('content')
 
-<style>
-    .container {
-        margin-top: 30px;
-    }
-
-    .header {
-        background-color: #17a2b8;
-        color: white;
-        padding: 15px;
-        text-align: center;
-        border-radius: 8px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    th, td {
-        padding: 12px 15px;
-        text-align: left;
-    }
-
-    thead {
-        background-color: #17a2b8;
-        color: white;
-    }
-
-    tbody tr:nth-child(even) {
-        background-color: #f8f8f8;
-    }
-
-    tbody tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    th {
-        background-color: #17a2b8;
-        color: white;
-    }
-
-    th:first-child, td:first-child {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-    }
-
-    th:last-child, td:last-child {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-        margin-top: 20px;
-    }
-
-    canvas {
-        max-width: 100%;
-        height: auto;
-        margin-top: 20px;
-    }
-
-    @media (max-width: 768px) {
-        .dashboard-container {
-            flex-direction: column;
-        }
-
-        .dashboard-section {
-            width: 100%;
-        }
-    }
-</style>
-
 <div class="container">
     <div class="header">
         <h3>Daily Summary for {{ $monthYear }}</h3>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive tbl-cards">
         <table>
             <thead>
                 <tr>

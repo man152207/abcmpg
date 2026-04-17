@@ -3,10 +3,6 @@
 @push('styles')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
-<style>
-.editable { cursor: pointer; }
-.readonly { background: #f4f4f9; }
-</style>
 @endpush
 
 @section('content')

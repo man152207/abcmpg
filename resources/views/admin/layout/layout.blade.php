@@ -895,5 +895,60 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 @stack('scripts')
+
+{{-- Mobile Card Auto-builder --}}
+<script>
+(function(){
+  'use strict';
+  function buildMobileCards(){
+    document.querySelectorAll('.tbl-cards').forEach(function(wrapper){
+      var tbl = wrapper.querySelector('table');
+      if(!tbl) return;
+      var old = wrapper.querySelector('.mc-mobile-list');
+      if(old) old.remove();
+      var headers = [];
+      tbl.querySelectorAll('thead th').forEach(function(th){ headers.push(th.innerText.trim()); });
+      var list = document.createElement('div');
+      list.className = 'mc-mobile-list';
+      tbl.querySelectorAll('tbody tr').forEach(function(tr){
+        var card = document.createElement('div');
+        card.className = 'mc-card';
+        var actionsCells = [];
+        tr.querySelectorAll('td').forEach(function(td, i){
+          var isAction = td.querySelector('a.btn, button, .btn-group, form');
+          if(isAction){
+            actionsCells.push(td); return;
+          }
+          if(!td.innerText.trim() && !td.innerHTML.trim()) return;
+          var row = document.createElement('div');
+          row.className = 'mc-row';
+          var lbl = document.createElement('span');
+          lbl.className = 'mc-label';
+          lbl.textContent = headers[i] || '#';
+          var val = document.createElement('span');
+          val.className = 'mc-val';
+          val.innerHTML = td.innerHTML;
+          row.appendChild(lbl); row.appendChild(val);
+          card.appendChild(row);
+        });
+        if(actionsCells.length){
+          var actions = document.createElement('div');
+          actions.className = 'mc-actions';
+          actionsCells.forEach(function(td){ actions.innerHTML += td.innerHTML; });
+          card.appendChild(actions);
+        }
+        list.appendChild(card);
+      });
+      wrapper.appendChild(list);
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', buildMobileCards);
+  } else {
+    buildMobileCards();
+  }
+  window.mpgRebuildMobileCards = buildMobileCards;
+})();
+</script>
 </body>
 </html>
