@@ -2809,3 +2809,121 @@ html.mpg-layout, body.mpg-layout{
     margin-left: 0 !important;
   }
 }
+
+/* =============================================================
+   25b. TASK-43 — POP-OUT SUBMENUS in collapsed sidebar
+   ============================================================= */
+
+/* Allow children of the sidebar to escape the rail without being clipped. */
+.mpg-layout.sidebar-collapse .main-sidebar,
+.mpg-layout.sidebar-collapse .main-sidebar .sidebar,
+.mpg-layout.sidebar-collapse .main-sidebar .os-host,
+.mpg-layout.sidebar-collapse .main-sidebar .os-padding,
+.mpg-layout.sidebar-collapse .main-sidebar .os-viewport,
+.mpg-layout.sidebar-collapse .main-sidebar .nav-sidebar{
+  overflow: visible !important;
+}
+
+/* Anchor for the floating popover. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview{
+  position: relative;
+}
+
+/* In collapsed mode, ignore AdminLTE's inline `.menu-open` and keep
+   the submenu hidden by default; show it ONLY on hover / keyboard focus. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview > .nav-treeview{
+  display: none !important;
+}
+
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview{
+  display: block !important;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 8px;
+  min-width: 230px;
+  max-width: 290px;
+  padding: .4rem 0;
+  background: linear-gradient(180deg, #0f1c33 0%, #0a1426 100%);
+  border-radius: 10px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.42), 0 0 0 1px rgba(94,234,212,.16);
+  z-index: 1310;
+  animation: mpgPopoverIn .14s ease-out;
+}
+
+@keyframes mpgPopoverIn{
+  from{ opacity: 0; transform: translateX(-6px); }
+  to  { opacity: 1; transform: translateX(0);    }
+}
+
+/* Re-style child rows inside the popover (override the icon-only collapsed look). */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link{
+  padding: .5rem .85rem !important;
+  justify-content: flex-start;
+  color: #d4dce8;
+  border-radius: 7px;
+  margin: 1px 6px;
+  min-height: 34px;
+}
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link p,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link p{
+  display: inline-block !important;
+  margin: 0 0 0 .5rem;
+  font-size: .82rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-icon,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-icon{
+  font-size: .85rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+/* Re-show the right caret inside the popover for nested treeview indicators. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link > p > .right,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link > p > .right{
+  display: inline-block !important;
+  margin-left: auto;
+  font-size: .7rem;
+  opacity: .7;
+}
+
+/* Hover + active states inside the popover. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link:hover,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link:focus,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link:hover{
+  background: rgba(94,234,212,.12);
+  color: #fff;
+}
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link.active,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link.active{
+  background: linear-gradient(135deg, rgba(20,184,166,.30), rgba(59,130,246,.18));
+  color: #fff;
+}
+
+/* Nested treeviews inside the popover: render inline, indented (no second-level pop-out). */
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-treeview .nav-treeview{
+  position: static;
+  display: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  animation: none;
+  min-width: 0;
+}
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-treeview .nav-item.has-treeview.menu-open > .nav-treeview{
+  display: block !important;
+}
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-treeview .nav-treeview .nav-link{
+  padding-left: 1.7rem !important;
+}
+
+/* Suppress the icon-only tooltip pill on parents that already pop a submenu
+   (avoids tooltip + popover stacking on the same hover). */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview > .nav-link[data-tooltip]:hover::after{
+  opacity: 0;
+}
