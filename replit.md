@@ -23,11 +23,16 @@ A comprehensive business management system built with Laravel 10 for MPG Solutio
 - **Excel:** maatwebsite/excel
 - **Images:** intervention/image
 
-## Environment Setup
+## Environment Setup (Replit)
 
-- **Database:** Replit PostgreSQL (heliumdb via PGHOST=helium)
-- **DB_PASSWORD:** Set as Replit secret
-- **APP_URL:** Set to Replit dev domain
+- **Database:** Replit PostgreSQL (heliumdb via PGHOST=helium, port 5432)
+  - DB_CONNECTION=pgsql, DB_HOST=helium, DB_PORT=5432, DB_DATABASE=heliumdb, DB_USERNAME=postgres
+  - DB_PASSWORD set as Replit secret
+- **APP_URL:** Set to Replit dev domain via shared env var
+- **Note on cPanel MySQL:** The original production database is on cPanel MySQL (190.92.174.35).
+  Direct connection from Replit is NOT possible — the shared hosting provider blocks port 3306
+  externally at the firewall level even with Remote MySQL Access `%` wildcard enabled.
+  To use real data, export from cPanel phpMyAdmin and import into Replit PostgreSQL.
 
 ## Running the Application
 
