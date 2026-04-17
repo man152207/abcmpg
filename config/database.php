@@ -45,6 +45,9 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
+            // MYSQL_DATABASE_URL (Replit Secret) carries full cPanel MySQL connection string.
+            // Falls back to individual DB_HOST/DB_DATABASE/etc. env vars if not set.
+            // DATABASE_URL is intentionally NOT used here — it points to Replit's pgsql (helium).
             'url' => env('MYSQL_DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
