@@ -5,9 +5,13 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout code
@@ -32,7 +36,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Show Node and NPM version
         run: |
@@ -68,16 +72,20 @@ jobs:
           find storage/logs -type f ! -name ".gitignore" -delete || true
           find bootstrap/cache -type f ! -name ".gitignore" -delete || true
 
-      - name: Deploy to cPanel via FTP
+      - name: Deploy to cPanel via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
           local-dir: ./
           server-dir: /
+          log-level: standard
           exclude: |
             **/.git*
+            **/.git*/**
             **/.github/**
             **/node_modules/**
             **/tests/**
