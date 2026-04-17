@@ -112,6 +112,7 @@
                                 @csrf
                                 @method('POST')
                             </form>
+                        </td>
                     </tr>
                     @endif
                     @endforeach

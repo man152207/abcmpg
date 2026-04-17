@@ -312,7 +312,6 @@ $previousMonthName = \Carbon\Carbon::now()->subMonth()->format('F Y');
         </table>
     </div>
 </div>
-</div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const eyeIcon = document.getElementById('eye-icon');
