@@ -701,6 +701,8 @@ Route::get('/us/holidays', [\App\Http\Controllers\Api\UsApiController::class, 'h
 Route::get('/us/banking', [\App\Http\Controllers\Api\UsApiController::class, 'bankStatus']);
 Route::get('/us/emergency', [\App\Http\Controllers\Api\UsApiController::class, 'emergency']);
 
+Route::get('/health', [\App\Http\Controllers\HealthController::class, 'check'])->name('health.check');
+
 
 // Route::get('/admin/dashboard/customer_list_js', function () {
 //     $customers = Customer::all();
