@@ -1,44 +1,65 @@
 name: Deploy dash.mpg.com.np
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+build-and-deploy:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+```
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+  - name: Setup PHP
+    uses: shivammathur/setup-php@v2
+    with:
+      php-version: '8.2'
+      extensions: mbstring, bcmath, ctype, fileinfo, json, openssl, pdo, tokenizer, xml
+      coverage: none
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+  - name: Setup Composer
+    run: composer --version
 
-      - name: Install dependencies
-        run: pnpm install
+  - name: Install PHP dependencies
+    run: composer install --no-dev --optimize-autoloader --no-interaction
 
-      - name: Build nearme
-        working-directory: artifacts/nearme
-        run: pnpm build
-        env:
-          PORT: 3000
-          BASE_PATH: /
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
 
-      - name: Deploy to cPanel via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: artifacts/nearme/dist/public/
-          server-dir: /
-          dangerous-clean-slate: false
+  - name: Install Node dependencies
+    run: npm install
+
+  - name: Build Vite assets
+    run: npm run build
+
+  - name: Prepare deployment package
+    run: |
+      rm -rf node_modules
+      rm -rf tests
+      rm -f .env
+      rm -f .env.*
+      find storage/logs -type f ! -name ".gitignore" -delete || true
+      find bootstrap/cache -type f ! -name ".gitignore" -delete || true
+
+  - name: Deploy to cPanel via FTP
+    uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+    with:
+      server: ${{ secrets.FTP_SERVER }}
+      username: ${{ secrets.FTP_USERNAME }}
+      password: ${{ secrets.FTP_PASSWORD }}
+      local-dir: ./
+      server-dir: /dash.mpg.com.np/
+      exclude: |
+        **/.git*
+        **/.github/**
+        **/node_modules/**
+        **/tests/**
+        **/.env
+        **/.env.*
+```
