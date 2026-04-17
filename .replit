@@ -1,0 +1,16 @@
+modules = ["nodejs-20", "php-8.2", "web"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+DB_CONNECTION = "pgsql"
+DB_HOST = "helium"
+DB_PORT = "5432"
+DB_DATABASE = "heliumdb"
+DB_USERNAME = "postgres"
+APP_URL = "https://2886d36d-b2a1-46ef-8839-e02b4fcfec6a-00-2riexz0quqodp.sisko.replit.dev"
