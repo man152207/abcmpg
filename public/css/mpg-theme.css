@@ -2028,7 +2028,8 @@ html.mpg-layout, body.mpg-layout {
 /* ── Online / Offline status badge ── */
 .status-online  { color: #16a34a; font-weight: bold; }
 .status-online  i { animation: blink 1s infinite; }
-.status-offline { color: #dc2626; font-weight: bold; }
+.status-offline   { color: #6b7280; font-weight: bold; }
+.status-offline i { color: #dc2626; }
 
 /* ── Ad Account Management: input widths ── */
 .adm-select { min-width: 200px; }

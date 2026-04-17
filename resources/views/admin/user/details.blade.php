@@ -223,8 +223,7 @@
 @endphp
 
 @if($img)
-    <img src="{{ $img }}" alt="{{ $user->name }}" class="profile-picture-large"
-         class="user-profile-pic">
+    <img src="{{ $img }}" alt="{{ $user->name }}" class="profile-picture-large user-profile-pic">
 @else
     <i class="fas fa-user-circle user-profile-icon"></i>
 @endif
