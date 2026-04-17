@@ -15,7 +15,7 @@ A comprehensive business management system built with Laravel 10 for MPG Solutio
 ## Tech Stack
 
 - **Backend:** PHP 8.2 + Laravel 10
-- **Database:** PostgreSQL (Replit built-in)
+- **Database:** cPanel MySQL (190.92.174.35 / mpgcomnp_wp146) — both dev and production
 - **Frontend:** Blade templates + Livewire + Bootstrap 4 + jQuery
 - **Real-time:** Pusher + beyondcode/laravel-websockets
 - **Build:** Vite
@@ -25,14 +25,13 @@ A comprehensive business management system built with Laravel 10 for MPG Solutio
 
 ## Environment Setup (Replit)
 
-- **Database:** Replit PostgreSQL (heliumdb via PGHOST=helium, port 5432)
-  - DB_CONNECTION=pgsql, DB_HOST=helium, DB_PORT=5432, DB_DATABASE=heliumdb, DB_USERNAME=postgres
-  - DB_PASSWORD set as Replit secret
-- **APP_URL:** Set to Replit dev domain via shared env var
-- **cPanel MySQL (production):** The production database is on cPanel MySQL (190.92.174.35, db: mpgcomnp_wp146).
-  Connection requires the cPanel firewall to have port 3306 open to Replit's outbound IP.
-  Set `MYSQL_DATABASE_URL` (or individual `DB_HOST`/`DB_DATABASE`/`DB_USERNAME`/`DB_MYSQL_PASSWORD`)
-  to enable the `mysql` connection. Verify with `php scripts/verify-mysql.php`.
+- **Database (dev + production):** cPanel MySQL at 190.92.174.35:3306, db: mpgcomnp_wp146
+  - `DB_CONNECTION=mysql` set in Replit development env vars
+  - `MYSQL_DATABASE_URL` Replit Secret holds full connection string (credentials)
+  - Replit egress IP `34.47.205.64` is whitelisted in cPanel → Remote MySQL
+- **PostgreSQL (heliumdb):** Still available as `DB::connection('pgsql')` for migration/validation tools
+  - Accessed via Replit's auto-set `DATABASE_URL` env var (no manual config needed)
+- **APP_URL:** Set to Replit dev domain via development env var
 
 ## Running the Application
 
