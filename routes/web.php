@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\AdAccountController;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdminController;
@@ -391,6 +392,12 @@ Route::prefix('admin/recp')
     Route::get('/', [AdminController::class, 'login_form'])->name('admin.login_form');
     Route::post('admin/login', [AdminController::class, 'login'])->name('admin.login');
     Route::post('admin/register', [AdminController::class, 'register'])->name('admin.register');
+
+    // Admin password reset routes (guest/unauthenticated only)
+    Route::get('admin/forgot-password', [\App\Http\Controllers\Auth\AdminPasswordResetController::class, 'showForgotForm'])->name('admin.password.request');
+    Route::post('admin/forgot-password', [\App\Http\Controllers\Auth\AdminPasswordResetController::class, 'sendResetLink'])->name('admin.password.email');
+    Route::get('admin/reset-password/{token}', [\App\Http\Controllers\Auth\AdminPasswordResetController::class, 'showResetForm'])->name('admin.password.reset');
+    Route::post('admin/reset-password', [\App\Http\Controllers\Auth\AdminPasswordResetController::class, 'resetPassword'])->name('admin.password.update');
     Route::get('/api/weather', [WeatherController::class, 'show'])->name('api.weather');
     Route::get('/api/weather-forecast', [WeatherController::class, 'forecast'])->name('api.weather-forecast');
 
