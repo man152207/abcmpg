@@ -2,17 +2,20 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration {
     public function up(): void
     {
-        DB::statement("ALTER TABLE campaign_insights MODIFY campaign_name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        if (DB::getDriverName() === 'mysql' && Schema::hasTable('campaign_insights')) {
+            DB::statement("ALTER TABLE campaign_insights MODIFY campaign_name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        }
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE campaign_insights MODIFY campaign_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci");
+        if (DB::getDriverName() === 'mysql' && Schema::hasTable('campaign_insights')) {
+            DB::statement("ALTER TABLE campaign_insights MODIFY campaign_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci");
+        }
     }
 };
