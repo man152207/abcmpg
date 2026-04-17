@@ -36,8 +36,7 @@
       <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
-            <input class="privilege-check"
-                   type="checkbox" class="custom-control-input"
+            <input type="checkbox" class="custom-control-input privilege-check"
                    id="dashboard" name="privileges[]" value="1"
                    {{ in_array(1, $userPrivileges) ? 'checked' : '' }}>
             <label class="custom-control-label" for="dashboard">Dashboard</label>
