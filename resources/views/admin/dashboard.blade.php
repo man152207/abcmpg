@@ -120,16 +120,16 @@ $accountBalance = $openingBalance + $totalIncome - $totalExpenses - $formattedTo
                     <div class="summary-card">
                         <div>
                             <h6>Account Payables (USD)</h6>
-                            <span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;"><span class="usd">$ {{ number_format($monthlyAdIncomeSummaries->totalUSD ?? 0, 2) }}</span> 
+                            <span class="amount hidden-number">xxxx.xx</span>
+                            <span class="amount revealed-number usd" style="display:none;"><span class="usd">$ {{ number_format($monthlyAdIncomeSummaries->totalUSD ?? 0, 2) }}</span></span>
                         </div>
                         <i class="fa fa-chart-line"></i>
                     </div>
                     <div class="summary-card">
-                        
                         <div>
                             <h6>Total Purchases (USD)</h6>
-                            
-                            <span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;"><span class="usd">$ {{ number_format($monthlyClientSummaries->totalUSD ?? 0, 2) }}</span> 
+                            <span class="amount hidden-number">xxxx.xx</span>
+                            <span class="amount revealed-number usd" style="display:none;"><span class="usd">$ {{ number_format($monthlyClientSummaries->totalUSD ?? 0, 2) }}</span></span>
                         </div>
                         <i class="fa fa-money-bill-wave"></i>
                     </div>
@@ -141,10 +141,8 @@ $accountBalance = $openingBalance + $totalIncome - $totalExpenses - $formattedTo
 <div class="summary-card">
     <div>
         <h6>{{ $usdLoadText }}</h6>
-        <span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">
-            <span class="usd">$ {{ number_format($pendingUSD, 2) }}</span>
-            <div></div>
-        </span>
+        <span class="amount hidden-number">xxxx.xx</span>
+        <span class="amount revealed-number usd" style="display:none;"><span class="usd">$ {{ number_format($pendingUSD, 2) }}</span></span>
     </div>
     <i class="fa fa-retweet"></i>
 </div>

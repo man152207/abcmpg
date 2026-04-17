@@ -41,7 +41,8 @@
                     </div>
                 </div>
             </form>
-            <table class="table-responsive tbl-cards">
+            <div class="table-responsive tbl-cards">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -116,6 +117,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>{{-- /.table-responsive.tbl-cards --}}
         </div>
     </div>
     {{ $ads->appends(request()->query())->links('pagination::bootstrap-5')}}
