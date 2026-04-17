@@ -1005,10 +1005,10 @@ document.addEventListener('DOMContentLoaded', function(){
   //    vertical scroll container without us having to override overflow.
   //    Detects bottom-of-viewport collisions and flips upward when needed.
   function initSubmenuPopovers(){
-    var SIDEBAR_WIDTH = 4.6 * 16; // 4.6rem in px (matches CSS)
     var GAP = 8;
     var openLi = null;
     var closeTimer = null;
+    var sidebarEl = document.querySelector('.main-sidebar');
 
     function isCollapsed(){
       return body.classList.contains('sidebar-collapse')
@@ -1018,7 +1018,11 @@ document.addEventListener('DOMContentLoaded', function(){
     function position(li){
       var panel = li.querySelector(':scope > .nav-treeview');
       if (!panel) return;
-      var rect = li.getBoundingClientRect();
+      var liRect = li.getBoundingClientRect();
+      // Measure the actual sidebar so we don't rely on a hardcoded rail width
+      // (resilient to theme tweaks, browser zoom, or root font-size changes).
+      var sbRect = sidebarEl ? sidebarEl.getBoundingClientRect()
+                             : { right: liRect.right };
       // Reset before measuring (so we get natural height)
       panel.style.top = '-9999px';
       panel.style.left = '-9999px';
@@ -1026,12 +1030,12 @@ document.addEventListener('DOMContentLoaded', function(){
       var ph = panel.offsetHeight;
       var pw = panel.offsetWidth;
       var vh = window.innerHeight;
-      var top = rect.top;
+      var top = liRect.top;
       // Flip upward if it would overflow bottom
       if (top + ph + 8 > vh) {
         top = Math.max(8, vh - ph - 8);
       }
-      var left = SIDEBAR_WIDTH + GAP;
+      var left = sbRect.right + GAP;
       // If popover would overflow right edge, clamp
       if (left + pw + 8 > window.innerWidth) {
         left = Math.max(8, window.innerWidth - pw - 8);
