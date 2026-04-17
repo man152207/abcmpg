@@ -2609,3 +2609,70 @@ html.mpg-layout, body.mpg-layout{
     transition-duration: .001ms !important;
   }
 }
+
+/* =============================================================
+   24b.  TASK-40 review patches
+   ============================================================= */
+
+/* Sticky table headers + explicit alternating row tint */
+.mpg-layout .table-responsive{ overflow: auto; }
+.mpg-layout .table thead th,
+.mpg-layout .table > thead > tr > th{
+  position: sticky; top: 0; z-index: 2;
+}
+.mpg-layout .table tbody tr:nth-child(odd):not([style]) td{
+  background: #ffffff;
+}
+.mpg-layout .table tbody tr:nth-child(even):not([style]) td{
+  background: #fafbfd;
+}
+.mpg-layout .table tbody tr:hover td{
+  background: rgba(15,118,110,.05) !important;
+}
+
+/* .mpg-page-header alias — same look as .page-header */
+.mpg-layout .mpg-page-header{
+  background    : linear-gradient(135deg,#ffffff 0%,#f8fafc 100%) !important;
+  border        : 1px solid rgba(15,23,42,.06);
+  border-radius : 12px;
+  padding       : 1rem 1.25rem;
+  margin-bottom : 1rem;
+  display       : flex;
+  align-items   : center;
+  justify-content: space-between;
+  flex-wrap     : wrap;
+  gap           : .65rem;
+  box-shadow    : var(--mpg-shadow-card);
+  position      : relative;
+  overflow      : hidden;
+}
+.mpg-layout .mpg-page-header::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+  background: var(--mpg-grad-primary);
+}
+.mpg-layout .mpg-page-header h1,
+.mpg-layout .mpg-page-header h2{
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.3px;
+  margin: 0;
+}
+
+/* Ghost danger button variant */
+.mpg-layout .btn-danger-ghost{
+  background  : transparent !important;
+  color       : var(--mpg-danger) !important;
+  border      : 1px solid rgba(244,63,94,.30) !important;
+  box-shadow  : none !important;
+  font-weight : 700 !important;
+  border-radius: 9px !important;
+  padding     : .5rem 1rem !important;
+  transition  : background .15s ease, color .15s ease, box-shadow .2s ease;
+}
+.mpg-layout .btn-danger-ghost:hover{
+  background  : rgba(244,63,94,.08) !important;
+  border-color: var(--mpg-danger) !important;
+  color       : var(--mpg-danger) !important;
+  box-shadow  : 0 4px 12px rgba(244,63,94,.12) !important;
+}
+.mpg-layout .btn-danger-ghost:active{ transform: translateY(1px); }
