@@ -42,11 +42,8 @@ jobs:
       - name: Install Node dependencies
         run: npm install
 
-      - name: Fix Vite permission
-        run: chmod +x node_modules/.bin/vite
-
       - name: Build Vite assets
-        run: npx vite build
+        run: node node_modules/vite/bin/vite.js build
 
       - name: Prepare deployment package
         run: |
@@ -64,7 +61,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: /
+          server-dir: /dash.mpg.com.np/
           exclude: |
             **/.git*
             **/.github/**
