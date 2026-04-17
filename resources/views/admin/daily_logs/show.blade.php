@@ -61,13 +61,13 @@
   <div class="card-header2">
     <div>
       Daily Log – {{ optional($log->log_date)->format('Y-m-d') ?? '—' }}
-      <div style="font-size:12.5px;color:var(--muted);font-weight:500">Readable summary and structured record of the day</div>
+      <div class="log-sub-hd">Readable summary and structured record of the day</div>
     </div>
     <span class="badge {{ $badgeClass }}">{!! $badgeIcon !!} {{ strtoupper($log->status) }}</span>
   </div>
 
   <div class="card-body2">
-    <div class="toolbar" style="margin-bottom:12px">
+    <div class="toolbar mb-3">
       <a href="{{ url()->previous() }}" class="btn btn-outline">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back
@@ -117,8 +117,8 @@
         @endif
       </div>
       <div class="summary">
-        <div class="k" style="font-size:var(--fs-12);color:var(--muted);margin-bottom:6px">End-of-Day Notes</div>
-        <div style="white-space:pre-wrap">{{ $log->summary ?: '—' }}</div>
+        <div class="k log-eod-label">End-of-Day Notes</div>
+        <div class="log-prewrap">{{ $log->summary ?: '—' }}</div>
       </div>
     </div>
 
@@ -134,16 +134,16 @@
       @if(!empty($rows))
       <div class="card-section">
         <div class="hd"><h3>Production</h3></div>
-        <div style="padding:0 14px 14px 14px">
-          <table class="view" aria-label="Production table">
+        <div class="log-section">
+          <table class="view log-tbl prod-v" aria-label="Production table">
             <thead>
               <tr>
-                <th style="width:90px">Time</th>
-                <th style="width:200px">Task / Job</th>
+                <th>Time</th>
+                <th>Task / Job</th>
                 <th>Details / Asset</th>
-                <th style="width:120px">By</th>
-                <th style="width:140px">Status</th>
-                <th style="width:160px">Notes</th>
+                <th>By</th>
+                <th>Status</th>
+                <th>Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -178,16 +178,16 @@
       @if(!empty($rows))
       <div class="card-section">
         <div class="hd"><h3>Reception</h3></div>
-        <div style="padding:0 14px 14px 14px">
-          <table class="view" aria-label="Reception table">
+        <div class="log-section">
+          <table class="view log-tbl rec-v" aria-label="Reception table">
             <thead>
               <tr>
-                <th style="width:90px">Time</th>
-                <th style="width:220px">Name / Org</th>
+                <th>Time</th>
+                <th>Name / Org</th>
                 <th>Purpose / Message</th>
-                <th style="width:170px">Forwarded To</th>
-                <th style="width:140px">Mode</th>
-                <th style="width:160px">Outcome / Next</th>
+                <th>Forwarded To</th>
+                <th>Mode</th>
+                <th>Outcome / Next</th>
               </tr>
             </thead>
             <tbody>
@@ -222,16 +222,16 @@
       @if(!empty($rows))
       <div class="card-section">
         <div class="hd"><h3>Operations</h3></div>
-        <div style="padding:0 14px 14px 14px">
-          <table class="view" aria-label="Operations table">
+        <div class="log-section">
+          <table class="view log-tbl ops-v" aria-label="Operations table">
             <thead>
               <tr>
-                <th style="width:90px">Time</th>
-                <th style="width:200px">Action</th>
+                <th>Time</th>
+                <th>Action</th>
                 <th>Client / Ticket / Ref</th>
-                <th style="width:150px">Owner</th>
-                <th style="width:140px">Status</th>
-                <th style="width:160px">Remarks</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Remarks</th>
               </tr>
             </thead>
             <tbody>

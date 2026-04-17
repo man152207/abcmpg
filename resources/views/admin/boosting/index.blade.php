@@ -8,27 +8,27 @@
     {{-- Quick Add Form --}}
     <form action="{{ route('boosting.store') }}" method="POST" class="mb-3" id="boostingForm">
         @csrf
-        <div class="form-row" style="display:flex; gap:10px; flex-wrap:wrap;">
-            <div style="flex:1; min-width:200px;">
+        <div class="form-row form-row-flex tight">
+            <div class="fg-md">
                 <input type="text" id="customer_phone" name="customer_phone" class="form-control" placeholder="Customer Phone" required autocomplete="off">
-                <div id="phoneSuggestions" class="list-group position-absolute" style="z-index:1000; max-height:200px; overflow-y:auto; display:none; width:100%;"></div>
+                <div id="phoneSuggestions" class="list-group position-absolute suggestions-dropdown"></div>
             </div>
-            <div style="flex:1; min-width:200px;">
+            <div class="fg-md">
                 <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Customer Name" required>
             </div>
-            <div style="flex:1; min-width:150px;">
+            <div class="fg-sm">
                 <select name="priority" class="form-control">
                     <option value="Normal" selected>Normal</option>
                     <option value="Urgent">Urgent</option>
                 </select>
             </div>
-            <div style="flex:1; min-width:200px;">
+            <div class="fg-md">
                 <input type="datetime-local" name="eta_time" class="form-control" placeholder="ETA (optional)">
             </div>
-            <div style="flex:1; min-width:300px;">
+            <div class="fg-lg">
                 <input type="text" name="remarks" class="form-control" placeholder="Remarks (optional)">
             </div>
-            <div style="flex:0;">
+            <div class="fg-auto">
                 <button type="submit" class="btn btn-success">+ Add Task</button>
             </div>
         </div>
@@ -66,18 +66,18 @@
                 <td>{{ $t->remarks ?? '-' }}</td>
                 <td>
                     @if($t->status=='Pending')
-                    <form action="{{ route('boosting.assign',$t->id) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('boosting.assign',$t->id) }}" method="POST" class="d-inline">
                         @csrf
                         <button class="btn btn-sm btn-info">Claim</button>
                     </form>
                     @endif
                     @if($t->status=='In Progress')
-                    <form action="{{ route('boosting.complete',$t->id) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('boosting.complete',$t->id) }}" method="POST" class="d-inline">
                         @csrf
                         <button class="btn btn-sm btn-success">Done</button>
                     </form>
                     @endif
-                    <form action="{{ route('boosting.destroy',$t->id) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('boosting.destroy',$t->id) }}" method="POST" class="d-inline">
                         @csrf @method('DELETE')
                         <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this task?')">Del</button>
                     </form>

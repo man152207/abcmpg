@@ -9,7 +9,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0">
                     🇺🇸 USA Calendar Intelligence
-                    <small class="text-muted d-block" style="font-size: 0.8rem;">
+                    <small class="text-muted d-block cal-subtitle">
                         Federal, Bank & Payment Holidays + Emergency Closures (US)
                     </small>
                 </h1>
@@ -46,12 +46,12 @@
                                 <span class="badge badge-success">Upcoming (next 30 days)</span>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-sm table-striped mb-0">
+                                <table class="table table-sm table-striped mb-0 cal-tbl federal">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th style="width: 140px;">Date</th>
+                                            <th>Date</th>
                                             <th>Name</th>
-                                            <th style="width: 90px;">State</th>
+                                            <th>State</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,12 +75,12 @@
                                         Showing last 7 days history:
                                     </p>
                                     <div class="table-responsive">
-                                        <table class="table table-sm table-striped mb-0">
+                                        <table class="table table-sm table-striped mb-0 cal-tbl federal">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th style="width: 140px;">Date</th>
+                                                    <th>Date</th>
                                                     <th>Name</th>
-                                                    <th style="width: 90px;">State</th>
+                                                    <th>State</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -120,12 +120,12 @@
                                 </span>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-sm table-striped mb-0">
+                                <table class="table table-sm table-striped mb-0 cal-tbl bank">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th style="width: 140px;">Date</th>
-                                            <th style="width: 140px;">Provider</th>
-                                            <th style="width: 130px;">Status</th>
+                                            <th>Date</th>
+                                            <th>Provider</th>
+                                            <th>Status</th>
                                             <th>Reason</th>
                                         </tr>
                                     </thead>
@@ -160,12 +160,12 @@
                                         Showing last 7 days history (incl. weekends):
                                     </p>
                                     <div class="table-responsive">
-                                        <table class="table table-sm table-striped mb-0">
+                                        <table class="table table-sm table-striped mb-0 cal-tbl bank">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th style="width: 140px;">Date</th>
-                                                    <th style="width: 140px;">Provider</th>
-                                                    <th style="width: 130px;">Status</th>
+                                                    <th>Date</th>
+                                                    <th>Provider</th>
+                                                    <th>Status</th>
                                                     <th>Reason</th>
                                                 </tr>
                                             </thead>
@@ -213,12 +213,12 @@
                                 <span class="badge badge-success">Upcoming (next 30 days)</span>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-sm table-striped mb-0">
+                                <table class="table table-sm table-striped mb-0 cal-tbl payment">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th style="width: 140px;">Date</th>
-                                            <th style="width: 140px;">Provider</th>
-                                            <th style="width: 100px;">Status</th>
+                                            <th>Date</th>
+                                            <th>Provider</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -242,12 +242,12 @@
                                         Showing last 7 days history:
                                     </p>
                                     <div class="table-responsive">
-                                        <table class="table table-sm table-striped mb-0">
+                                        <table class="table table-sm table-striped mb-0 cal-tbl payment">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th style="width: 140px;">Date</th>
-                                                    <th style="width: 140px;">Provider</th>
-                                                    <th style="width: 100px;">Status</th>
+                                                    <th>Date</th>
+                                                    <th>Provider</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

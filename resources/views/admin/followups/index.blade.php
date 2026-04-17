@@ -816,5 +816,3 @@ loadData();
 </script>
 @endpush
 
-@section('js_')
-@endsection

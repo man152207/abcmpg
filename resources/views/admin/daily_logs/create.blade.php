@@ -6,10 +6,10 @@
 
   {{-- STEP 0: Department चयन – यसपछि मात्र form खुल्ने --}}
   <div class="card p-3" id="deptStep">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div class="log-dept-hd">
       <div>
-        <div style="font-size:18px;font-weight:700">Choose Department</div>
-        <div style="color:#6b7280">कुन विभागमा log भर्नुछ चयन गर्नुहोस् (पछि पनि switch गर्न सक्नुहुन्छ)।</div>
+        <div class="log-dept-title">Choose Department</div>
+        <div class="log-dept-sub">कुन विभागमा log भर्नुछ चयन गर्नुहोस् (पछि पनि switch गर्न सक्नुहुन्छ)।</div>
       </div>
       <div class="pillbar" role="tablist" aria-label="Departments">
         <button class="pill" type="button" data-dept="prod" aria-selected="false">Production</button>
@@ -56,16 +56,16 @@
       <strong>Status</strong> • <strong>Notes</strong>
     </div>
 
-    <table class="log" aria-label="Production log table">
+    <table class="log log-tbl prod" aria-label="Production log table">
       <thead>
         <tr>
-          <th style="width:90px">Time</th>
-          <th style="width:200px">Task / Job</th>
+          <th>Time</th>
+          <th>Task / Job</th>
           <th>Details / Asset</th>
-          <th style="width:110px">By</th>
-          <th style="width:130px">Status</th>
-          <th style="width:160px">Notes</th>
-          <th style="width:48px"></th>
+          <th>By</th>
+          <th>Status</th>
+          <th>Notes</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="prod_body"></tbody>
@@ -88,16 +88,16 @@
       <strong>Mode</strong> • <strong>Outcome/Next</strong>
     </div>
 
-    <table class="log" aria-label="Reception log table">
+    <table class="log log-tbl rec" aria-label="Reception log table">
       <thead>
         <tr>
-          <th style="width:90px">Time</th>
-          <th style="width:200px">Name / Org</th>
+          <th>Time</th>
+          <th>Name / Org</th>
           <th>Purpose / Message</th>
-          <th style="width:170px">Forwarded To</th>
-          <th style="width:140px">Mode</th>
-          <th style="width:160px">Outcome / Next</th>
-          <th style="width:48px"></th>
+          <th>Forwarded To</th>
+          <th>Mode</th>
+          <th>Outcome / Next</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="rec_body"></tbody>
@@ -120,17 +120,17 @@
       <strong>Owner</strong> • <strong>Status</strong> • <strong>Remarks</strong>
     </div>
 
-    <table class="log" aria-label="Operations log table">
+    <table class="log log-tbl ops" aria-label="Operations log table">
       <thead>
         <tr>
-          <th style="width:90px">Time</th>
-          <th style="width:200px">Action</th>
-          <th style="width:240px">Client</th>
+          <th>Time</th>
+          <th>Action</th>
+          <th>Client</th>
           <th>Ticket / Ref</th>
-          <th style="width:150px">Owner</th>
-          <th style="width:140px">Status</th>
-          <th style="width:160px">Remarks</th>
-          <th style="width:48px"></th>
+          <th>Owner</th>
+          <th>Status</th>
+          <th>Remarks</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="ops_body"></tbody>
@@ -141,9 +141,9 @@
   </div>
 
   <div class="card p-3 hidden" id="summaryCard">
-    <label style="font-weight:600;margin-bottom:6px;display:block">End-of-Day Summary</label>
+    <label class="log-summary-label">End-of-Day Summary</label>
     <textarea name="summary" rows="3" placeholder="आजको मुख्य उपलब्धि, tomorrow को priority, blockers…"
-              style="width:100%;border:1px solid #e5e7eb;border-radius:8px;padding:10px;font-size:var(--fs-base)">{{ old('summary') }}</textarea>
+              class="log-summary-area">{{ old('summary') }}</textarea>
   </div>
 
   {{-- Hidden JSON fields --}}

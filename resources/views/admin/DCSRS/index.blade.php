@@ -10,7 +10,7 @@
     <!-- Card Totals Row -->
     <div class="card-totals-row">
         @foreach ($cardTotals as $cardName => $total)
-            <a href="{{ route('daily-card-spends.view', $cardName) }}" style="text-decoration: none;">
+            <a href="{{ route('daily-card-spends.view', $cardName) }}" class="text-decoration-none">
                 <div class="card-box">
                     <h5>{{ $cardName }}</h5>
                     <p>${{ number_format($total, 2) }}</p>
@@ -22,10 +22,10 @@
     <!-- Form to Add New Record -->
     <form action="{{ route('daily-card-spends.store') }}" method="POST">
     @csrf
-    <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end;">
+    <div class="form-row form-row-flex">
         <!-- Card Name -->
-        <div class="form-group" style="flex: 1; min-width: 200px;">
-            <label for="card_name" style="display: block; margin-bottom: 5px; font-weight: bold;">Card Name</label>
+        <div class="form-group">
+            <label for="card_name">Card Name</label>
             <select name="card_name" id="card_name" class="form-control js-example-basic-single" required>
                 <option value="">Select Card</option>
                 @foreach($cards as $card)
@@ -35,8 +35,8 @@
         </div>
 
         <!-- Ad Account -->
-        <div class="form-group" style="flex: 1; min-width: 200px;">
-            <label for="ad_account" style="display: block; margin-bottom: 5px; font-weight: bold;">Ad Account</label>
+        <div class="form-group">
+            <label for="ad_account">Ad Account</label>
             <select name="ad_account" id="ad_account" class="form-control js-example-basic-single" required>
                 <option value="">Select Ad Account</option>
                 @foreach($groupedAdAccounts as $groupName => $accounts)
@@ -50,26 +50,26 @@
         </div>
 
         <!-- Date -->
-        <div class="form-group" style="flex: 1; min-width: 200px;">
-            <label for="date" style="display: block; margin-bottom: 5px; font-weight: bold;">Date</label>
+        <div class="form-group">
+            <label for="date">Date</label>
             <input type="date" name="date" id="date" class="form-control" value="{{ now()->toDateString() }}" required>
         </div>
 
         <!-- Amount -->
-        <div class="form-group" style="flex: 1; min-width: 200px;">
-            <label for="amount_usd" style="display: block; margin-bottom: 5px; font-weight: bold;">Amount (USD)</label>
+        <div class="form-group">
+            <label for="amount_usd">Amount (USD)</label>
             <input type="number" step="0.01" name="amount_usd" id="amount_usd" class="form-control" required>
         </div>
 
         <!-- Description -->
-        <div class="form-group" style="flex: 1; min-width: 200px;">
-            <label for="description" style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
+        <div class="form-group">
+            <label for="description">Description</label>
             <input type="text" name="description" id="description" class="form-control">
         </div>
 
         <!-- Submit Button -->
-        <div class="form-group" style="flex: 1; min-width: 200px;">
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Add Record</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary w-100">Add Record</button>
         </div>
     </div>
 </form>

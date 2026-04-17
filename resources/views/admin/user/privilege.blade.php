@@ -9,8 +9,8 @@
 
     {{-- Departments (multi-select) --}}
     <div class="form-group mt-3">
-      <label style="font-size: xx-large;">Assign Departments:</label>
-      <div class="row mt-2" style="font-size: x-large;">
+      <label class="privilege-label">Assign Departments:</label>
+      <div class="row mt-2 privilege-row">
         @foreach($departments as $dept)
           <div class="col-md-3 mb-2">
             <div class="custom-control custom-checkbox">
@@ -31,12 +31,12 @@
 
     {{-- Privileges --}}
     <div class="form-group mt-4">
-      <label style="font-size: xx-large;">Select Privileges:</label>
+      <label class="privilege-label">Select Privileges:</label>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
-            <input style="width:40px;height:40px;"
+            <input class="privilege-check"
                    type="checkbox" class="custom-control-input"
                    id="dashboard" name="privileges[]" value="1"
                    {{ in_array(1, $userPrivileges) ? 'checked' : '' }}>
@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input"
@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input"
@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input"
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input"
@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input"
@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="font-size: x-large;">
+      <div class="row mt-2 privilege-row">
         <div class="col-md-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input"

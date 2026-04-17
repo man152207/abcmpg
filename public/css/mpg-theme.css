@@ -1916,3 +1916,107 @@ html.mpg-layout, body.mpg-layout {
 
 /* Card body flush (ad table wrapper) */
 .mpg-layout .ads-card-body { padding: 0 !important; padding-top: 0 !important; }
+
+/* =========================================================
+   TASK-35: Form-row flex, Daily logs, Calendar, Privilege
+   ========================================================= */
+
+/* ── Form row flex layout (DCSRS, Boosting) ── */
+.form-row-flex {
+  display   : flex !important;
+  flex-wrap : wrap;
+  gap       : 20px;
+  align-items: flex-end;
+}
+.form-row-flex.tight { gap: 10px; }
+.form-row-flex > .form-group,
+.form-row-flex > .fg-md  { flex: 1; min-width: 200px; }
+.form-row-flex > .fg-sm  { flex: 1; min-width: 150px; }
+.form-row-flex > .fg-lg  { flex: 1; min-width: 300px; }
+.form-row-flex > .fg-auto { flex: 0; }
+.form-row-flex label      { display:block; margin-bottom:5px; font-weight:600; }
+.form-row-flex .btn-full  { width:100%; padding:12px; }
+
+/* ── Phone suggestions dropdown (Boosting) ── */
+.suggestions-dropdown {
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  width: 100%;
+}
+
+/* ── Daily logs: dept step flex header ── */
+.log-dept-hd    { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.log-dept-title { font-size:18px; font-weight:700; }
+.log-dept-sub   { color:#6b7280; }
+
+/* ── Daily logs: summary label + textarea ── */
+.log-summary-label { font-weight:600; margin-bottom:6px; display:block; }
+.log-summary-area  { width:100%; border:1px solid #e5e7eb; border-radius:8px; padding:10px; font-size:var(--fs-base,15px); }
+
+/* ── Daily logs: show.blade header text ── */
+.log-sub-hd  { font-size:12.5px; color:var(--muted,#6b7280); font-weight:500; }
+.log-eod-label { font-size:var(--fs-12,12px); color:var(--muted,#6b7280); margin-bottom:6px; }
+.log-prewrap   { white-space:pre-wrap; }
+
+/* ── Daily logs: section padding wrapper ── */
+.log-section { padding:0 14px 14px 14px; }
+
+/* ── Daily logs table: col widths via nth-child ── */
+/* Production CREATE (Time|Task|Details|By|Status|Notes|Del) */
+.log-tbl.prod th:nth-child(1){ width:90px;  }
+.log-tbl.prod th:nth-child(2){ width:200px; }
+.log-tbl.prod th:nth-child(4){ width:110px; }
+.log-tbl.prod th:nth-child(5){ width:130px; }
+.log-tbl.prod th:nth-child(6){ width:160px; }
+.log-tbl.prod th:nth-child(7){ width:48px;  }
+/* Production SHOW (Time|Task|Details|By|Status|Notes) */
+.log-tbl.prod-v th:nth-child(1){ width:90px;  }
+.log-tbl.prod-v th:nth-child(2){ width:200px; }
+.log-tbl.prod-v th:nth-child(4){ width:120px; }
+.log-tbl.prod-v th:nth-child(5){ width:140px; }
+.log-tbl.prod-v th:nth-child(6){ width:160px; }
+/* Reception CREATE */
+.log-tbl.rec th:nth-child(1){ width:90px;  }
+.log-tbl.rec th:nth-child(2){ width:200px; }
+.log-tbl.rec th:nth-child(4){ width:170px; }
+.log-tbl.rec th:nth-child(5){ width:140px; }
+.log-tbl.rec th:nth-child(6){ width:160px; }
+.log-tbl.rec th:nth-child(7){ width:48px;  }
+/* Reception SHOW */
+.log-tbl.rec-v th:nth-child(1){ width:90px;  }
+.log-tbl.rec-v th:nth-child(2){ width:220px; }
+.log-tbl.rec-v th:nth-child(4){ width:170px; }
+.log-tbl.rec-v th:nth-child(5){ width:140px; }
+.log-tbl.rec-v th:nth-child(6){ width:160px; }
+/* Operations CREATE (Time|Action|Client|Ticket|Owner|Status|Remarks|Del) */
+.log-tbl.ops th:nth-child(1){ width:90px;  }
+.log-tbl.ops th:nth-child(2){ width:200px; }
+.log-tbl.ops th:nth-child(3){ width:240px; }
+.log-tbl.ops th:nth-child(5){ width:150px; }
+.log-tbl.ops th:nth-child(6){ width:140px; }
+.log-tbl.ops th:nth-child(7){ width:160px; }
+.log-tbl.ops th:nth-child(8){ width:48px;  }
+/* Operations SHOW (Time|Action|Client/Ticket/Ref|Owner|Status|Remarks) */
+.log-tbl.ops-v th:nth-child(1){ width:90px;  }
+.log-tbl.ops-v th:nth-child(2){ width:200px; }
+.log-tbl.ops-v th:nth-child(4){ width:150px; }
+.log-tbl.ops-v th:nth-child(5){ width:140px; }
+.log-tbl.ops-v th:nth-child(6){ width:160px; }
+
+/* ── Calendar table: col widths ── */
+.cal-tbl.federal th:nth-child(1){ width:140px; }
+.cal-tbl.federal th:nth-child(3){ width:90px;  }
+.cal-tbl.bank    th:nth-child(1){ width:140px; }
+.cal-tbl.bank    th:nth-child(2){ width:140px; }
+.cal-tbl.bank    th:nth-child(3){ width:130px; }
+.cal-tbl.payment th:nth-child(1){ width:140px; }
+.cal-tbl.payment th:nth-child(2){ width:140px; }
+.cal-tbl.payment th:nth-child(3){ width:100px; }
+.cal-subtitle { font-size:0.8rem; display:block; }
+
+/* ── Privilege page ── */
+.privilege-label { font-size:1.5rem;  font-weight:700; display:block; }
+.privilege-row   { font-size:1.15rem; }
+.privilege-check { width:40px !important; height:40px !important; }
