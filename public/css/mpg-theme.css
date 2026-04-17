@@ -2676,3 +2676,139 @@ html.mpg-layout, body.mpg-layout{
   box-shadow  : 0 4px 12px rgba(244,63,94,.12) !important;
 }
 .mpg-layout .btn-danger-ghost:active{ transform: translateY(1px); }
+
+/* =============================================================
+   25.  TASK-42 — COLLAPSED (icon-only) SIDEBAR for dark theme
+   ============================================================= */
+
+/* When sidebar is collapsed, AdminLTE shrinks it to 4.6rem.
+   We re-polish the dark gradient look in that compact state. */
+
+.mpg-layout.sidebar-collapse .main-sidebar,
+.sidebar-collapse .mpg-layout .main-sidebar{
+  width: 4.6rem !important;
+}
+.mpg-layout.sidebar-collapse .content-wrapper,
+.mpg-layout.sidebar-collapse .main-header,
+.mpg-layout.sidebar-collapse .main-footer{
+  margin-left: 4.6rem !important;
+}
+
+/* Brand: hide text, keep logo centered */
+.sidebar-collapse .mpg-layout .brand-link,
+.mpg-layout.sidebar-collapse .brand-link{
+  padding: .85rem .5rem !important;
+  justify-content: center;
+}
+.sidebar-collapse .mpg-layout .brand-text,
+.mpg-layout.sidebar-collapse .brand-text{
+  display: none !important;
+}
+.sidebar-collapse .mpg-layout .brand-image,
+.mpg-layout.sidebar-collapse .brand-image{
+  margin: 0 !important;
+}
+
+/* Section headers: hidden when collapsed (replace with a thin divider) */
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-header,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-header{
+  font-size: 0 !important;
+  padding: .5rem .8rem !important;
+  border-top: 1px solid rgba(255,255,255,.06);
+  margin: .35rem .55rem 0;
+  height: 1px;
+  overflow: hidden;
+}
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-header:first-child,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-header:first-child{
+  border-top: 0;
+}
+
+/* Nav items: center icon, hide labels */
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link{
+  padding: .65rem 0 !important;
+  justify-content: center;
+  position: relative;
+}
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link p,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link p{
+  /* AdminLTE handles the slide-out, but we polish it as a tooltip pill */
+  display: none;
+}
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-icon,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-icon{
+  margin: 0 !important;
+  font-size: 1.05rem;
+}
+
+/* Active item: keep accent, restyle the left bar to a centered glow */
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link.active::before,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link.active::before{
+  height: 70%;
+  width: 3px;
+}
+
+/* Hover-revealed tooltip (CSS-only, uses the data-tooltip attribute
+   we inject from JS that mirrors the nav-link's <p> text). */
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link[data-tooltip],
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link[data-tooltip]{
+  overflow: visible;
+}
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link[data-tooltip]::after,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link[data-tooltip]::after{
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  background: #0b1220;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .2px;
+  padding: .4rem .7rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,.30), 0 0 0 1px rgba(94,234,212,.18);
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 1300;
+}
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link[data-tooltip]:hover::after,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link[data-tooltip]:hover::after{
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Treeview: hide nested arrows / submenus when collapsed (AdminLTE pops them out on hover) */
+.sidebar-collapse .mpg-layout .nav-sidebar .nav-link > p > .right,
+.mpg-layout.sidebar-collapse .nav-sidebar .nav-link > p > .right{
+  display: none;
+}
+
+/* Collapse toggle button: subtle visual hint on the pushmenu */
+.mpg-layout .main-header .nav-link[data-widget="pushmenu"]{
+  position: relative;
+}
+.mpg-layout.sidebar-collapse .main-header .nav-link[data-widget="pushmenu"] i::before{
+  /* keep icon as-is; AdminLTE swaps fa-bars naturally */
+}
+
+/* Smooth width transition */
+.mpg-layout .main-sidebar,
+.mpg-layout .content-wrapper,
+.mpg-layout .main-header,
+.mpg-layout .main-footer{
+  transition: margin-left .25s cubic-bezier(.2,.7,.2,1), width .25s cubic-bezier(.2,.7,.2,1) !important;
+}
+
+/* On small screens AdminLTE overlays the sidebar — avoid pushing content */
+@media (max-width: 991.98px){
+  .mpg-layout.sidebar-collapse .content-wrapper,
+  .mpg-layout.sidebar-collapse .main-header,
+  .mpg-layout.sidebar-collapse .main-footer{
+    margin-left: 0 !important;
+  }
+}

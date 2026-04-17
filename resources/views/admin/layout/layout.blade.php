@@ -81,6 +81,9 @@ $bankData = [
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed mpg-layout">
+<script>/* TASK-42: restore sidebar collapsed state before paint to avoid FOUC */
+(function(){try{if(localStorage.getItem('mpg_sidebar_collapsed')==='1'){document.body.classList.add('sidebar-collapse');}}catch(e){}})();
+</script>
 <div class="wrapper mpg-layout">
 
   {{-- ========== TOP NAVBAR ========== --}}
@@ -948,6 +951,65 @@ document.addEventListener('DOMContentLoaded', function(){
     buildMobileCards();
   }
   window.mpgRebuildMobileCards = buildMobileCards;
+})();
+</script>
+
+<script>
+/* TASK-42: Persist sidebar collapsed state + inject tooltip text on nav links */
+(function(){
+  var STORAGE_KEY = 'mpg_sidebar_collapsed';
+  var body = document.body;
+
+  // 1) (Restore happens earlier inline at <body> open to avoid FOUC.)
+
+  // 2) Mirror nav-link text into data-tooltip + aria-label for CSS popover
+  //    and screen-reader access when collapsed.
+  function annotateTooltips(){
+    document.querySelectorAll('.main-sidebar .nav-sidebar .nav-link').forEach(function(link){
+      if (link.hasAttribute('data-tooltip')) return;
+      var p = link.querySelector('p');
+      if (!p) return;
+      var txt = '';
+      p.childNodes.forEach(function(n){
+        if (n.nodeType === 3) txt += n.textContent;
+        else if (n.nodeType === 1 && !n.matches('.right, .badge, i')) txt += n.textContent;
+      });
+      txt = (txt || p.textContent || '').trim();
+      if (txt) {
+        link.setAttribute('data-tooltip', txt);
+        if (!link.hasAttribute('aria-label')) link.setAttribute('aria-label', txt);
+      }
+    });
+  }
+
+  // 3) Persist on toggle (AdminLTE adds/removes .sidebar-collapse on body)
+  function watchToggle(){
+    var btn = document.querySelector('[data-widget="pushmenu"]');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      // AdminLTE flips the class shortly after click; defer the read
+      setTimeout(function(){
+        try {
+          if (body.classList.contains('sidebar-collapse')) {
+            localStorage.setItem(STORAGE_KEY, '1');
+          } else {
+            localStorage.removeItem(STORAGE_KEY);
+          }
+        } catch(e){}
+      }, 50);
+    });
+  }
+
+  function init(){
+    annotateTooltips();
+    watchToggle();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 </body>
