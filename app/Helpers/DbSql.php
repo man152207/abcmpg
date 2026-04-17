@@ -86,6 +86,18 @@ class DbSql
         return "SUBSTRING_INDEX($column, '$delimiter', -1)";
     }
 
+    /** YEAR(col) for mysql, EXTRACT(YEAR FROM col) for pgsql. */
+    public static function year(string $column): string
+    {
+        return static::isPgsql() ? "EXTRACT(YEAR FROM $column)" : "YEAR($column)";
+    }
+
+    /** MONTH(col) for mysql, EXTRACT(MONTH FROM col) for pgsql. */
+    public static function month(string $column): string
+    {
+        return static::isPgsql() ? "EXTRACT(MONTH FROM $column)" : "MONTH($column)";
+    }
+
     /**
      * Wrap expression with an alias, quoting the alias on PostgreSQL
      * to preserve camelCase (e.g. totalUSD not totalusd).

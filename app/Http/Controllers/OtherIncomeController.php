@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\OtherIncome;
 use App\Models\Customer;
 use Carbon\Carbon;
+use App\Helpers\DbSql;
 
 class OtherIncomeController extends Controller
 {
@@ -31,7 +32,7 @@ class OtherIncomeController extends Controller
         $customers = Customer::all();
 
         // Retrieve distinct previous months for the selection dropdown
-        $previousMonths = OtherIncome::selectRaw('YEAR(date) as year, MONTH(date) as month')
+        $previousMonths = OtherIncome::selectRaw(DbSql::year('date') . ' as year, ' . DbSql::month('date') . ' as month')
             ->distinct()
             ->where('date', '<', $currentMonthStart)
             ->orderBy('year', 'desc')

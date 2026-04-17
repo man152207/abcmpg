@@ -15,6 +15,7 @@ use App\Models\Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Customer;
+use App\Helpers\DbSql;
 
 class AdminController extends Controller
 {
@@ -127,7 +128,7 @@ public function showUserDetails($id)
     $clientsAdded7    = (clone $cliBase)->where('created_at','>=',$since7)->count();
 
     $adsMoney7 = (clone $adsBase)->where('created_at','>=',$since7)
-        ->selectRaw("SUM(COALESCE(\"NRP\",0)) as total_nrp, SUM(COALESCE(\"USD\",0)) as total_usd")
+        ->selectRaw(DbSql::sumCoalesce('NRP') . ' as total_nrp, ' . DbSql::sumCoalesce('USD') . ' as total_usd')
         ->first();
 
     $kpis = [

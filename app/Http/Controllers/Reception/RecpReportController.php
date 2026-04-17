@@ -6,6 +6,7 @@ use App\Models\RecpPayment;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DuesExport;
+use Illuminate\Support\Facades\DB;
 
 class RecpReportController extends Controller
 {
