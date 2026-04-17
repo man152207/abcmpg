@@ -98,6 +98,14 @@ class ImportMysqlDump extends Command
                 }
             }
             $this->table(['Table', 'Row Count'], $rows);
+
+            if ($clear) {
+                $this->newLine();
+                $this->info('Resetting sequences so new inserts do not clash with imported data…');
+                $this->call('db:fix-sequences', [
+                    '--tables' => implode(',', array_keys($inserts)),
+                ]);
+            }
         }
 
         return count($this->errors) > 0 ? 1 : 0;
