@@ -8,11 +8,6 @@ channel = "stable-25_05"
 [userenv]
 
 [userenv.shared]
-DB_CONNECTION = "pgsql"
-DB_HOST = "helium"
-DB_PORT = "5432"
-DB_DATABASE = "heliumdb"
-DB_USERNAME = "postgres"
 APP_URL = "https://2886d36d-b2a1-46ef-8839-e02b4fcfec6a-00-2riexz0quqodp.sisko.replit.dev"
 MAIL_MAILER = "smtp"
 MAIL_HOST = "smtppro.zoho.com"
@@ -21,6 +16,13 @@ MAIL_ENCRYPTION = "tls"
 MAIL_USERNAME = "update@mpgsolution.com"
 MAIL_FROM_ADDRESS = "update@mpgsolution.com"
 MAIL_FROM_NAME = "MPG Solution"
+
+[userenv.development]
+DB_CONNECTION = "pgsql"
+DB_HOST = "helium"
+DB_PORT = "5432"
+DB_DATABASE = "heliumdb"
+DB_USERNAME = "postgres"
 
 [workflows]
 runButton = "Project"
