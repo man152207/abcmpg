@@ -4,116 +4,142 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>MPG — Team Login</title>
-  <meta name="color-scheme" content="dark"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#2a2742; --panel:#3a3658; --card:#2f2b49;
-      --ink:#f1f2f9; --muted:#b6b3c9; --line:#4a4667;
-      --brand:#7c5cff; --accent:#5bd0ff; --radius:18px;
-      --shadow:0 30px 80px rgba(16,14,30,.45), 0 10px 30px rgba(16,14,30,.35);
+      --primary:#0f766e;
+      --primary-dk:#115e59;
+      --accent:#38bdf8;
+      --bg:#f5f7fa;
+      --card:#ffffff;
+      --border:#e5e9f0;
+      --text:#0f172a;
+      --muted:#64748b;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; background:
-  radial-gradient(978px 684px at 4% 10%, #f5f7ff 0%, transparent 60%),
-  radial-gradient(900px 650px at 85% 20%, #d1ecff70 0%, transparent 60%),
-  linear-gradient(135deg, #f0f4ff, #e6efff);
-      color:var(--ink);
-      font:15px/1.6 ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 8% 10%, #ecfeff 0%, transparent 60%),
+        radial-gradient(900px 600px at 92% 90%, #ecfdf5 0%, transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-size:14px;
+      line-height:1.55;
     }
 
-    /* Logo बाहिर (top-left) */
     .globalBrand{position:fixed; left:20px; top:18px; z-index:5; display:flex; align-items:center; gap:10px}
-    .globalBrand img{height:42px}
-    .globalBrand a{color:#e7e4ff; text-decoration:none; font-weight:800; font-size:12.5px; padding:6px 10px; border-radius:999px; border:1px solid #ffffff30; background:#00000030; backdrop-filter:blur(6px)}
+    .globalBrand img{height:36px; border-radius:8px; background:#fff; padding:3px; border:1px solid var(--border)}
+    .globalBrand a{color:var(--text); text-decoration:none; font-weight:600; font-size:12px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:#fff}
+    .globalBrand a:hover{border-color:var(--primary); color:var(--primary)}
 
-    /* Centered shell */
     .wrap{min-height:100dvh; display:grid; place-items:center; padding:28px}
     .shell{
-      width:min(1060px,96vw); background:var(--panel); border-radius:24px; box-shadow:var(--shadow);
-      border:1px solid rgba(255,255,255,.06); overflow:hidden;
-      display:grid; grid-template-columns:1.1fr 1fr;
+      width:min(1040px,96vw);
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:0 20px 50px rgba(15,23,42,.12);
+      border:1px solid var(--border);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:1.05fr 1fr;
     }
     @media (max-width: 980px){ .shell{grid-template-columns:1fr} }
 
-    /* LEFT — hero slideshow */
-    .left{position:relative; background:#1a1a2e; min-height:580px}
+    /* LEFT — hero */
+    .left{position:relative; background:#0f172a; min-height:540px; overflow:hidden}
     .slide, .slide-next{
       position:absolute; inset:0; background-size:cover; background-position:center;
-      transition:opacity .9s ease; filter:saturate(1.05) contrast(1.03);
+      transition:opacity .9s ease;
     }
     .slide::after, .slide-next::after{
       content:""; position:absolute; inset:0;
-      background:linear-gradient(0deg, rgba(22,20,38,.68), rgba(22,20,38,.22));
+      background:linear-gradient(135deg, rgba(15,118,110,.55) 0%, rgba(15,23,42,.55) 100%);
     }
     .slide{opacity:1}
     .slide-next{opacity:0}
 
-    .caption{position:absolute; left:0; right:0; bottom:0; padding:28px; color:#ecebff}
-    .caption h2{margin:0 0 6px; font-size:22px; font-weight:900; letter-spacing:.2px}
-    .cap-sub{font-size:13.5px; color:#d8d6f1}
-    .dots{display:flex; gap:6px; margin-top:8px}
-    .dot{width:8px; height:8px; border-radius:50%; background:#aaa3ff55; border:1px solid #c3beff77}
-    .dot.active{background:#fff; border-color:#fff}
+    .caption{position:absolute; left:0; right:0; bottom:0; padding:28px; color:#fff; z-index:2}
+    .caption h2{margin:0 0 6px; font-size:20px; font-weight:800; letter-spacing:-.2px}
+    .cap-sub{font-size:13px; opacity:.9}
+    .dots{display:flex; gap:6px; margin-top:12px}
+    .dot{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.4)}
+    .dot.active{background:#fff; width:18px; border-radius:3px}
 
-    /* small weather chip */
     .wx-chip{
-      position:absolute; right:16px; top:16px; display:flex; align-items:center; gap:10px;
-      padding:8px 10px; border-radius:12px; background:rgba(15,17,40,.50); backdrop-filter: blur(6px);
-      border:1px solid rgba(255,255,255,.18); color:#f4f6ff; font-size:13px
+      position:absolute; right:16px; top:16px; display:flex; align-items:center; gap:8px;
+      padding:6px 12px; border-radius:999px;
+      background:rgba(255,255,255,.95); backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.6);
+      color:var(--text); font-size:12px; font-weight:600; z-index:2;
     }
-    .wx-chip .t{font-weight:900; font-size:20px}
+    .wx-chip .t{font-weight:800; font-size:14px; color:var(--primary)}
 
-    /* RIGHT — login form */
-    .right{padding:28px 28px 26px; background:var(--card); display:grid; align-content:start; gap:14px}
+    /* RIGHT — form */
+    .right{padding:38px 36px; display:flex; flex-direction:column; justify-content:center; gap:14px; background:#fff}
+    .brand-mark{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+    .brand-mark img{width:36px; height:36px; border-radius:8px; background:#ecfdf5; padding:4px; border:1px solid var(--border)}
+    .brand-mark span{font-weight:800; font-size:15px; color:var(--text)}
     .head h1{
-      margin:0; font-size:24px; font-weight:1000; letter-spacing:.3px;
-      background:linear-gradient(90deg, var(--brand), var(--accent));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      margin:0; font-size:24px; font-weight:800; color:var(--text); letter-spacing:-.4px;
     }
-    .meta{font-size:13px; color:var(--muted)}
-    .meta a{color:#cfe4ff; text-decoration:none; font-weight:800}
+    .meta{font-size:13px; color:var(--muted); margin-top:4px}
+    .meta a{color:var(--primary); text-decoration:none; font-weight:700}
 
-    form{display:grid; gap:12px; margin-top:6px}
-    label{font-size:13px; color:#d6d3ea; font-weight:800}
-    input{
-      width:100%; padding:12px 14px; border-radius:12px; background:#252244;
-      border:1px solid #47426b; color:var(--ink); font-size:15px; outline:none;
+    form{display:grid; gap:14px; margin-top:14px}
+    .field label{display:block; font-size:12px; color:var(--text); font-weight:700; margin-bottom:6px}
+    .field input{
+      width:100%;
+      padding:11px 14px;
+      border-radius:10px;
+      background:#fff;
+      border:1px solid var(--border);
+      color:var(--text);
+      font-size:14px;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
     }
-    input::placeholder{color:#8f89b0}
-    input:focus{ border-color:#89dcff; box-shadow:0 0 0 3px #5bd0ff33 }
+    .field input::placeholder{color:#94a3b8}
+    .field input:focus{ border-color:var(--primary); box-shadow:0 0 0 3px rgba(15,118,110,.12) }
 
-    .row{display:flex; align-items:center; justify-content:space-between; font-size:13px; color:#c5c1da}
-    .row a{color:#bfe1ff; text-decoration:none; font-weight:800}
+    .row{display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--muted); margin-top:-4px}
+    .row label{display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-weight:500}
+    .row a{color:var(--primary); text-decoration:none; font-weight:700}
+    .row a:hover{text-decoration:underline}
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      background:linear-gradient(90deg, var(--brand), var(--accent));
-      color:#0a0e1f; border:0; padding:12px 16px; border-radius:12px; cursor:pointer;
-      font-weight:900; letter-spacing:.35px; box-shadow:0 16px 32px rgba(91,92,255,.25);
+      background:var(--primary);
+      color:#fff; border:0;
+      padding:12px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:.2px;
+      transition:background .15s ease, transform .15s ease, box-shadow .15s ease;
     }
+    .btn:hover{background:var(--primary-dk); box-shadow:0 8px 20px rgba(15,118,110,.18)}
 
-    .fine{font-size:12px; color:#bebad3; text-align:center; margin-top:6px}
+    .err{color:#dc2626; font-size:12px; margin-top:4px}
+    .fine{font-size:11.5px; color:var(--muted); text-align:center; margin-top:4px}
   </style>
 </head>
 <body>
 
-<!-- Logo बाहिर -->
 <div class="globalBrand">
-  <img src="/storage/uploads/logo3.png" alt="MPG Logo">
+  <img src="/storage/uploads/logo3.png" alt="MPG Logo" onerror="this.style.display='none'">
   <a href="https://mpg.com.np">Back to website</a>
 </div>
 
 <main class="wrap">
   <div class="shell" role="main" aria-label="MPG login">
-    <!-- LEFT -->
     <aside class="left" aria-label="Hero">
-      <!-- slideshow layers -->
       <div class="slide" id="slideA" style="background-image:url('about:blank')"></div>
       <div class="slide-next" id="slideB" style="background-image:url('about:blank')"></div>
 
-      <!-- small Pokhara weather chip -->
       <div class="wx-chip" id="wxChip">
         <span id="wxCity">Pokhara</span>
         <span class="t" id="wxTemp">--°C</span>
@@ -126,24 +152,27 @@
       </div>
     </aside>
 
-    <!-- RIGHT -->
     <section class="right" aria-label="Login form">
+      <div class="brand-mark">
+        <img src="/storage/uploads/logo3.png" alt="" onerror="this.style.display='none'">
+        <span>MPG Solution</span>
+      </div>
       <div class="head">
-        <h1>Login</h1>
+        <h1>Welcome back</h1>
         <div class="meta">Need access? <a href="mailto:info@mpg.com.np">Contact admin</a></div>
       </div>
 
       <form method="POST" action="{{ route('admin.login') }}">
         @csrf
-        <div>
+        <div class="field">
           <label for="email">Work Email</label>
           <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="you@mpg.com.np" required autofocus>
-          @error('email') <div style="color:#ff8e8e; font-size:12.5px">{{ $message }}</div> @enderror
+          @error('email') <div class="err">{{ $message }}</div> @enderror
         </div>
-        <div>
+        <div class="field">
           <label for="password">Password</label>
           <input id="password" type="password" name="password" placeholder="••••••••" required autocomplete="current-password">
-          @error('password') <div style="color:#ff8e8e; font-size:12.5px">{{ $message }}</div> @enderror
+          @error('password') <div class="err">{{ $message }}</div> @enderror
         </div>
 
         <div class="row">
@@ -151,15 +180,14 @@
           <a href="{{ route('admin.password.request') }}">Forgot password?</a>
         </div>
 
-        <button class="btn" type="submit">Login</button>
-        <div class="fine">Internal use • Authorized personnel</div>
+        <button class="btn" type="submit">Sign in</button>
+        <div class="fine">Internal use • Authorized personnel only</div>
       </form>
     </section>
   </div>
 </main>
 
 <script>
-/* Pokhara weather chip */
 (function(){
   const city = encodeURIComponent('Pokhara,NP');
   const url  = `{{ route('api.weather') }}?city=${city}`;
@@ -169,24 +197,21 @@
   }).catch(()=>{});
 })();
 
-/* Random image + Auto slideshow (8s) */
 (function(){
-  // High-quality Unsplash images (royalty-free)
   const IMGS = [
-    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop', // team / workspace
-    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop', // tech desk
-    'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1600&auto=format&fit=crop', // neon city
-    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop', // creative team
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop', // abstract dunes
-    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1600&auto=format&fit=crop', // gradient wave
-    'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop'  // analytics screen
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop'
   ];
 
   const a = document.getElementById('slideA');
   const b = document.getElementById('slideB');
   const dots = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
 
-  // start with a random index
   let idx = Math.floor(Math.random()*IMGS.length);
   let next = (idx+1) % IMGS.length;
 
@@ -195,26 +220,21 @@
     dots[i % dots.length].classList.add('active');
   }
 
-  // initial images
   a.style.backgroundImage = `url('${IMGS[idx]}')`;
   b.style.backgroundImage = `url('${IMGS[next]}')`;
   setDots(idx);
 
   function swap(){
-    // crossfade
     b.style.backgroundImage = `url('${IMGS[next]}')`;
     b.style.opacity = 1;
     setTimeout(()=>{
       a.style.backgroundImage = `url('${IMGS[next]}')`;
       b.style.opacity = 0;
     }, 900);
-
     idx = next;
     next = (next+1) % IMGS.length;
     setDots(idx);
   }
-
-  // rotate every 8s
   setInterval(swap, 8000);
 })();
 </script>

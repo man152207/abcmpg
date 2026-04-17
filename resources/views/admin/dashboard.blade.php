@@ -508,21 +508,21 @@ $accountBalance = $openingBalance + $totalIncome - $totalExpenses - $formattedTo
     $currentMonthProfitNRP = ($monthlyAdIncomeSummaries->totalNRP ?? 0) 
                              - (($monthlyClientSummaries->totalNRP ?? 0) + ($monthlyExp->totalAmt ?? 0));
 
-    $backgroundColor = $currentMonthProfitNRP < 0 ? '#FF0000' : '#008000';
-    $fontColor = $currentMonthProfitNRP < 0 ? '#FF0000' : '#008000';
-    $iconClass = $currentMonthProfitNRP < 0 ? 'fa-rotate' : 'fa-shake';
-    $profitText = $currentMonthProfitNRP < 0 ? 'Loss' : 'Profit';
+    $isLoss     = $currentMonthProfitNRP < 0;
+    $fontColor  = $isLoss ? '#f43f5e' : '#10b981';
+    $iconClass  = $isLoss ? 'fa-rotate' : 'fa-shake';
+    $profitText = $isLoss ? 'Loss' : 'Profit';
 @endphp
 
 
-<div class="summary-crd" style="background-color: {{ $backgroundColor }};">
+<div class="summary-crd" data-loss="{{ $isLoss ? 'true' : 'false' }}">
     <div>
         <h6>{{ $currentMonthName }} {{ $profitText }}</h6>
         <span class="amount revealed-number usd" style="color: {{ $fontColor }};">
             Rs {{ number_format($currentMonthProfitNRP, 2) }}
         </span>
     </div>
-    <i class="fa fa-piggy-bank {{ $iconClass }}" style="animation-duration: 1s;"></i>
+    <i class="fa fa-piggy-bank {{ $iconClass }}" style="animation-duration: 1s; color: {{ $fontColor }} !important; background: {{ $isLoss ? '#fef2f2' : '#ecfdf5' }} !important; border-color: {{ $isLoss ? '#fecaca' : '#a7f3d0' }} !important;"></i>
 </div>
 
 
