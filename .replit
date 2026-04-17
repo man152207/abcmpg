@@ -26,6 +26,7 @@ APP_URL = "https://2886d36d-b2a1-46ef-8839-e02b4fcfec6a-00-2riexz0quqodp.sisko.r
 
 [userenv.production]
 APP_URL = "https://abcmpg.replit.app"
+DB_CONNECTION = "mysql"
 
 [workflows]
 runButton = "Project"
