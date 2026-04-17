@@ -1827,15 +1827,23 @@ html.mpg-layout, body.mpg-layout {
 
 /* ── Ads List Page — header bar, chips, table, status rows ─────────────── */
 
-/* Header toolbar bar (was lightblue + grey shadow) */
+/* Header toolbar bar — premium gradient surface */
 .mpg-layout .ads-header-bar {
   display        : flex !important;
   align-items    : center !important;
-  padding        : .3rem .5rem !important;
-  background     : var(--mpg-primary) !important;
-  box-shadow     : 0 2px 6px rgba(0,0,0,.12) !important;
+  padding        : .55rem .75rem !important;
+  background     : linear-gradient(135deg,#ffffff 0%,#f8fafc 100%) !important;
+  border         : 1px solid rgba(15,23,42,.06) !important;
+  border-radius  : 12px !important;
+  box-shadow     : var(--mpg-shadow-card, 0 4px 12px rgba(15,23,42,.06)) !important;
   flex-wrap      : wrap;
-  gap            : .25rem;
+  gap            : .3rem;
+  position       : relative;
+  overflow       : hidden;
+}
+.mpg-layout .ads-header-bar::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+  background: linear-gradient(180deg,#0f766e 0%,#14b8a6 100%);
 }
 .mpg-layout .ads-header-inner {
   flex        : 1;
@@ -1845,28 +1853,43 @@ html.mpg-layout, body.mpg-layout {
   gap         : .25rem;
 }
 
-/* Chip / badge buttons in header */
+/* Chip / badge buttons in header — soft pill style, premium palette */
 .mpg-layout .ads-chip {
   display      : inline-flex;
   align-items  : center;
-  gap          : .3rem;
-  padding      : 4px 8px !important;
-  border-radius: 4px !important;
+  gap          : .35rem;
+  padding      : 5px 12px !important;
+  border-radius: 999px !important;
   font-weight  : 700;
-  font-size    : .8rem;
+  font-size    : .72rem;
+  letter-spacing: .3px;
+  text-transform: uppercase;
   border       : 1px solid transparent !important;
   cursor       : default;
   margin       : 2px;
   white-space  : nowrap;
+  box-shadow   : 0 1px 2px rgba(15,23,42,.04), inset 0 1px 0 rgba(255,255,255,.6) !important;
+  transition   : transform .12s ease, box-shadow .2s ease, filter .2s ease !important;
 }
-.mpg-layout .chip-paused    { background: #1e3a5f !important; color:#fff !important; border-color:#1e3a5f !important; }
-.mpg-layout .chip-load      { background: #475569 !important; color:#fff !important; border-color:#475569 !important; }
-.mpg-layout .chip-receivable{ background: #475569 !important; color:#fff !important; border-color:#475569 !important; }
-.mpg-layout .chip-spend     { background: #166534 !important; color:#fff !important; border-color:#166534 !important; }
-.mpg-layout .chip-active    { background: #075985 !important; color:#fff !important; border-color:#075985 !important; }
-.mpg-layout .chip-arab      { background: #581c87 !important; color:#fff !important; border-color:#581c87 !important; }
-.mpg-layout .chip-option    { background: #78350f !important; color:#fff !important; border-color:#78350f !important; }
-.mpg-layout .chip-monitoring{ background: #78350f !important; color:#fff !important; border-color:#78350f !important; }
+.mpg-layout .ads-chip:hover{
+  transform : translateY(-1px);
+  filter    : brightness(1.02);
+  box-shadow: 0 4px 10px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.6) !important;
+}
+/* Paused → warm amber soft */
+.mpg-layout .chip-paused    { background:#fffbeb !important; color:#92400e !important; border-color:#fde68a !important; }
+/* Load / Receivable → teal primary soft */
+.mpg-layout .chip-load      { background:#ecfdf5 !important; color:#0f766e !important; border-color:#a7f3d0 !important; }
+.mpg-layout .chip-receivable{ background:#eff6ff !important; color:#1e40af !important; border-color:#bfdbfe !important; }
+/* Spend → success soft */
+.mpg-layout .chip-spend     { background:#ecfdf5 !important; color:#065f46 !important; border-color:#a7f3d0 !important; }
+/* Active → sky/info soft */
+.mpg-layout .chip-active    { background:#f0f9ff !important; color:#075985 !important; border-color:#bae6fd !important; }
+/* ARAB → coral accent soft */
+.mpg-layout .chip-arab      { background:#fff1f2 !important; color:#9f1239 !important; border-color:#fecdd3 !important; }
+/* Option / Monitoring → neutral slate soft */
+.mpg-layout .chip-option    { background:#f8fafc !important; color:#334155 !important; border-color:#e2e8f0 !important; }
+.mpg-layout .chip-monitoring{ background:#f5f3ff !important; color:#5b21b6 !important; border-color:#ddd6fe !important; }
 
 /* Dropdown filter/option menus */
 .mpg-layout .ads-filter-menu {
@@ -1907,12 +1930,18 @@ html.mpg-layout, body.mpg-layout {
 .mpg-layout .ads-td         { padding: 2.5px !important; }
 .mpg-layout .ads-td-rel     { padding: 2.5px !important; position: relative; }
 
-/* Status-group row colors */
-.mpg-layout .tr-pending  { background-color: #f9a52c6e !important; color: #000206 !important; }
-.mpg-layout .tr-paused   { background-color: #c4a35a   !important; }
-.mpg-layout .tr-baki,
-.mpg-layout .tr-incomplete { background-color: #c66b3d91 !important; color: black   !important; }
-.mpg-layout .tr-done     { background-color: #e5e5dc   !important; }
+/* Status-group row colors — soft tinted backgrounds matching badge palette */
+.mpg-layout .tr-pending  > td { background-color: #fffbeb !important; color: #78350f !important; box-shadow: inset 3px 0 0 #f59e0b; }
+.mpg-layout .tr-paused   > td { background-color: #fff7ed !important; color: #7c2d12 !important; box-shadow: inset 3px 0 0 #fb923c; }
+.mpg-layout .tr-baki     > td,
+.mpg-layout .tr-incomplete > td { background-color: #fff1f2 !important; color: #9f1239 !important; box-shadow: inset 3px 0 0 #fb7185; }
+.mpg-layout .tr-done     > td { background-color: #ecfdf5 !important; color: #065f46 !important; box-shadow: inset 3px 0 0 #10b981; }
+/* Keep hover subtle on tinted rows */
+.mpg-layout .table tbody tr.tr-pending:hover  > td { background-color:#fef3c7 !important; }
+.mpg-layout .table tbody tr.tr-paused:hover   > td { background-color:#ffedd5 !important; }
+.mpg-layout .table tbody tr.tr-baki:hover     > td,
+.mpg-layout .table tbody tr.tr-incomplete:hover > td { background-color:#ffe4e6 !important; }
+.mpg-layout .table tbody tr.tr-done:hover     > td { background-color:#d1fae5 !important; }
 
 /* Card body flush (ad table wrapper) */
 .mpg-layout .ads-card-body { padding: 0 !important; padding-top: 0 !important; }
