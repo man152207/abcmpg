@@ -8,7 +8,6 @@ channel = "stable-25_05"
 [userenv]
 
 [userenv.shared]
-APP_URL = "https://2886d36d-b2a1-46ef-8839-e02b4fcfec6a-00-2riexz0quqodp.sisko.replit.dev"
 MAIL_MAILER = "smtp"
 MAIL_HOST = "smtppro.zoho.com"
 MAIL_PORT = "587"
@@ -23,6 +22,16 @@ DB_HOST = "helium"
 DB_PORT = "5432"
 DB_DATABASE = "heliumdb"
 DB_USERNAME = "postgres"
+APP_URL = "https://2886d36d-b2a1-46ef-8839-e02b4fcfec6a-00-2riexz0quqodp.sisko.replit.dev"
+
+[userenv.production]
+DB_CONNECTION = "mysql"
+DB_HOST = "190.92.174.35"
+DB_PORT = "3306"
+DB_DATABASE = "mpgcomnp_wp146"
+DB_USERNAME = "mpgcomnp_wp146"
+DB_MYSQL_PASSWORD = "jg%;KZsS7PWn"
+APP_URL = "https://abcmpg.replit.app"
 
 [workflows]
 runButton = "Project"
