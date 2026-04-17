@@ -3,10 +3,13 @@
 use App\Models\UserPrivilege;
 
 $is_super_admin = UserPrivilege::select('full_or_partial','option')->where('user_id', auth('admin')->user()->id)->first();
-if ($is_super_admin && !$is_super_admin['full_or_partial']) {
+if (!$is_super_admin) {
+    // No privilege record → no UI menu access until assigned by super admin
+    $userPrivileges = [];
+} elseif (!$is_super_admin['full_or_partial']) {
     $userPrivileges = $is_super_admin['option']
-        ? explode(',', $is_super_admin['option'])
-        : [1, 2, 3, 4, 5, 6, 7];
+        ? array_map('intval', explode(',', $is_super_admin['option']))
+        : [];
 } else {
     $userPrivileges = [1, 2, 3, 4, 5, 6, 7];
 }
