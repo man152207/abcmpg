@@ -283,12 +283,12 @@
                 </div>
 
                 {{-- Asset fields (visible only when completed) --}}
-                <div class="col-md-6 asset-field d-none">
+                <div class="col-md-6 asset-field asset-field-hidden">
                   <label class="form-label">Asset Link (Drive/Dropbox/YouTube…)</label>
                   <input type="url" name="asset_link" id="mm_asset_link" class="form-control" placeholder="https://drive.google.com/...">
                 </div>
 
-                <div class="col-md-3 asset-field d-none">
+                <div class="col-md-3 asset-field asset-field-hidden">
                   <label class="form-label">Provider</label>
                   <select name="asset_provider" id="mm_asset_provider" class="form-control">
                     @foreach(['Drive', 'Dropbox', 'OneDrive', 'YouTube', 'Vimeo', 'Other'] as $prov)
@@ -297,7 +297,7 @@
                   </select>
                 </div>
 
-                <div class="col-md-3 asset-field d-none">
+                <div class="col-md-3 asset-field asset-field-hidden">
                   <label class="form-label">Access</label>
                   <select name="asset_access" id="mm_asset_access" class="form-control">
                     @foreach(['view_only', 'comment', 'edit'] as $acc)
@@ -306,7 +306,7 @@
                   </select>
                 </div>
 
-                <div class="col-md-3 asset-field d-none">
+                <div class="col-md-3 asset-field asset-field-hidden">
                   <label class="form-label">Asset Type</label>
                   <select name="asset_type" id="mm_asset_type" class="form-control">
                     @foreach(['Image', 'Video', 'PSD/AI', 'Doc', 'Other'] as $at)
@@ -316,7 +316,7 @@
                 </div>
 
                 {{-- ONLY keep caption doc link; removed Version / Size (MB) / Publish URL --}}
-                <div class="col-md-6 asset-field d-none">
+                <div class="col-md-6 asset-field asset-field-hidden">
                   <label class="form-label">Caption Doc Link</label>
                   <input type="url" name="caption_link" id="mm_caption_link" class="form-control" placeholder="https://docs.google.com/...">
                 </div>
@@ -493,9 +493,9 @@ window.addEventListener('load', function() {
   function toggleAssetFields() {
     var $assetFields = $('.asset-field');
     if (F.status.val() === 'completed') {
-      $assetFields.removeClass('d-none');
+      $assetFields.removeClass('asset-field-hidden');
     } else {
-      $assetFields.addClass('d-none');
+      $assetFields.addClass('asset-field-hidden');
       F.asset_link.val('');
       F.asset_provider.val('Drive');
       F.asset_access.val('view_only');
