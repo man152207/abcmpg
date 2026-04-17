@@ -179,56 +179,6 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 
       </div>
     </div>
-
-    {{-- ===== ACTIVE FILTERS CHIP STRIP (Wave 2) ===== --}}
-    @php
-      $afSearch = trim((string) request('search_query', ''));
-      $afDate   = trim((string) request('date_range', ''));
-      $afSegs   = request()->segments();
-      $afStatus = null; $afVolume = null; $afMonitoring = false;
-      foreach ($afSegs as $i => $seg) {
-        // /admin/dashboard/filter/{status}
-        // /ads/filterByCalculatedStatus/{status}
-        if (in_array($seg, ['filter','filterByCalculatedStatus'], true) && isset($afSegs[$i+1])) {
-          $afStatus = urldecode($afSegs[$i+1]);
-        }
-        // /admin/dashboard/ads/volume/{range}
-        if ($seg === 'volume' && isset($afSegs[$i+1])) {
-          $afVolume = ucfirst($afSegs[$i+1]);
-        }
-        // /admin/dashboard/monitoring
-        if ($seg === 'monitoring') {
-          $afMonitoring = true;
-        }
-      }
-      $afHasAny = $afSearch || $afDate || $afStatus || $afVolume || $afMonitoring;
-    @endphp
-    @if($afHasAny)
-    <div class="ads-active-filters">
-      <span class="af-label">Active filters</span>
-      @if($afSearch)
-        <span class="af-chip"><span class="af-key">Search</span> {{ $afSearch }}
-          <a href="{{ route('ads.showAllAds') }}" class="af-x" title="Clear">&times;</a></span>
-      @endif
-      @if($afDate)
-        <span class="af-chip"><span class="af-key">Date</span> {{ $afDate }}
-          <a href="{{ route('ads.showAllAds') }}" class="af-x" title="Clear">&times;</a></span>
-      @endif
-      @if($afStatus)
-        <span class="af-chip"><span class="af-key">Status</span> {{ $afStatus }}
-          <a href="{{ route('ads.showAllAds') }}" class="af-x" title="Clear">&times;</a></span>
-      @endif
-      @if($afVolume)
-        <span class="af-chip"><span class="af-key">Volume</span> {{ $afVolume }}
-          <a href="{{ route('ads.showAllAds') }}" class="af-x" title="Clear">&times;</a></span>
-      @endif
-      @if($afMonitoring)
-        <span class="af-chip"><span class="af-key">View</span> Monitoring
-          <a href="{{ route('ads.showAllAds') }}" class="af-x" title="Clear">&times;</a></span>
-      @endif
-      <a href="{{ route('ads.showAllAds') }}" class="af-clear">Clear all</a>
-    </div>
-    @endif
   </div>
 
   <div id="notePopup" class="popup">
@@ -429,7 +379,7 @@ The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
 eSewa payment: 9856000601
 _Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
-                 <strong class="phone-number {{ $customer && $customer->requires_bill ? 'ads-phone-bill-required' : '' }}" style="user-select: all;"> {{ $customer->phone }} </strong>
+                 <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
 
                 @else
@@ -673,7 +623,7 @@ The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
 eSewa payment: 9856000601
 _Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
-                 <strong class="phone-number {{ $customer && $customer->requires_bill ? 'ads-phone-bill-required' : '' }}" style="user-select: all;"> {{ $customer->phone }} </strong>
+                 <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
                 @else
                 <span>No Customer Info</span>
@@ -916,7 +866,7 @@ The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
 eSewa payment: 9856000601
 _Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
-                 <strong class="phone-number {{ $customer && $customer->requires_bill ? 'ads-phone-bill-required' : '' }}" style="user-select: all;"> {{ $customer->phone }} </strong>
+                 <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
                 @else
                 <span>No Customer Info</span>
@@ -1158,7 +1108,7 @@ The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
 eSewa payment: 9856000601
 _Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
-                 <strong class="phone-number {{ $customer && $customer->requires_bill ? 'ads-phone-bill-required' : '' }}" style="user-select: all;"> {{ $customer->phone }} </strong>
+                 <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
 
                 @else
@@ -1402,7 +1352,7 @@ The total cost is *Rs '. number_format($ad->NRP, 0, '.', ',') . '/-*.
 eSewa payment: 9856000601
 _Kindly make the payment within an hour to ensure smooth processing of your ad campaign._
 _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inherit;">
-                 <strong class="phone-number {{ $customer && $customer->requires_bill ? 'ads-phone-bill-required' : '' }}" style="user-select: all;"> {{ $customer->phone }} </strong>
+                 <strong id="phone-number" style="user-select: all; {{ $customer && $customer->requires_bill ? 'background-color: darkgreen; color: white; padding: 2px 6px; border-radius: 4px;' : '' }}"> {{ $customer->phone }} </strong>
                 </a>
 
                 @else
@@ -3384,78 +3334,6 @@ function fetchCustomerRate() {
     });
     </script>
 
-{{-- ===== Wave 2 enhancements: dirty-row + saving + mobile-card tinting ===== --}}
-<script>
-(function(){
-  'use strict';
 
-  function init(){
-    var table = document.querySelector('.ads-list-table');
-    if (!table) return;
-
-    /* (1) Dirty-row indicator: pulse a dot on the first cell when any
-       input/select inside the row's <form> has been changed. */
-    table.querySelectorAll('tbody tr').forEach(function(tr){
-      var form = tr.querySelector('form') || tr.closest('form');
-      // Each ads_list row wraps its tds inside a <form> — find any input/select
-      var inputs = tr.querySelectorAll('input.form-control, select.form-control, textarea.form-control');
-      if (!inputs.length) return;
-      inputs.forEach(function(el){
-        // hidden inputs and CSRF tokens skip
-        if (el.type === 'hidden') return;
-        var initial = (el.tagName === 'SELECT') ? el.value : el.value;
-        el.addEventListener('input', function(){
-          if (el.value !== initial) tr.classList.add('ads-row-dirty');
-          else if (!Array.prototype.some.call(inputs, function(i){ return i.value !== i.defaultValue; })) {
-            tr.classList.remove('ads-row-dirty');
-          }
-        });
-        el.addEventListener('change', function(){
-          if (el.value !== initial) tr.classList.add('ads-row-dirty');
-        });
-      });
-    });
-
-    /* (2) Saving state on row submit. Each row has its own form — when
-       submitted, mark the tr as saving so the user sees a spinner.
-       The form will navigate / reload, so we don't need to clear it. */
-    table.querySelectorAll('tbody tr form').forEach(function(form){
-      form.addEventListener('submit', function(){
-        var tr = form.closest('tr');
-        if (tr) {
-          tr.classList.remove('ads-row-dirty');
-          tr.classList.add('ads-row-saving');
-        }
-      });
-    });
-
-    /* (3) Tag the JS-generated mobile cards with their row-status class
-       (.mc-tr-pending / .mc-tr-paused / etc.) so the colored left rail
-       carries over from the desktop table view. The global builder
-       runs before our script (DOMContentLoaded), so we just iterate
-       over the cards now and the source rows in DOM order. */
-    // Tag mobile cards by walking rows + cards in parallel; tolerate
-    // small count mismatches so tagging still works for the rest.
-    // (buildMobileCards creates one card per <tr>, so counts normally match.)
-    var rows = Array.prototype.slice.call(table.querySelectorAll('tbody tr'));
-    var cards = document.querySelectorAll('.tbl-cards .mc-mobile-list .mc-card');
-    var n = Math.min(rows.length, cards.length);
-    for (var i = 0; i < n; i++) {
-      var tr = rows[i], card = cards[i];
-      ['tr-pending','tr-paused','tr-baki','tr-incomplete','tr-done','tr-running']
-        .forEach(function(c){
-          if (tr.classList.contains(c)) card.classList.add('mc-' + c);
-        });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    // The mobile-card builder runs at DOMContentLoaded too; defer slightly
-    setTimeout(init, 0);
-  }
-})();
-</script>
 
 @endsection
