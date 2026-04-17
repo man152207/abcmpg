@@ -1782,3 +1782,45 @@ html.mpg-layout, body.mpg-layout {
   padding      : 1rem;
   margin-bottom: .75rem;
 }
+
+/* ── Daily Log Create/Edit — logpage sections ──────────────────────────── */
+.mpg-layout .logpage {
+  background   : #fff;
+  border       : 1px solid var(--mpg-border);
+  border-radius: var(--mpg-radius);
+  padding      : 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.mpg-layout .logpage.hidden { display: none; }
+.mpg-layout .sec-hd {
+  font-size    : .8rem;
+  font-weight  : 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color        : var(--mpg-primary);
+  border-bottom: 2px solid var(--mpg-primary);
+  padding-bottom: .4rem;
+  margin-bottom : .85rem;
+}
+
+/* ── 2FA Management card ────────────────────────────────────────────────── */
+.mpg-layout .tfa-card {
+  border       : 1px solid var(--mpg-border);
+  border-radius: var(--mpg-radius);
+  overflow     : hidden;
+  box-shadow   : 0 1px 4px rgba(0,0,0,.06);
+}
+.mpg-layout .tfa-card-header {
+  background   : var(--mpg-primary);
+  padding      : .9rem 1.25rem;
+}
+.mpg-layout .tfa-card-title {
+  color        : #fff;
+  font-size    : 1rem;
+  font-weight  : 700;
+  margin       : 0;
+}
+.mpg-layout .tfa-card-body {
+  padding      : 1.25rem;
+  background   : #fff;
+}
