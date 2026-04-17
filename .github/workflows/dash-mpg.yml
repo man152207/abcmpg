@@ -39,11 +39,25 @@ jobs:
           node -v
           npm -v
 
+      - name: Clean Node install
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+
       - name: Install Node dependencies
         run: npm install
 
+      - name: Fix Vite and esbuild permissions
+        run: |
+          chmod +x node_modules/.bin/vite || true
+          chmod +x node_modules/esbuild/bin/esbuild || true
+          chmod +x node_modules/@esbuild/linux-x64/bin/esbuild || true
+
+      - name: Rebuild esbuild
+        run: npm rebuild esbuild
+
       - name: Build Vite assets
-        run: node node_modules/vite/bin/vite.js build
+        run: npm run build
 
       - name: Prepare deployment package
         run: |
