@@ -2934,3 +2934,70 @@ html.mpg-layout, body.mpg-layout{
 .mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-link[data-tooltip]:hover::after{
   opacity: 0;
 }
+
+/* =============================================================
+   27.  ADS LIST TABLE — restore original bordered look
+   Scoped strictly to .ads-list-table so other admin tables
+   keep their current Silva theme. Mirrors the original inline
+   <style> block from the legacy ads_list.blade.php.
+   ============================================================= */
+.mpg-layout .ads-list-table{
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+.mpg-layout .ads-list-table th,
+.mpg-layout .ads-list-table td{
+  border: 1px solid #dddddd !important;
+  text-align: left;
+  padding: 8px !important;
+  vertical-align: middle;
+  font-size: .875rem;
+  color: #1f2937;
+}
+.mpg-layout .ads-list-table thead th,
+.mpg-layout .ads-list-table .ads-th{
+  background: #f2f2f2 !important;
+  background-image: none !important;
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: .875rem !important;
+  border-bottom: 1px solid #dddddd !important;
+}
+
+/* Original bold row tints — kill the pastel + left-rail from §23 */
+.mpg-layout .ads-list-table tbody tr.tr-pending  > td{
+  background-color: #f9a52c6e !important;
+  color: #000206 !important;
+  box-shadow: none !important;
+}
+.mpg-layout .ads-list-table tbody tr.tr-paused   > td{
+  background-color: #c4a35a !important;
+  color: #1f2937 !important;
+  box-shadow: none !important;
+}
+.mpg-layout .ads-list-table tbody tr.tr-baki     > td,
+.mpg-layout .ads-list-table tbody tr.tr-incomplete > td{
+  background-color: #c66b3d91 !important;
+  color: #000 !important;
+  box-shadow: none !important;
+}
+.mpg-layout .ads-list-table tbody tr.tr-done     > td{
+  background-color: #e5e5dc !important;
+  color: #1f2937 !important;
+  box-shadow: none !important;
+}
+.mpg-layout .ads-list-table tbody tr.tr-running  > td{
+  background-color: #e0f2fe !important;
+  color: #0c4a6e !important;
+  box-shadow: none !important;
+}
+
+/* Hover — darken same colour family */
+.mpg-layout .ads-list-table tbody tr.tr-pending:hover  > td{ background-color:#f9a52ca6 !important; }
+.mpg-layout .ads-list-table tbody tr.tr-paused:hover   > td{ background-color:#b08e48 !important; }
+.mpg-layout .ads-list-table tbody tr.tr-baki:hover     > td,
+.mpg-layout .ads-list-table tbody tr.tr-incomplete:hover > td{ background-color:#c66b3dcc !important; }
+.mpg-layout .ads-list-table tbody tr.tr-done:hover     > td{ background-color:#d4d4c8 !important; }
+.mpg-layout .ads-list-table tbody tr.tr-running:hover  > td{ background-color:#bae6fd !important; }
