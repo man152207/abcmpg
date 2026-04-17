@@ -42,8 +42,8 @@ class EmailMarketingController extends Controller
             ->select(
                 'customer',
                 DB::raw('COUNT(*) as total_ads'),
-                DB::raw(DbSql::as(DbSql::sumCol('NRP'), 'total_nrp')),
-                DB::raw(DbSql::as(DbSql::sumCol('USD'), 'total_usd')),
+                DB::raw(DbSql::alias(DbSql::sumCol('NRP'), 'total_nrp')),
+                DB::raw(DbSql::alias(DbSql::sumCol('USD'), 'total_usd')),
                 DB::raw('MIN(created_at) as first_ad_at'),
                 DB::raw('MAX(created_at) as last_ad_at')
             )

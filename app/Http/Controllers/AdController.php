@@ -683,9 +683,9 @@ public function destroy($id)
             $_dc = DbSql::dateFormat('created_at', '%Y-%m');
             $_dcd = DbSql::dateFormat('created_at', '%Y-%m-%d');
             $monthlySummaries = Ad::select(
-                DB::raw(DbSql::as($_su, 'totalUSD')),
-                DB::raw(DbSql::as($_sn, 'totalNRP')),
-                DB::raw(DbSql::as($_dc, 'monthYear'))
+                DB::raw(DbSql::alias($_su, 'totalUSD')),
+                DB::raw(DbSql::alias($_sn, 'totalNRP')),
+                DB::raw(DbSql::alias($_dc, 'monthYear'))
             )
                 ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
                 ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
@@ -694,9 +694,9 @@ public function destroy($id)
             $monthlySummaries_paid = Ad::where('is_complete', '>', 0)
                 ->where('Status', 'Paid')
                 ->select(
-                    DB::raw(DbSql::as($_su, 'totalUSD')),
-                    DB::raw(DbSql::as($_sn, 'totalNRP')),
-                    DB::raw(DbSql::as($_dc, 'monthYear'))
+                    DB::raw(DbSql::alias($_su, 'totalUSD')),
+                    DB::raw(DbSql::alias($_sn, 'totalNRP')),
+                    DB::raw(DbSql::alias($_dc, 'monthYear'))
                 )
                 ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
                 ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
@@ -705,9 +705,9 @@ public function destroy($id)
             $monthlySummaries_due = Ad::where('is_complete', '>', 0)
                 ->where('Status', '!=', 'Paid')
                 ->select(
-                    DB::raw(DbSql::as($_su, 'totalUSD')),
-                    DB::raw(DbSql::as($_sn, 'totalNRP')),
-                    DB::raw(DbSql::as($_dc, 'monthYear'))
+                    DB::raw(DbSql::alias($_su, 'totalUSD')),
+                    DB::raw(DbSql::alias($_sn, 'totalNRP')),
+                    DB::raw(DbSql::alias($_dc, 'monthYear'))
                 )
                 ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
                 ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
@@ -913,7 +913,7 @@ public function destroy($id)
             ->select(
                 DB::raw("$_su2 as totalUSD"),
                 DB::raw("$_sn2 as totalNRP"),
-                DB::raw(DbSql::as($_dcd2, 'day'))
+                DB::raw(DbSql::alias($_dcd2, 'day'))
             )
             ->groupByRaw($_dcd2)
             ->orderByRaw("$_dcd2 asc")

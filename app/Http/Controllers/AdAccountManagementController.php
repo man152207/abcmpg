@@ -14,7 +14,7 @@ class AdAccountManagementController extends Controller
 {
     // Build driver-aware SQL fragments
     $sumUSD   = DbSql::sumCol('USD');
-    $rexAcc   = DbSql::regexpReplace('Ad_Account', '^.*/', '');
+    $rexAcc   = DbSql::extractAfterLastDelimiter('Ad_Account', '/');
     $dateC    = DbSql::dateOf('created_at');
     $dateA    = DbSql::dateOf('active_since');
     $curDate  = DbSql::currentDate();
@@ -68,7 +68,7 @@ class AdAccountManagementController extends Controller
 
     // Fetch unique Ad_Account values for the dropdown
     $adAccountOptions = DB::table('ads')
-        ->selectRaw(DbSql::as($rexAcc, 'Ad_Account_Display') . ', MAX(updated_at) as latest_update')
+        ->selectRaw(DbSql::alias($rexAcc, 'Ad_Account_Display') . ', MAX(updated_at) as latest_update')
         ->groupByRaw($rexAcc)
         ->orderBy('latest_update', 'DESC')
         ->get();

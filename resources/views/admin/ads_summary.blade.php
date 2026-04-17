@@ -12,7 +12,7 @@ $_sumUSD = DbSql::sumCoalesce('USD');
 $_sumNRP = DbSql::sumCoalesce('NRP');
 
 $rows = \App\Models\Ad::whereBetween('created_at', [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()])
-    ->selectRaw(DbSql::as($_dateD, 'd') . ', ' . DbSql::as($_sumUSD, 'totalUSD') . ', ' . DbSql::as($_sumNRP, 'totalNRP'))
+    ->selectRaw(DbSql::alias($_dateD, 'd') . ', ' . DbSql::alias($_sumUSD, 'totalUSD') . ', ' . DbSql::alias($_sumNRP, 'totalNRP'))
     ->groupByRaw($_dateD)
     ->orderByRaw($_dateD)
     ->get();

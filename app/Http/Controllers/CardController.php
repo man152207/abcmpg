@@ -123,7 +123,7 @@ class CardController extends Controller
         try {
 
             $summary = Card::select(
-                DB::raw(DbSql::as(DbSql::sumCol('USD'), 'totalUSD')),
+                DB::raw(DbSql::alias(DbSql::sumCol('USD'), 'totalUSD')),
             )->first();
             // dd($summary);
 
@@ -139,7 +139,7 @@ class CardController extends Controller
     $endOfMonth = Carbon::now()->endOfMonth();
     
     $summary = Card::where('status', true) // Only active cards
-                  ->select(DB::raw(DbSql::as(DbSql::sumCol('USD'), 'totalUSD')))
+                  ->select(DB::raw(DbSql::alias(DbSql::sumCol('USD'), 'totalUSD')))
                   ->first();
     
     $cards = Card::where('status', true) // Only active cards

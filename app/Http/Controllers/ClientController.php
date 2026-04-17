@@ -157,17 +157,17 @@ class ClientController extends Controller
             $sumNRP    = DbSql::sumCol('NRP');
 
             $monthlySummaries = Client::select(
-                DB::raw(DbSql::as($sumUSD, 'totalUSD')),
-                DB::raw(DbSql::as($sumNRP, 'totalNRP')),
-                DB::raw(DbSql::as($dfCreated, 'monthYear'))
+                DB::raw(DbSql::alias($sumUSD, 'totalUSD')),
+                DB::raw(DbSql::alias($sumNRP, 'totalNRP')),
+                DB::raw(DbSql::alias($dfCreated, 'monthYear'))
             )
                 ->groupByRaw($dfCreated)
                 ->orderByRaw($dfCreated . ' desc')
                 ->get();
 
             $monthlyExp = Other_Exp::select(
-                DB::raw(DbSql::as('SUM(amount)', 'totalAmt')),
-                DB::raw(DbSql::as($dfDate, 'monthYear'))
+                DB::raw(DbSql::alias('SUM(amount)', 'totalAmt')),
+                DB::raw(DbSql::alias($dfDate, 'monthYear'))
             )
                 ->groupByRaw($dfDate)
                 ->orderByRaw($dfDate . ' desc')

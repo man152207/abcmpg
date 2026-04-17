@@ -4,6 +4,10 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Driver-aware SQL expression helpers.
+ * Generates correct SQL for PostgreSQL (pgsql) and MySQL (mysql/mariadb).
+ */
 class DbSql
 {
     public static function isPgsql(): bool
@@ -11,6 +15,10 @@ class DbSql
         return DB::getDriverName() === 'pgsql';
     }
 
+    /**
+     * Date format expression: TO_CHAR (pgsql) or DATE_FORMAT (mysql).
+     * Use MySQL-style format string e.g. '%Y-%m' or '%Y-%m-%d'.
+     */
     public static function dateFormat(string $column, string $mysqlFormat): string
     {
         if (static::isPgsql()) {
@@ -20,44 +28,44 @@ class DbSql
         return "DATE_FORMAT($column, '$mysqlFormat')";
     }
 
+    /** CURRENT_DATE (pgsql) or CURDATE() (mysql). */
     public static function currentDate(): string
     {
         return static::isPgsql() ? 'CURRENT_DATE' : 'CURDATE()';
     }
 
+    /** Cast to date: col::date (pgsql) or DATE(col) (mysql). */
     public static function dateOf(string $column): string
     {
         return static::isPgsql() ? "$column::date" : "DATE($column)";
     }
 
+    /** Date difference: (end - start) (pgsql) or DATEDIFF(end, start) (mysql). */
     public static function dateDiff(string $end, string $start): string
     {
         return static::isPgsql() ? "($end - $start)" : "DATEDIFF($end, $start)";
     }
 
+    /** SUM with proper column quoting: SUM("USD") (pgsql) or SUM(USD) (mysql). */
     public static function sumCol(string $column): string
     {
         return static::isPgsql() ? "SUM(\"$column\")" : "SUM($column)";
     }
 
-    /**
-     * Returns the column reference with proper quoting.
-     * pgsql: "USD" — mysql: USD
-     */
+    /** Column reference with proper quoting: "USD" (pgsql) or USD (mysql). */
     public static function colRef(string $column): string
     {
         return static::isPgsql() ? "\"$column\"" : $column;
     }
 
-    /**
-     * SUM(COALESCE(col, 0)) — works on both drivers.
-     */
-    public static function sumCoalesce(string $column, mixed $default = 0): string
+    /** SUM(COALESCE(col, default)) compatible with both drivers. */
+    public static function sumCoalesce(string $column, int $default = 0): string
     {
         $col = static::colRef($column);
         return "SUM(COALESCE($col, $default))";
     }
 
+    /** REGEXP_REPLACE compatible version (both drivers support this). */
     public static function regexpReplace(string $column, string $pattern, string $replacement = ''): string
     {
         if (static::isPgsql()) {
@@ -67,14 +75,26 @@ class DbSql
     }
 
     /**
-     * Wrap an expression with an alias, quoting the alias on PostgreSQL
-     * so camelCase aliases are preserved (e.g. "totalUSD" not "totalusd").
+     * Extract the portion of a column after the last occurrence of a delimiter.
+     * Uses regexp_replace on pgsql and SUBSTRING_INDEX on mysql (MySQL 5.7+ compatible).
      */
-    public static function as(string $expression, string $alias): string
+    public static function extractAfterLastDelimiter(string $column, string $delimiter): string
     {
         if (static::isPgsql()) {
-            return $expression . ' as "' . $alias . '"';
+            return "regexp_replace(\"$column\", '^.*{$delimiter}', '')";
         }
-        return $expression . ' as ' . $alias;
+        return "SUBSTRING_INDEX($column, '$delimiter', -1)";
+    }
+
+    /**
+     * Wrap expression with an alias, quoting the alias on PostgreSQL
+     * to preserve camelCase (e.g. totalUSD not totalusd).
+     */
+    public static function alias(string $expression, string $name): string
+    {
+        if (static::isPgsql()) {
+            return $expression . ' as "' . $name . '"';
+        }
+        return $expression . ' as ' . $name;
     }
 }
