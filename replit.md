@@ -58,3 +58,28 @@ php artisan serve --host=0.0.0.0 --port=5000
 - Many migrations had class naming conflicts (MySQL → PostgreSQL migration); fixed with anonymous classes and defensive column checks
 - TrustProxies set to `*` for Replit's proxy environment
 - Storage link already exists at `public/storage`
+
+## Database Import (cPanel → Replit PostgreSQL)
+
+Real production data has been imported from cPanel MySQL into Replit PostgreSQL.
+
+**Import command:**
+```
+php artisan db:import-mysql <dump.sql> [--clear] [--dry-run] [--tables=tbl1,tbl2]
+```
+- Exports from cPanel phpMyAdmin (SQL format, default settings)
+- Upload the .sql file to the project root (never commit it — SQL dumps are gitignored)
+- Run the command; it handles MySQL→PostgreSQL syntax conversion automatically
+- `--clear` truncates existing data before importing (safe to re-run)
+
+**Current data (imported April 2026):**
+- ads: 11,319 | customers: 475 | admins: 9 | cards: 34
+- card_credit_info: 2,263 | card_debit_info: 1,929 | campaign_links: 858
+- clients: 1,397 | crm_contacts: 82 | packages: 23
+- Total: 21,494+ rows across 49 tables
+
+**Schema differences fixed (ALTER TABLE columns added):**
+- ads: customer_id, daily_budget, ad_links
+- customers: city, assigned_admin_id, is_vip, last_interaction_at, last_note_at, created_by
+- invoices: customer, salesperson, invoice_number, description, date
+- Several other tables: see migration history
