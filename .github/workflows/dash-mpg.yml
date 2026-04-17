@@ -20,6 +20,9 @@ jobs:
           extensions: mbstring, bcmath, ctype, fileinfo, json, openssl, pdo, tokenizer, xml
           coverage: none
 
+      - name: Show PHP version
+        run: php -v
+
       - name: Show Composer version
         run: composer --version
 
@@ -31,17 +34,26 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Show Node and NPM version
+        run: |
+          node -v
+          npm -v
+
       - name: Install Node dependencies
         run: npm install
 
+      - name: Fix Vite permission
+        run: chmod +x node_modules/.bin/vite
+
       - name: Build Vite assets
-        run: npm run build
+        run: npx vite build
 
       - name: Prepare deployment package
         run: |
           rm -rf node_modules
           rm -rf tests
           rm -f .env
+          rm -f .env.*
           find storage/logs -type f ! -name ".gitignore" -delete || true
           find bootstrap/cache -type f ! -name ".gitignore" -delete || true
 
@@ -52,7 +64,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: /dash.mpg.com.np/
+          server-dir: /
           exclude: |
             **/.git*
             **/.github/**
@@ -60,3 +72,4 @@ jobs:
             **/tests/**
             **/.env
             **/.env.*
+            **/storage/logs/**
