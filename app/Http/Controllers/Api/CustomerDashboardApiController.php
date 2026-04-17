@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\DbSql;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Ad;
@@ -264,11 +265,13 @@ class CustomerDashboardApiController extends Controller
         $rate      = $percent / 100;                                // 0.20
         $threshold = (float) ($activeBonusSeason->min_spend ?? 0);  // e.g. 300
 
-        $adTotals = Ad::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, SUM(USD) as total_usd")
+        $dfYm = DbSql::dateFormat('created_at', '%Y-%m');
+        $sumU = DbSql::sumCol('USD');
+        $adTotals = Ad::selectRaw("$dfYm as ym, $sumU as total_usd")
             ->where('customer', $customer->phone)
             ->whereBetween('created_at', [$start, $end])
-            ->groupBy('ym')
-            ->orderBy('ym')
+            ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
+            ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
             ->get();
 
         $bonusCredit = 0;

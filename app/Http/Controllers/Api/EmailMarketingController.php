@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Helpers\DbSql;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -41,8 +42,8 @@ class EmailMarketingController extends Controller
             ->select(
                 'customer',
                 DB::raw('COUNT(*) as total_ads'),
-                DB::raw('SUM(NRP) as total_nrp'),
-                DB::raw('SUM(USD) as total_usd'),
+                DB::raw(DbSql::as(DbSql::sumCol('NRP'), 'total_nrp')),
+                DB::raw(DbSql::as(DbSql::sumCol('USD'), 'total_usd')),
                 DB::raw('MIN(created_at) as first_ad_at'),
                 DB::raw('MAX(created_at) as last_ad_at')
             )

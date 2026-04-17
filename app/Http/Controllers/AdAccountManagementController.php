@@ -2,65 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Helpers\DbSql;
 use App\Models\AdAccount;
 use App\Models\StorredAdAccount;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdAccountManagementController extends Controller
 {
     public function index()
 {
+    // Build driver-aware SQL fragments
+    $sumUSD   = DbSql::sumCol('USD');
+    $rexAcc   = DbSql::regexpReplace('Ad_Account', '^.*/', '');
+    $dateC    = DbSql::dateOf('created_at');
+    $dateA    = DbSql::dateOf('active_since');
+    $curDate  = DbSql::currentDate();
+    $dateDiff = DbSql::dateDiff($curDate, DbSql::dateOf('active_since'));
+
     // Fetch ad accounts with calculated fields
     $adAccountsWithUSD = AdAccount::select('ad_accounts.*')
-        ->selectRaw('(
-            SELECT SUM(USD)
+        ->selectRaw("(
+            SELECT $sumUSD
             FROM ads
-            WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
-            AND DATE(created_at) >= ad_accounts.active_since
-        ) AS usd_value')
-        ->selectRaw('GREATEST(initial_remaining_days - DATEDIFF(CURDATE(), DATE(active_since)), 0) AS remaining_days')
-        ->selectRaw('(
+            WHERE $rexAcc = ad_accounts.account_name
+            AND $dateC >= ad_accounts.active_since
+        ) AS usd_value")
+        ->selectRaw("GREATEST(initial_remaining_days - $dateDiff, 0) AS remaining_days")
+        ->selectRaw("(
             CASE
                 WHEN (
-                    SELECT SUM(USD)
+                    SELECT $sumUSD
                     FROM ads
-                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
-                    AND DATE(created_at) >= ad_accounts.active_since
+                    WHERE $rexAcc = ad_accounts.account_name
+                    AND $dateC >= ad_accounts.active_since
                 ) IS NOT NULL
                 THEN running_ads_balance + (
-                    SELECT SUM(USD)
+                    SELECT $sumUSD
                     FROM ads
-                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
-                    AND DATE(created_at) >= ad_accounts.active_since
+                    WHERE $rexAcc = ad_accounts.account_name
+                    AND $dateC >= ad_accounts.active_since
                 )
                 ELSE running_ads_balance
             END
-        ) AS running_ads_balance_updated')
-        ->selectRaw('(
+        ) AS running_ads_balance_updated")
+        ->selectRaw("(
             CASE
                 WHEN (
-                    SELECT SUM(USD)
+                    SELECT $sumUSD
                     FROM ads
-                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
-                    AND DATE(created_at) >= ad_accounts.active_since
+                    WHERE $rexAcc = ad_accounts.account_name
+                    AND $dateC >= ad_accounts.active_since
                 ) IS NOT NULL
                 THEN account_threshold - (running_ads_balance + (
-                    SELECT SUM(USD)
+                    SELECT $sumUSD
                     FROM ads
-                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
-                    AND DATE(created_at) >= ad_accounts.active_since
+                    WHERE $rexAcc = ad_accounts.account_name
+                    AND $dateC >= ad_accounts.active_since
                 ))
                 ELSE account_threshold - running_ads_balance
             END
-        ) AS targeted_budget_updated')
+        ) AS targeted_budget_updated")
         ->orderBy('created_at', 'DESC')
         ->paginate(15);
 
     // Fetch unique Ad_Account values for the dropdown
     $adAccountOptions = DB::table('ads')
-        ->selectRaw('REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') AS Ad_Account_Display, MAX(updated_at) as latest_update')
-        ->groupBy('Ad_Account_Display')
+        ->selectRaw(DbSql::as($rexAcc, 'Ad_Account_Display') . ', MAX(updated_at) as latest_update')
+        ->groupByRaw($rexAcc)
         ->orderBy('latest_update', 'DESC')
         ->get();
 

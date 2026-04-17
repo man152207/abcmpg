@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AdReceipt;
+use App\Helpers\DbSql;
 use App\Models\Ad;
 use App\Models\Card;
 use App\Models\Client;
@@ -583,17 +584,20 @@ public function destroy($id)
     $previousMonthEnd   = Carbon::now()->subMonth()->endOfMonth();
 
     // 🔹 पुरानो summary data जस्ताको तस्तै
+    $_sumUSD = DbSql::sumCol('USD');
+    $_sumNRP = DbSql::sumCol('NRP');
+    $_dfDate = DbSql::dateFormat('date', '%Y-%m');
     $data = [
-        'monthlyAdIncomeSummaries' => Ad::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+        'monthlyAdIncomeSummaries' => Ad::selectRaw("$_sumUSD as totalUSD, $_sumNRP as totalNRP")
             ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
             ->first(),
-        'previousMonthlyAdIncomeSummaries' => Ad::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+        'previousMonthlyAdIncomeSummaries' => Ad::selectRaw("$_sumUSD as totalUSD, $_sumNRP as totalNRP")
             ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
             ->first(),
-        'monthlyClientSummaries' => Client::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+        'monthlyClientSummaries' => Client::selectRaw("$_sumUSD as totalUSD, $_sumNRP as totalNRP")
             ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
             ->first(),
-        'previousMonthlyClientSummaries' => Client::selectRaw('SUM(USD) as totalUSD, SUM(NRP) as totalNRP')
+        'previousMonthlyClientSummaries' => Client::selectRaw("$_sumUSD as totalUSD, $_sumNRP as totalNRP")
             ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
             ->first(),
         'monthlyExp' => Other_Exp::selectRaw('SUM(amount) as totalAmt')
@@ -602,8 +606,8 @@ public function destroy($id)
         'previousMonthlyExp' => Other_Exp::selectRaw('SUM(amount) as totalAmt')
             ->whereBetween('date', [$previousMonthStart, $previousMonthEnd])
             ->first(),
-        'Cardsummary' => Card::selectRaw('SUM(USD) as totalUSD')->first(),
-        'previousCardsummary' => Card::selectRaw('SUM(USD) as totalUSD')->first(),
+        'Cardsummary' => Card::selectRaw("$_sumUSD as totalUSD")->first(),
+        'previousCardsummary' => Card::selectRaw("$_sumUSD as totalUSD")->first(),
         'totalOtherIncome' => OtherIncome::where('income_type', 'Other Income')
             ->whereBetween('date', [$currentMonthStart, $currentMonthEnd])
             ->sum('amount'),
@@ -612,9 +616,9 @@ public function destroy($id)
             ->sum('amount'),
         'totalNRP' => Ad::whereIn('Payment', ['Pending', 'Paused', 'Informed'])->sum('NRP'),
         'totalAdvance' => Ad::where('Payment', 'Baki')->sum('advance'),
-        'currentMonthExpenses' => Other_Exp::selectRaw("DATE_FORMAT(date, '%Y-%m') as month, SUM(amount) as total_amount")
-            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
-            ->groupBy('month')
+        'currentMonthExpenses' => Other_Exp::selectRaw("$_dfDate as month, SUM(amount) as total_amount")
+            ->whereRaw("$_dfDate = ?", [$currentMonth])
+            ->groupByRaw(DbSql::dateFormat('date', '%Y-%m'))
             ->first(),
         'other_incomes' => OtherIncome::all(),
         'customers' => Client::all(),
@@ -633,9 +637,11 @@ public function destroy($id)
         $bonusRate = $activeBonusSeason->bonus_rate ?? 1; // 1 = 1%
 
         // प्रति ग्राहक प्रति महिना spend → threshold पुगेपछि मात्र bonus
-        $rows = Ad::selectRaw("customer, DATE_FORMAT(created_at, '%Y-%m') as ym, SUM(USD) as total_usd")
+        $_dfCreated = DbSql::dateFormat('created_at', '%Y-%m');
+        $_sumUSD2 = DbSql::sumCol('USD');
+        $rows = Ad::selectRaw("customer, $_dfCreated as ym, $_sumUSD2 as total_usd")
             ->whereBetween('created_at', [$seasonStart, $seasonEnd])
-            ->groupBy('customer', 'ym')
+            ->groupByRaw("customer, $_dfCreated")
             ->get();
 
         foreach ($rows as $row) {
@@ -672,35 +678,39 @@ public function destroy($id)
     public function summary()
     {
         try {
+            $_su = DbSql::sumCol('USD');
+            $_sn = DbSql::sumCol('NRP');
+            $_dc = DbSql::dateFormat('created_at', '%Y-%m');
+            $_dcd = DbSql::dateFormat('created_at', '%Y-%m-%d');
             $monthlySummaries = Ad::select(
-                DB::raw('SUM(USD) as totalUSD'),
-                DB::raw('SUM(NRP) as totalNRP'),
-                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                DB::raw(DbSql::as($_su, 'totalUSD')),
+                DB::raw(DbSql::as($_sn, 'totalNRP')),
+                DB::raw(DbSql::as($_dc, 'monthYear'))
             )
-                ->groupBy('monthYear')
-                ->orderBy('monthYear', 'desc')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
+                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
                 ->paginate(15);
 
             $monthlySummaries_paid = Ad::where('is_complete', '>', 0)
                 ->where('Status', 'Paid')
                 ->select(
-                    DB::raw('SUM(USD) as totalUSD'),
-                    DB::raw('SUM(NRP) as totalNRP'),
-                    DB::raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                    DB::raw(DbSql::as($_su, 'totalUSD')),
+                    DB::raw(DbSql::as($_sn, 'totalNRP')),
+                    DB::raw(DbSql::as($_dc, 'monthYear'))
                 )
-                ->groupBy('monthYear')
-                ->orderBy('monthYear', 'desc')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
+                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
                 ->paginate(15);
 
             $monthlySummaries_due = Ad::where('is_complete', '>', 0)
                 ->where('Status', '!=', 'Paid')
                 ->select(
-                    DB::raw('SUM(USD) as totalUSD'),
-                    DB::raw('SUM(NRP) as totalNRP'),
-                    DB::raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                    DB::raw(DbSql::as($_su, 'totalUSD')),
+                    DB::raw(DbSql::as($_sn, 'totalNRP')),
+                    DB::raw(DbSql::as($_dc, 'monthYear'))
                 )
-                ->groupBy('monthYear')
-                ->orderBy('monthYear', 'desc')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
+                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
                 ->paginate(15);
 
             return view('admin.ads_summary', compact('monthlySummaries', 'monthlySummaries_due', 'monthlySummaries_paid'));
@@ -894,15 +904,19 @@ public function destroy($id)
     {
         $date = Carbon::createFromFormat('F Y', $monthYear);
 
+        $_su2  = DbSql::sumCol('USD');
+        $_sn2  = DbSql::sumCol('NRP');
+        $_dcd2 = DbSql::dateFormat('created_at', '%Y-%m-%d');
+
         $dailySummaries = Ad::whereYear('created_at', $date->year)
             ->whereMonth('created_at', $date->month)
             ->select(
-                DB::raw('SUM(USD) as totalUSD'),
-                DB::raw('SUM(NRP) as totalNRP'),
-                DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as day")
+                DB::raw("$_su2 as totalUSD"),
+                DB::raw("$_sn2 as totalNRP"),
+                DB::raw(DbSql::as($_dcd2, 'day'))
             )
-            ->groupBy('day')
-            ->orderBy('day', 'asc')
+            ->groupByRaw($_dcd2)
+            ->orderByRaw("$_dcd2 asc")
             ->get();
 
         return view('admin.ads_daily_summary', compact('dailySummaries', 'monthYear'));

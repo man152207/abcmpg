@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DbSql;
 use App\Models\Card;
 use App\Models\Client;
 use App\Models\Other_Exp;
@@ -150,21 +151,26 @@ class ClientController extends Controller
     public function summary()
     {
         try {
+            $dfCreated = DbSql::dateFormat('created_at', '%Y-%m');
+            $dfDate    = DbSql::dateFormat('date', '%Y-%m');
+            $sumUSD    = DbSql::sumCol('USD');
+            $sumNRP    = DbSql::sumCol('NRP');
+
             $monthlySummaries = Client::select(
-                DB::raw('SUM(USD) as totalUSD'),
-                DB::raw('SUM(NRP) as totalNRP'),
-                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                DB::raw(DbSql::as($sumUSD, 'totalUSD')),
+                DB::raw(DbSql::as($sumNRP, 'totalNRP')),
+                DB::raw(DbSql::as($dfCreated, 'monthYear'))
             )
-                ->groupBy('monthYear')
-                ->orderBy('monthYear', 'desc')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
+                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
                 ->get();
 
             $monthlyExp = Other_Exp::select(
                 DB::raw('SUM(amount) as totalAmt'),
-                DB::raw("DATE_FORMAT(date, '%Y-%m') as monthYear")
+                DB::raw(DbSql::as($dfDate, 'monthYear'))
             )
-                ->groupBy('monthYear')
-                ->orderBy('monthYear', 'desc')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
+                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
                 ->get();
 
             return view('client.summary', compact('monthlySummaries', 'monthlyExp'));

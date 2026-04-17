@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DbSql;
 use App\Models\Other_Exp;
 use Illuminate\Http\Request;
 
@@ -36,9 +37,10 @@ class OtherExpController extends Controller
     public function show()
 {
     // Fetch monthly summary with pagination
-    $monthlySummary = Other_Exp::selectRaw("DATE_FORMAT(date, '%Y-%m') as month, SUM(amount) as total_amount")
-        ->groupBy('month')
-        ->orderBy('month', 'desc')
+    $df = DbSql::dateFormat('date', '%Y-%m');
+    $monthlySummary = Other_Exp::selectRaw("$df as month, SUM(amount) as total_amount")
+        ->groupByRaw(DbSql::dateFormat('date', '%Y-%m'))
+        ->orderByRaw(DbSql::dateFormat('date', '%Y-%m') . ' desc')
         ->paginate(5); // Show 5 rows per page
 
     // Fetch all expenses with pagination

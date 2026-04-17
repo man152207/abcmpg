@@ -1,4 +1,5 @@
 <?php
+use App\Helpers\DbSql;
 use Carbon\Carbon;
 use App\Models\Ad;
 
@@ -6,10 +7,14 @@ use App\Models\Ad;
 $startDate = Carbon::now()->startOfMonth();
 $endDate   = Carbon::today();
 
+$_dateD  = DbSql::dateOf('created_at');
+$_sumUSD = DbSql::sumCoalesce('USD');
+$_sumNRP = DbSql::sumCoalesce('NRP');
+
 $rows = \App\Models\Ad::whereBetween('created_at', [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()])
-    ->selectRaw("created_at::date as d, SUM(COALESCE(\"USD\",0)) AS totalUSD, SUM(COALESCE(\"NRP\",0)) AS totalNRP")
-    ->groupBy('d')
-    ->orderBy('d')
+    ->selectRaw(DbSql::as($_dateD, 'd') . ', ' . DbSql::as($_sumUSD, 'totalUSD') . ', ' . DbSql::as($_sumNRP, 'totalNRP'))
+    ->groupByRaw($_dateD)
+    ->orderByRaw($_dateD)
     ->get();
 
 $data = [];

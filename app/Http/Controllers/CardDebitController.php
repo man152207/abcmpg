@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use Illuminate\Http\Request;
+use App\Helpers\DbSql;
 use Illuminate\Support\Facades\DB;
 
 class CardDebitController extends Controller
@@ -98,10 +99,10 @@ class CardDebitController extends Controller
         try {
             $monthlySummaries = DB::table('card_debit_info')
                 ->select(
-                    DB::raw('SUM(USD) as totalUSD'),
-                    DB::raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                    DB::raw(DbSql::as(DbSql::sumCol('USD'), 'totalUSD')),
+                    DB::raw(DbSql::as(DbSql::dateFormat('created_at', '%Y-%m'), 'monthYear'))
                 )
-                ->groupBy('monthYear')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
                 ->paginate(12);
 
             return view('card.debit.summary', compact('monthlySummaries'));
@@ -116,10 +117,10 @@ class CardDebitController extends Controller
             $monthlySummaries = DB::table('card_debit_info')
                 ->where('card_number', $request->search)
                 ->select(
-                    DB::raw('SUM(USD) as totalUSD'),
-                    DB::raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                    DB::raw(DbSql::as(DbSql::sumCol('USD'), 'totalUSD')),
+                    DB::raw(DbSql::as(DbSql::dateFormat('created_at', '%Y-%m'), 'monthYear'))
                 )
-                ->groupBy('monthYear')
+                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
                 ->paginate(12);
 
             return view('card.debit.summary', compact('monthlySummaries'));

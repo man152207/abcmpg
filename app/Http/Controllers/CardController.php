@@ -6,6 +6,7 @@ use App\Exports\ExcelExport;
 use App\Models\Card;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Helpers\DbSql;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -122,7 +123,7 @@ class CardController extends Controller
         try {
 
             $summary = Card::select(
-                DB::raw('SUM(USD) as totalUSD'),
+                DB::raw(DbSql::as(DbSql::sumCol('USD'), 'totalUSD')),
             )->first();
             // dd($summary);
 
@@ -138,7 +139,7 @@ class CardController extends Controller
     $endOfMonth = Carbon::now()->endOfMonth();
     
     $summary = Card::where('status', true) // Only active cards
-                  ->select(DB::raw('SUM(USD) as totalUSD'))
+                  ->select(DB::raw(DbSql::as(DbSql::sumCol('USD'), 'totalUSD')))
                   ->first();
     
     $cards = Card::where('status', true) // Only active cards
