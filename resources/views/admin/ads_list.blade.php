@@ -60,25 +60,11 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 
 <meta name="current-admin" content="{{ auth('admin')->user()->name }}">
 <script src="{{ asset('js/fetchCustomerRate.js') }}"></script>
-<!-- jQuery (ONLY ONE) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Moment (ONLY ONE - daterangepicker needs it) -->
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
 
-<!-- DateRangePicker -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-<!-- Bootstrap 4.5.2 (ONLY ONE css + js) -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- Font Awesome (Choose ONE) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-<!-- Select2 (Choose ONE version) -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
 
@@ -87,44 +73,44 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <div class="dropdown">
-  <div class="container-fluid" style="padding-left: 0px; padding-right: 0px;">
+  <div class="container-fluid px-0">
 
-    <div class="card" style="width: 100%;">
-      <div class="card-header" style="display: flex; align-items: center; padding: 0px; background-color: lightblue; box-shadow: 0px 6px 6px 0px grey;">
+    <div class="card w-100">
+      <div class="card-header ads-header-bar">
 
-        <div class="heading-div" style="flex: 1; display: flex; align-items: center;">
+        <div class="heading-div ads-header-inner">
 
           <!-- Paused Balance -->
-          <h6 class="btn btn-primary" style="margin-left: 5px; margin-top: 5px; padding: 5px!important; border-radius: 3px; font-weight: bold; background: #093b7b; border-color: #093b7b;" data-toggle="tooltip" title="Paused Balance">
+          <h6 class="btn ads-chip chip-paused" data-toggle="tooltip" title="Paused Balance">
             ${{$paused_amount}} <i class="fa fa-pause" aria-hidden="true"></i>
           </h6>
-            <h6 class="btn btn-primary" style="margin-left: 5px; margin-top: 5px; padding: 5px!important; border-radius: 3px; font-weight: bold; background: #646564; border-color: #646564;" data-toggle="tooltip" title="{{ $to_be_load < 0 ? 'Excessive USD Loads' : 'To Be Loaded' }}">
+            <h6 class="btn ads-chip chip-load" data-toggle="tooltip" title="{{ $to_be_load < 0 ? 'Excessive USD Loads' : 'To Be Loaded' }}">
                 ${{ number_format($to_be_load, 2) }} <i class="fa fa-upload" aria-hidden="true"></i>
             </h6>
           <!-- Receivable -->
-          <h6 class="btn btn-primary" style="margin-left: 5px; margin-top: 5px; padding: 5px!important; border-radius: 3px; font-weight: bold; background: #646564; border-color: #646564;" data-toggle="tooltip" title="Receivable">
+          <h6 class="btn ads-chip chip-receivable" data-toggle="tooltip" title="Receivable">
             Rs.{{$formattedTotalToBeReceived}} <i class="fa fa-clock-o" aria-hidden="true"></i>
           </h6>
           <!-- Daily Spend -->
-          <button id="dailySpendButton" class="btn btn-primary" style="margin-left: 5px; padding: 5px; border-radius: 3px; font-weight: bold; background-color: #5a9c5a; border-color: #5a9c5a; cursor: pointer;">
+          <button id="dailySpendButton" class="btn ads-chip chip-spend">
             <i class="fa fa-calculator" aria-hidden="true"></i> Daily Spend:
           </button>
 
           <!-- Total Active Ads -->
-          <button id="activeAdsButton" class="btn btn-primary" style="margin-left: 5px; padding: 5px; border-radius: 3px; font-weight: bold; background-color: #3a89c5; border-color: #3a89c5; cursor: pointer;" data-toggle="tooltip" title="Total Active Ads">
+          <button id="activeAdsButton" class="btn ads-chip chip-active" data-toggle="tooltip" title="Total Active Ads">
             <i class="fa fa-bullhorn" aria-hidden="true"></i> Active:
           </button>
 
           <!-- Actively Running Ads Budget -->
-          <button id="ARABButton" class="btn btn-primary" style="margin-left: 5px; padding: 5px; border-radius: 3px; font-weight: bold; background-color: #8e44ad; border-color: #8e44ad; cursor: pointer;" data-toggle="tooltip" title="Total Actively Running Ads Budget">
+          <button id="ARABButton" class="btn ads-chip chip-arab" data-toggle="tooltip" title="Total Actively Running Ads Budget">
             <i class="fa fa-dollar-sign" aria-hidden="true"></i> ARAB:
           </button>
           <!-- Dropdown for Status -->
           <div class="dropdown">
-            <button id="dropdownButton" class="btn btn-primary" style="margin-left: 5px; padding: 5px; border-radius: 3px; font-weight: bold; background-color: #c4a35a; border-color: #c4a35a; cursor: pointer;">
+            <button id="dropdownButton" class="btn ads-chip chip-option">
               Status &#9660;
             </button>
-            <div class="dropdown-content-filter" id="dropdownFilterMenu" style="display: none; position: absolute; background-color: #f1f1f1; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); z-index: 1;">
+            <div class="dropdown-content-filter ads-filter-menu" id="dropdownFilterMenu">
               <a href="{{ route('ads.filterByStatus', ['status' => 'Pending Action']) }}">Pending Action</a>
               <a href="{{ route('ads.filterByStatus', ['status' => 'Pending']) }}">Pending</a>
               <a href="{{ route('ads.filterByStatus', ['status' => 'Paused']) }}">Paused</a>
@@ -139,12 +125,12 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
               <a href="{{ route('ads.filterByCalculatedStatus', ['status' => 'Ending tomorrow']) }}">Ending tomorrow</a>
               <a href="{{ route('ads.filterByCalculatedStatus', ['status' => 'Ended']) }}">Ended</a>
             </div>
-            <button class="btn btn-primary" style="margin-right: 5px; padding: 5px; border-radius: 3px; font-weight: bold; background-color: #c4a35a; border-color: #c4a35a; cursor: pointer;" onclick="window.location.href='{{ route('ads.filterByMonitoringStatus') }}'">
+            <button class="btn ads-chip chip-monitoring" onclick="window.location.href='{{ route('ads.filterByMonitoringStatus') }}'">
               <i class="fa fa-desktop" aria-hidden="true"></i>
             </button>
             <select onchange="if(this.value){ window.location =
         '{{ url('/admin/dashboard/ads/volume') }}/' + this.value }"
-        class="form-control form-control-sm" style="width:auto; display:inline;">
+        class="form-control form-control-sm ads-volume-select">
     <option value="">All Volume</option>
     <option value="high" {{ request()->segment(5)=='high' ? 'selected' : '' }}>High (≥ 100 USD)</option>
     <option value="low"  {{ request()->segment(5)=='low'  ? 'selected' : '' }}>Low (≤ 20 USD)</option>
@@ -152,31 +138,31 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 
           </div>
         </div>
-        <form action="{{ route('search_ad') }}" method="get" style="display: flex; align-items: center; gap: 20px;">
+        <form action="{{ route('search_ad') }}" method="get" class="ads-search-form">
     @csrf
     <!-- Search by Name, Display Name, or Number -->
-    <div style="flex: 1;position: relative;margin-right: 5px;">
-        <input type="text" name="search_query" placeholder="Find Individual Records" class="form-control" style="padding-right: 35px;">
+    <div class="ads-search-wrap">
+        <input type="text" name="search_query" placeholder="Find Individual Records" class="form-control pe-5 pr-5">
         <!-- Clickable Search Icon for Search Query -->
-        <button type="submit" style="border: none; background: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
-            <i class="fas fa-search" style="color: #aaa;"></i>
+        <button type="submit" class="ads-search-icon">
+            <i class="fas fa-search ads-search-icon"></i>
         </button>
     </div>
 </form>
-<form action="{{ route('search_ad') }}" method="get" style="display: flex; align-items: center; gap: 20px;">
+<form action="{{ route('search_ad') }}" method="get" class="ads-search-form">
     @csrf
     <!-- Date Range Picker Form -->
-    <div style="flex: 1; position: relative;">
+    <div class="ads-date-wrap">
         <input type="text" name="date_range" id="date_range" class="form-control" placeholder="Select Date" style="padding-right: 35px;">
         <!-- Clickable Search Icon for Date Range -->
-        <button type="submit" style="border: none; background: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
-            <i class="fas fa-search" style="color: #aaa;"></i>
+        <button type="submit" class="ads-search-icon">
+            <i class="fas fa-search ads-search-icon"></i>
         </button>
     </div>
 </form>
-        <div class="dropdown" style="margin-left: 10px; position: relative;">
-          <button id="optionButton" class="btn" style="background-color:#c4a35a!important;color: white;">Option</button>
-          <div class="dropdown-menu" id="optionDropdown" style="display: none; position: absolute; background-color: #f1f1f1; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); z-index: 1;">
+        <div class="dropdown ads-opts-wrap">
+          <button id="optionButton" class="btn ads-chip chip-option">Option</button>
+          <div class="dropdown-menu ads-filter-menu" id="optionDropdown">
             <a href="{{ route('ads.yesterday') }}" class="dropdown-item">Yesterday</a>
             <a href="{{ route('ads.this_day') }}" class="dropdown-item">Today</a>
             <a href="{{ route('ads.this_week') }}" class="dropdown-item">This Week</a>
@@ -184,11 +170,11 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
           </div>
         </div>
 
-        <div class="button-div" style="display: flex; align-items: center;">
-          <div id="addnew_btn" style="display: block;">
-            <button class="ml-3 btn sm btn-primary" style="color:white;" onclick="addRow()"><i class='fas fa-record-vinyl'></i> </button>
+        <div class="button-div ads-btns-wrap">
+          <div id="addnew_btn" class="ads-addnew">
+            <button class="ml-3 btn btn-sm btn-primary" onclick="addRow()"><i class='fas fa-record-vinyl'></i> </button>
           </div>
-          <button class="ml-3 btn sm btn-primary" style="height: 35px;" id="noteButton"><i class="fas fa-solid fa-book-open"></i></button>
+          <button class="ml-3 btn btn-sm btn-primary" id="noteButton"><i class="fas fa-solid fa-book-open"></i></button>
         </div>
 
       </div>
@@ -211,19 +197,19 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
           <div id="myInputsContainer">
             @foreach($x as $item)
             <tr id="{{$item}}" class="items">
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <input name="customer[{{$item}}]" type="text">
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <input name="USD[{{$item}}]" type="number" step="0.01">
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <input name="Remarks[{{$item}}]" type="text">
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <input name="xyz[{{$item}}]" type="text">
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <button class="clear-button">Clear</button>
               </td>
             </tr>
@@ -236,30 +222,30 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
     </div>
   </div>
 
-  <div class="card-body" style="padding: 0; padding-top: 0px;">
-    <div id="add_new" style="display: show;">
+  <div class="card-body ads-card-body">
+    <div id="add_new">
       <form id="newRecordForm" action="{{ route('storeAd') }}" method="POST">
         @csrf
         <table>
           <tbody>
             <tr id="ad__table" class="blinking-row">
-  <td style="min-width: 200px; padding: 2.5px;">
+  <td class="ads-td" style="min-width:200px;">
 <input class="form-control" type="text" id="customer" name="customer" placeholder="Customer WhatsApp Number" required onblur="fetchCustomerRate()" >
 </td>
-  <td style="min-width: 100px; padding: 2.5px;">
+  <td class="ads-td" style="min-width:100px;">
     <input class="form-control" type="text" id="USD" step="0.01" name="USD" placeholder="USD" required>
   </td>
-  <td style="min-width: 100px; padding: 2.5px;">
+  <td class="ads-td" style="min-width:100px;">
     <input class="form-control" type="text" id="Rate" name="Rate" placeholder="Rate" readonly ondblclick="makeEditable(this)" >
   </td>
-  <td style="min-width: 100px; padding: 2.5px;">
+  <td class="ads-td" style="min-width:100px;">
     <input class="form-control" type="text" id="NRP" name="NRP" placeholder="NRP" required>
   </td>
   
-              <td style="min-width: 200px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:200px;">
                   <form id="adAccountForm" method="POST" action="/saveAdAccount">
     @csrf
-   <div style="display: flex; gap: 1px;"> 
+   <div style="display:flex;gap:1px;"> 
    <!-- Manual input field --> 
    <input class="form-control" type="text" id="manualInput" placeholder="Admin" style="flex: 1;" />
     <!-- Datalist input field -->
@@ -277,7 +263,7 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
     <input  class="form-control" type="text" id="Ad_Account" name="Ad_Account" placeholder="Ad Account" style=" display: none; "  required readonly />
 </form>
     </td>      
-    <td style="min-width: 100px; padding: 2.5px;">
+    <td class="ads-td" style="min-width:100px;">
                 <select class="form-control" id="Payment" name="Payment" required onchange="toggleBakiField()">
                   <option value="Pending" selected>Pending</option>
                   <option value="Paused">Paused</option>
@@ -292,13 +278,13 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
                   <option value="Informed">Informed</option>
                 </select>
               </td>
-              <td style="min-width: 50px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:50px;">
                 <input type="text" id="duration" name="Duration" class="form-control" placeholder="Duration" required>
               </td>
-              <td style="min-width: 50px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:50px;">
                 <input type="text" class="form-control" id="Quantity" name="Quantity" placeholder="Quantity" required>
               </td>
-              <td style="min-width: 100px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:100px;">
                 <select class="form-control" id="Status" name="Status" required>
                   <option value="New" selected>New</option>
                   <option value="Extend">Extend</option>
@@ -306,13 +292,13 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
                   <option value="On schedule">On schedule</option>
                 </select>
               </td>
-              <td style="min-width: 100px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:100px;">
                 <input type="text" class="form-control" id="bakifield" value="" name="advance" placeholder="Baki" disabled>
               </td>
-              <td style="min-width: 150px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:150px;">
                 <input type="text" class="form-control" id="Ad_Nature_Page" name="Ad_Nature_Page" placeholder="Ad Nature/Page" required>
               </td>
-              <td style="min-width: 80px; padding: 2.5px;">
+              <td class="ads-td" style="min-width:80px;">
 <button type="button"
         class="btn btn-sm btn-warning addon-btn-new"
         data-exist-types="[]">   {{-- ➜ new मा default empty --}}
@@ -320,7 +306,7 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 </button>
               <input type="hidden" class="form-control" value="{{ auth('admin')->user()->name }}" id="admin" name="admin" required>
 
-              <td style="padding: 2.5px; display: flex; justify-content: space-between;">
+              <td class="ads-td" style="display:flex;justify-content:space-between;">
                 <button class="btn btn-danger" style="margin-right: 10px;" onclick="close_()">Cancel</button>
                 <button type="submit" class="btn btn-success" id="btn_submit">Submit</button>
               </td>
@@ -347,26 +333,26 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
 
     </div>
     <div class="overflow-mobile table-responsive tbl-cards">
-      <table class="table" style="width: 100%!important;">
+      <table class="table ads-list-table">
         <thead>
           <tr>
-            <th style="min-width: 55px; background: #646564; color: white;">Date</th>
-            <th style="min-width: 80px; background: #646564; color: white;">WhatsApp</th>
-            <th style="min-width: 350px; background: #646564; color: white;">Customer Name</th>
-            <th style="min-width: 50px; background: #646564; color: white;">USD</th>
-            <th style="min-width: 50px; background: #646564; color: white;display: none;">Rate</th>
-            <th style="min-width: 75px; background: #646564; color: white;">NRP</th>
-            <th style="min-width: 150px; background: #646564; color: white;">Ad Account</th>
-            <th style="min-width: 150px; background: #646564; color: white;">Payment Status</th>
-            <th style="min-width: 10px; background: #646564; color: white;">Days</th>
-            <th style="min-width: 10px; background: #646564; color: white;">Q.</th>
-            <th style="min-width: 100px; background: #646564; color: white;">Status</th>
-            <th style="min-width: 35px; background: #646564; color: white;">Baki</th>
-            <th style="min-width: 120px; background: #646564; color: white;">Ad Nature/Page</th>
-            <th style="min-width: 90px; background: #646564; color: white;">add-on</th>
-            <th style="min-width: 60px; background: #646564; color: white;">Admin</th>
-            <th style="background: #646564; color: white;">Done</th>
-            <th style="background: #646564; color: white;">Task</th>
+            <th class="ads-th" style="min-width:55px;">Date</th>
+            <th class="ads-th" style="min-width:80px;">WhatsApp</th>
+            <th class="ads-th" style="min-width:350px;">Customer Name</th>
+            <th class="ads-th" style="min-width:50px;">USD</th>
+            <th class="ads-th" style="min-width: 50px; display:none;">Rate</th>
+            <th class="ads-th" style="min-width:75px;">NRP</th>
+            <th class="ads-th" style="min-width:150px;">Ad Account</th>
+            <th class="ads-th" style="min-width:150px;">Payment Status</th>
+            <th class="ads-th" style="min-width:10px;">Days</th>
+            <th class="ads-th" style="min-width:10px;">Q.</th>
+            <th class="ads-th" style="min-width:100px;">Status</th>
+            <th class="ads-th" style="min-width:35px;">Baki</th>
+            <th class="ads-th" style="min-width:120px;">Ad Nature/Page</th>
+            <th class="ads-th" style="min-width:90px;">add-on</th>
+            <th class="ads-th" style="min-width:60px;">Admin</th>
+            <th class="ads-th">Done</th>
+            <th class="ads-th">Task</th>
           </tr>
         </thead>
         <tbody>
@@ -374,13 +360,13 @@ $totalQuantityAllTime = Ad::sum('Quantity'); // Adjust the model and column name
           @foreach($ads as $ad)
           
           @if($ad->Payment == "Pending")
-          <tr style="background-color: #f9a52c6e; color: #000206;">
+          <tr class="tr-pending">
             <form action="{{ url('/admin/dashboard/ads/edit/'. $ad->id) }}" method="POST">
               @csrf
                   <input type="hidden" name="redirect_to" value="{{ url()->full() }}">
 
-               <td style="padding: 2.5px; position: relative;" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
-              <td style="padding: 2.5px;">
+               <td class="ads-td-rel" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
+              <td class="ads-td">
                 @php
                 $customer = $ad->customer()->first(); // Make sure $customer is defined
                 $phoneNumber = $customer->phone ?? $customer->phone_2; // Check if customer exists before using its attributes
@@ -403,7 +389,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <span class="customer-display-name" @if($customer) onmouseover="showPopup(event, '{{ $customer->id }}')" onmouseout="hidePopup()" onclick="goToDetails('{{ route('customer.details', ['id' => $customer->id]) }}')" @endif>
                   <strong>{{ $customer ? $customer->display_name : 'Unknown Customer' }}</strong>
 @if($customer && isset($customerNoteCounts[$customer->id]) && $customerNoteCounts[$customer->id] > 0)
@@ -421,10 +407,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   <div class="popup-arrow"></div>
                   <!-- Arrow pointing to the name -->
                   <div class="profile-popup">
-                    <div style="display: flex; align-items: center;">
+                    <div class="d-flex align-items-center">
                       <div>
                         <h4>{{ $customer->name }}</h4>
-                        <span class="form-group" style="margin-bottom: 0px;">
+                        <span class="form-group mb-0">
                         <button type="button"class="btn btn-info" style="width: 100%; font-weight: bold; cursor: default;"readonly>{{ $ad->Rate }}</button>
                         </span>
                         <span><strong>Name:</strong> {{ $customer->name }}</span>
@@ -433,7 +419,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                         <span><strong>Phone:</strong> {{ $customer->phone }}</span>
                         <span><strong>Address:</strong> {{ $customer->address }}</span>
                       </div>
-                      <div style="margin-left: 10px;">
+                      <div class="ms-2 ml-2">
                         @if($customer->profile_picture)
                         <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" alt="Profile Picture" style="width: 90px; height: 90px; border-radius: 50%;">
                         @else
@@ -454,31 +440,31 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </div>
               </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" oninput="calAmt({{$ad->id}})" class="form-control" onchange="calAmt({{$ad->id}})" id="{{$ad->id.'USD'}}" name="USD" value="{{ $ad->USD }}" required>
                 </div>
               </td>
               <!-- Non-editable Rate Field -->
-<td style="padding: 2.5px;display:none;">
-    <div class="form-group" style="margin-bottom: 0px;">
+<td class="ads-td" style="display:none;">
+    <div class="form-group mb-0">
         <input type="text" class="form-control" id="{{$ad->id.'Rate'}}" name="Rate" value="{{ $ad->Rate }}" readonly>
  
     </div>
 </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" value="{{ $ad->NRP }}" id="{{$ad->id.'NRP'}}" name="NRP" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Ad_Account }}" id="Ad_Account" name="Ad_Account" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="{{$ad->id.'baki'}}" name="Payment" required onchange="togglebakiField('{{$ad->id}}baki')">
                     @foreach(['Pending', 'Paused', 'FPY Received', 'eSewa Received', 'Baki', 'Paid', 'Refunded', 'Cancelled', 'Overpaid', 'PV Adjusted', 'Informed'] as $Payment)
                     <option value="{{ $Payment }}" {{ @$ad->Payment == $Payment ? 'selected' : '' }}> {{ $Payment }}</option>
@@ -486,18 +472,18 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" id="Duration" name="Duration" class="form-control" value="{{ $ad->Duration}}" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Quantity }}" id="Quantity" name="Quantity" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="Status" name="Status" required onchange="toggleAdvanceField()">
                     @foreach(['New', 'Extend', 'Both', 'On schedule', 'Monitoring'] as $status)
                     <option value="{{ $status }}" {{ @$ad->Status == $status ? 'selected' : '' }}> {{ $status }}</option>
@@ -505,7 +491,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 @if($ad->advance == '')
                 <div class="form-group" id="{{$ad->id.'bakifield'}}" style="display: none;">
                   <input type="text" class="form-control" id="advanceAmount" value="" name="advance">
@@ -516,8 +502,8 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 </div>
                 @endif
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" id="Ad_Nature_Page" name="Ad_Nature_Page" value="{{ $ad->Ad_Nature_Page }}" required>
                 </div>
               </td>
@@ -564,7 +550,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
 @endphp
 
-<td style="min-width:90px; padding:2.5px;">
+<td class="ads-td" style="min-width:90px;">
   <button type="button"
           class="btn btn-sm {{ $hasAddons ? 'btn-info' : 'btn-warning' }} addon-btn"
           data-customer="{{ $wa }}"
@@ -582,7 +568,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </td>
 
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
   <span class="admin-name"
         data-ad-id="{{ $ad->id }}"
         data-toggle="tooltip"
@@ -592,11 +578,11 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </span>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-check-square"></i></button>
               </td>
             </form>
-            <td style="padding: 2.5px;">
+            <td class="ads-td">
               <!-- Dropdown Trigger Button -->
               <div class="dropdown">
                 <button class="dropdown-button" onclick="toggleDropdown_({{$ad->id}})"><i class="fas fa-tasks"></i></button>
@@ -618,13 +604,13 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
             </td>
           </tr>
           @elseif($ad->Payment == "Paused")
-          <tr style="background-color: #c4a35a;">
+          <tr class="tr-paused">
             <form action="{{ url('/admin/dashboard/ads/edit/'. $ad->id) }}" method="POST">
               @csrf
                   <input type="hidden" name="redirect_to" value="{{ url()->full() }}">
 
-               <td style="padding: 2.5px; position: relative;" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
-              <td style="padding: 2.5px;">
+               <td class="ads-td-rel" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
+              <td class="ads-td">
                 @php
                 $customer = $ad->customer()->first(); // Make sure $customer is defined
                 $phoneNumber = $customer->phone ?? $customer->phone_2; // Check if customer exists before using its attributes
@@ -645,7 +631,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <span class="customer-display-name" @if($customer) onmouseover="showPopup(event, '{{ $customer->id }}')" onmouseout="hidePopup()" onclick="goToDetails('{{ route('customer.details', ['id' => $customer->id]) }}')" @endif>
 
                   <strong>{{ $customer ? $customer->display_name : 'Unknown Customer' }}</strong>
@@ -663,10 +649,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 <div class="customer-popup" id="popup-{{ $customer->id }}">
                   <div class="popup-arrow"></div>
                   <div class="profile-popup">
-                    <div style="display: flex; align-items: center;">
+                    <div class="d-flex align-items-center">
                       <div>
                         <h4>{{ $customer->name }}</h4>
-                        <span class="form-group" style="margin-bottom: 0px;">
+                        <span class="form-group mb-0">
                         <button type="button"class="btn btn-info" style="width: 100%; font-weight: bold; cursor: default;"readonly>{{ $ad->Rate }}</button>
                         </span>
                         <span><strong>Name:</strong> {{ $customer->name }}</span>
@@ -675,7 +661,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                         <span><strong>Phone:</strong> {{ $customer->phone }}</span>
                         <span><strong>Address:</strong> {{ $customer->address }}</span>
                       </div>
-                      <div style="margin-left: 10px;">
+                      <div class="ms-2 ml-2">
                         @if($customer->profile_picture)
                         <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" alt="Profile Picture" style="width: 90px; height: 90px; border-radius: 50%;">
                         @else
@@ -697,31 +683,31 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" oninput="calAmt({{$ad->id}})" onchange="calAmt({{$ad->id}})" id="{{$ad->id.'USD'}}" name="USD" value="{{ $ad->USD }}" required>
                 </div>
               </td>
               <!-- Non-editable Rate Field -->
-<td style="padding: 2.5px;display:none;">
-    <div class="form-group" style="margin-bottom: 0px;">
+<td class="ads-td" style="display:none;">
+    <div class="form-group mb-0">
         <input type="text" class="form-control" id="{{$ad->id.'Rate'}}" name="Rate" value="{{ $ad->Rate }}" readonly>
  
     </div>
 </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" value="{{ $ad->NRP }}" id="{{$ad->id.'NRP'}}" name="NRP" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Ad_Account }}" id="Ad_Account" name="Ad_Account" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="{{$ad->id.'baki'}}" name="Payment" required onchange="togglebakiField('{{$ad->id}}baki')">
                     @foreach(['Pending', 'Paused', 'FPY Received', 'eSewa Received', 'Baki', 'Paid', 'Refunded', 'Cancelled', 'Overpaid', 'PV Adjusted', 'Informed'] as $Payment)
                     <option value="{{ $Payment }}" {{ @$ad->Payment == $Payment ? 'selected' : '' }}> {{ $Payment }}</option>
@@ -729,18 +715,18 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" id="Duration" name="Duration" class="form-control" value="{{ $ad->Duration}}" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Quantity }}" id="Quantity" name="Quantity" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="Status" name="Status" required onchange="toggleAdvanceField()">
                     @foreach(['New', 'Extend', 'Both', 'On schedule', 'Monitoring'] as $status)
                     <option value="{{ $status }}" {{ @$ad->Status == $status ? 'selected' : '' }}> {{ $status }}</option>
@@ -748,7 +734,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 @if($ad->advance == '')
                 <div class="form-group" id="{{$ad->id.'bakifield'}}" style="display: none;">
                   <input type="text" class="form-control" id="advanceAmount" value="" name="advance">
@@ -759,8 +745,8 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 </div>
                 @endif
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" id="Ad_Nature_Page" name="Ad_Nature_Page" value="{{ $ad->Ad_Nature_Page }}" required>
                 </div>
               </td>
@@ -807,7 +793,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
 @endphp
 
-<td style="min-width:90px; padding:2.5px;">
+<td class="ads-td" style="min-width:90px;">
   <button type="button"
           class="btn btn-sm {{ $hasAddons ? 'btn-info' : 'btn-warning' }} addon-btn"
           data-customer="{{ $wa }}"
@@ -824,7 +810,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </button>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
   <span class="admin-name"
         data-ad-id="{{ $ad->id }}"
         data-toggle="tooltip"
@@ -833,13 +819,13 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
     {{ $ad->admin }}
   </span>
 </td>
-<td style="padding: 2.5px;">
+<td class="ads-td">
   <button type="submit" class="btn btn-primary">
     <i class="fas fa-check-square"></i>
   </button>
 </td>
             </form>
-            <td style="padding: 2.5px;">
+            <td class="ads-td">
               <div class="dropdown">
                 <button class="dropdown-button" onclick="toggleDropdown_({{$ad->id}})"><i class="fas fa-tasks"></i></button>
                 <div id="menu_{{$ad->id}}" class="horizontal-menu">
@@ -860,13 +846,13 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
             </td>
           </tr>
           @elseif($ad->Payment == "Baki")
-          <tr style="background-color: #c66b3d91; color: black;">
+          <tr class="tr-baki">
             <form action="{{ url('/admin/dashboard/ads/edit/'. $ad->id) }}" method="POST">
               @csrf
                   <input type="hidden" name="redirect_to" value="{{ url()->full() }}">
 
-               <td style="padding: 2.5px; position: relative;" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
-              <td style="padding: 2.5px;">
+               <td class="ads-td-rel" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
+              <td class="ads-td">
                 @php
                 $customer = $ad->customer()->first(); // Make sure $customer is defined
                 $phoneNumber = $customer->phone ?? $customer->phone_2; // Check if customer exists before using its attributes
@@ -889,7 +875,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <span class="customer-display-name" @if($customer) onmouseover="showPopup(event, '{{ $customer->id }}')" onmouseout="hidePopup()" onclick="goToDetails('{{ route('customer.details', ['id' => $customer->id]) }}')" @endif>
 
                   <strong>{{ $customer ? $customer->display_name : 'Unknown Customer' }}</strong>
@@ -907,10 +893,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 <div class="customer-popup" id="popup-{{ $customer->id }}">
                   <div class="popup-arrow"></div>
                   <div class="profile-popup">
-                    <div style="display: flex; align-items: center;">
+                    <div class="d-flex align-items-center">
                       <div>
                         <h4>{{ $customer->name }}</h4>
-                        <span class="form-group" style="margin-bottom: 0px;">
+                        <span class="form-group mb-0">
                         <button type="button"class="btn btn-info" style="width: 100%; font-weight: bold; cursor: default;"readonly>{{ $ad->Rate }}</button>
                         </span>
                         <span><strong>Name:</strong> {{ $customer->name }}</span>
@@ -919,7 +905,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                         <span><strong>Phone:</strong> {{ $customer->phone }}</span>
                         <span><strong>Address:</strong> {{ $customer->address }}</span>
                       </div>
-                      <div style="margin-left: 10px;">
+                      <div class="ms-2 ml-2">
                         @if($customer->profile_picture)
                         <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" alt="Profile Picture" style="width: 90px; height: 90px; border-radius: 50%;">
                         @else
@@ -940,31 +926,31 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </div>
               </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" oninput="calAmt({{$ad->id}})" onchange="calAmt({{$ad->id}})" class="form-control" id="{{$ad->id.'USD'}}" name="USD" value="{{ $ad->USD }}" required>
                 </div>
               </td>
              <!-- Non-editable Rate Field -->
-<td style="padding: 2.5px;display:none;">
-    <div class="form-group" style="margin-bottom: 0px;">
+<td class="ads-td" style="display:none;">
+    <div class="form-group mb-0">
         <input type="text" class="form-control" id="{{$ad->id.'Rate'}}" name="Rate" value="{{ $ad->Rate }}" readonly>
  
     </div>
 </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" value="{{ $ad->NRP }}" id="{{$ad->id.'NRP'}}" name="NRP" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Ad_Account }}" id="Ad_Account" name="Ad_Account" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="{{$ad->id.'baki'}}" name="Payment" required onchange="togglebakiField('{{$ad->id}}baki')">
                     @foreach(['Pending', 'Paused', 'FPY Received', 'eSewa Received', 'Baki', 'Paid', 'Refunded', 'Cancelled', 'Overpaid', 'PV Adjusted', 'Informed'] as $Payment)
                     <option value="{{ $Payment }}" {{ @$ad->Payment == $Payment ? 'selected' : '' }}> {{ $Payment }}</option>
@@ -972,18 +958,18 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" id="Duration" name="Duration" class="form-control" value="{{ $ad->Duration}}" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Quantity }}" id="Quantity" name="Quantity" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="Status" name="Status" required onchange="toggleAdvanceField()">
                     @foreach(['New', 'Extend', 'Both', 'On schedule', 'Monitoring'] as $status)
                     <option value="{{ $status }}" {{ @$ad->Status == $status ? 'selected' : '' }}> {{ $status }}</option>
@@ -991,7 +977,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 @if($ad->advance == '')
                 <div class="form-group" id="{{$ad->id.'bakifield'}}" style="display: none;">
                   <input type="text" class="form-control" id="advanceAmount" value="" name="advance">
@@ -1002,8 +988,8 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 </div>
                 @endif
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" id="Ad_Nature_Page" name="Ad_Nature_Page" value="{{ $ad->Ad_Nature_Page }}" required>
                 </div>
               </td>
@@ -1050,7 +1036,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
 @endphp
 
-<td style="min-width:90px; padding:2.5px;">
+<td class="ads-td" style="min-width:90px;">
   <button type="button"
           class="btn btn-sm {{ $hasAddons ? 'btn-info' : 'btn-warning' }} addon-btn"
           data-customer="{{ $wa }}"
@@ -1067,7 +1053,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </button>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
   <span class="admin-name"
         data-ad-id="{{ $ad->id }}"
         data-toggle="tooltip"
@@ -1077,11 +1063,11 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </span>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-check-square"></i></button>
               </td>
             </form>
-            <td style="padding: 2.5px;">
+            <td class="ads-td">
               <div class="dropdown">
                 <button class="dropdown-button" onclick="toggleDropdown_({{$ad->id}})"><i class="fas fa-tasks"></i></button>
                 <div id="menu_{{$ad->id}}" class="horizontal-menu">
@@ -1102,13 +1088,13 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
             </td>
           </tr>
           @elseif($ad->Payment == "Overpaid")
-          <tr style="background-color: #e5e5dc;">
+          <tr class="tr-done">
             <form action="{{ url('/admin/dashboard/ads/edit/'. $ad->id) }}" method="POST">
               @csrf
                   <input type="hidden" name="redirect_to" value="{{ url()->full() }}">
 
-               <td style="padding: 2.5px; position: relative;" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
-              <td style="padding: 2.5px;">
+               <td class="ads-td-rel" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
+              <td class="ads-td">
                 @php
                 $customer = $ad->customer()->first(); // Make sure $customer is defined
                 $phoneNumber = $customer->phone ?? $customer->phone_2; // Check if customer exists before using its attributes
@@ -1131,7 +1117,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <span class="customer-display-name" @if($customer) onmouseover="showPopup(event, '{{ $customer->id }}')" onmouseout="hidePopup()" onclick="goToDetails('{{ route('customer.details', ['id' => $customer->id]) }}')" @endif>
 
                   <strong>{{ $customer ? $customer->display_name : 'Unknown Customer' }}</strong>
@@ -1149,10 +1135,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 <div class="customer-popup" id="popup-{{ $customer->id }}">
                   <div class="popup-arrow"></div>
                   <div class="profile-popup">
-                    <div style="display: flex; align-items: center;">
+                    <div class="d-flex align-items-center">
                       <div>
                         <h4>{{ $customer->name }}</h4>
-                        <span class="form-group" style="margin-bottom: 0px;">
+                        <span class="form-group mb-0">
                         <button type="button"class="btn btn-info" style="width: 100%; font-weight: bold; cursor: default;"readonly>{{ $ad->Rate }}</button>
                         </span>
                         <span><strong>Name:</strong> {{ $customer->name }}</span>
@@ -1161,7 +1147,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                         <span><strong>Phone:</strong> {{ $customer->phone }}</span>
                         <span><strong>Address:</strong> {{ $customer->address }}</span>
                       </div>
-                      <div style="margin-left: 10px;">
+                      <div class="ms-2 ml-2">
                         @if($customer->profile_picture)
                         <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" alt="Profile Picture" style="width: 90px; height: 90px; border-radius: 50%;">
                         @else
@@ -1184,31 +1170,31 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" oninput="calAmt({{$ad->id}})" onclick="calAmt({{$ad->id}})" id="{{$ad->id.'USD'}}" name="USD" value="{{ $ad->USD }}" required>
                 </div>
               </td>
               <!-- Non-editable Rate Field -->
-<td style="padding: 2.5px;display:none;">
-    <div class="form-group" style="margin-bottom: 0px;">
+<td class="ads-td" style="display:none;">
+    <div class="form-group mb-0">
         <input type="text" class="form-control" id="{{$ad->id.'Rate'}}" name="Rate" value="{{ $ad->Rate }}" readonly>
  
     </div>
 </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" value="{{ $ad->NRP }}" id="{{$ad->id.'NRP'}}" name="NRP" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Ad_Account }}" id="Ad_Account" name="Ad_Account" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="{{$ad->id.'baki'}}" name="Payment" required onchange="togglebakiField('{{$ad->id}}baki')">
                     @foreach(['Pending', 'Paused', 'FPY Received', 'eSewa Received', 'Baki', 'Paid', 'Refunded', 'Cancelled', 'Overpaid', 'PV Adjusted', 'Informed'] as $Payment)
                     <option value="{{ $Payment }}" {{ @$ad->Payment == $Payment ? 'selected' : '' }}> {{ $Payment }}</option>
@@ -1216,18 +1202,18 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" id="Duration" name="Duration" class="form-control" value="{{ $ad->Duration}}" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Quantity }}" id="Quantity" name="Quantity" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="Status" name="Status" required onchange="toggleAdvanceField()">
                     @foreach(['New', 'Extend', 'Both', 'On schedule', 'Monitoring'] as $status)
                     <option value="{{ $status }}" {{ @$ad->Status == $status ? 'selected' : '' }}> {{ $status }}</option>
@@ -1235,7 +1221,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 @if($ad->advance == '')
                 <div class="form-group" id="{{$ad->id.'bakifield'}}" style="display: none;">
                   <input type="text" class="form-control" id="advanceAmount" value="" name="advance">
@@ -1246,8 +1232,8 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 </div>
                 @endif
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" id="Ad_Nature_Page" name="Ad_Nature_Page" value="{{ $ad->Ad_Nature_Page }}" required>
                 </div>
               </td>
@@ -1294,7 +1280,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
 @endphp
 
-<td style="min-width:90px; padding:2.5px;">
+<td class="ads-td" style="min-width:90px;">
   <button type="button"
           class="btn btn-sm {{ $hasAddons ? 'btn-info' : 'btn-warning' }} addon-btn"
           data-customer="{{ $wa }}"
@@ -1311,7 +1297,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </button>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
   <span class="admin-name"
         data-ad-id="{{ $ad->id }}"
         data-toggle="tooltip"
@@ -1321,11 +1307,11 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </span>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-check-square"></i></button>
               </td>
             </form>
-            <td style="padding: 2.5px;">
+            <td class="ads-td">
               <div class="dropdown">
                 <button class="dropdown-button" onclick="toggleDropdown_({{$ad->id}})"><i class="fas fa-tasks"></i></button>
                 <div id="menu_{{$ad->id}}" class="horizontal-menu">
@@ -1351,8 +1337,8 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
               @csrf
                   <input type="hidden" name="redirect_to" value="{{ url()->full() }}">
 
-               <td style="padding: 2.5px; position: relative;" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
-              <td style="padding: 2.5px;">
+               <td class="ads-td-rel" onmouseenter="showAdDetails(this, '{{ $ad->created_at }}')" onmouseleave="hideAdDetails(this)">   {{ $ad->created_at ? $ad->created_at->format('M j') : '' }} </td>
+              <td class="ads-td">
                 @php
                 $customer = $ad->customer()->first(); // Make sure $customer is defined
                 $phoneNumber = $customer->phone ?? $customer->phone_2; // Check if customer exists before using its attributes
@@ -1375,7 +1361,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
               </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <span class="customer-display-name" @if($customer) onmouseover="showPopup(event, '{{ $customer->id }}')" onmouseout="hidePopup()" onclick="goToDetails('{{ route('customer.details', ['id' => $customer->id]) }}')" @endif>
 
                   <strong>{{ $customer ? $customer->display_name : 'Unknown Customer' }}</strong>
@@ -1393,10 +1379,10 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 <div class="customer-popup" id="popup-{{ $customer->id }}">
                   <div class="popup-arrow"></div>
                   <div class="profile-popup">
-                    <div style="display: flex; align-items: center;">
+                    <div class="d-flex align-items-center">
                       <div>
                         <h4>{{ $customer->name }}</h4>
-                        <span class="form-group" style="margin-bottom: 0px;">
+                        <span class="form-group mb-0">
                         <button type="button"class="btn btn-info" style="width: 100%; font-weight: bold; cursor: default;"readonly>{{ $ad->Rate }}</button>
                         </span>
                         <span><strong>Name:</strong> {{ $customer->name }}</span>
@@ -1405,7 +1391,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                         <span><strong>Phone:</strong> {{ $customer->phone }}</span>
                         <span><strong>Address:</strong> {{ $customer->address }}</span>
                       </div>
-                      <div style="margin-left: 10px;">
+                      <div class="ms-2 ml-2">
                         @if($customer->profile_picture)
                         <img src="{{ asset('uploads/customers/' . $customer->profile_picture) }}" alt="Profile Picture" style="width: 90px; height: 90px; border-radius: 50%;">
                         @else
@@ -1426,31 +1412,31 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </div>
               </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" oninput="calAmt({{$ad->id}})" onchange="calAmt({{$ad->id}})" class="form-control" id="{{$ad->id.'USD'}}" name="USD" value="{{ $ad->USD }}" required>
                 </div>
               </td>
               <!-- Non-editable Rate Field -->
-<td style="padding: 2.5px;display:none;">
-    <div class="form-group" style="margin-bottom: 0px;">
+<td class="ads-td" style="display:none;">
+    <div class="form-group mb-0">
         <input type="text" class="form-control" id="{{$ad->id.'Rate'}}" name="Rate" value="{{ $ad->Rate }}" readonly>
  
     </div>
 </td>
 
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" step="0.01" class="form-control" value="{{ $ad->NRP }}" id="{{$ad->id.'NRP'}}" name="NRP" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Ad_Account }}" id="Ad_Account" name="Ad_Account" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="{{$ad->id.'baki'}}" name="Payment" required onchange="togglebakiField('{{$ad->id}}baki')">
                     @foreach(['Pending', 'Paused', 'FPY Received', 'eSewa Received', 'Baki', 'Paid', 'Refunded', 'Cancelled', 'Overpaid', 'PV Adjusted', 'Informed'] as $Payment)
                     <option value="{{ $Payment }}" {{ @$ad->Payment == $Payment ? 'selected' : '' }}> {{ $Payment }}</option>
@@ -1458,18 +1444,18 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" id="Duration" name="Duration" class="form-control" value="{{ $ad->Duration}}" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" value="{{ $ad->Quantity }}" id="Quantity" name="Quantity" required>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <select class="form-control" id="Status" name="Status" required onchange="toggleAdvanceField()">
                     @foreach(['New', 'Extend', 'Both', 'On schedule', 'Monitoring'] as $status)
                     <option value="{{ $status }}" {{ @$ad->Status == $status ? 'selected' : '' }}> {{ $status }}</option>
@@ -1477,7 +1463,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                   </select>
                 </div>
               </td>
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 @if($ad->advance == '')
                 <div class="form-group" id="{{$ad->id.'bakifield'}}" style="display: none;">
                   <input type="text" class="form-control" id="advanceAmount" value="" name="advance">
@@ -1488,8 +1474,8 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
                 </div>
                 @endif
               </td>
-              <td style="padding: 2.5px;">
-                <div class="form-group" style="margin-bottom: 0px;">
+              <td class="ads-td">
+                <div class="form-group mb-0">
                   <input type="text" class="form-control" id="Ad_Nature_Page" name="Ad_Nature_Page" value="{{ $ad->Ad_Nature_Page }}" required>
                 </div>
               </td>
@@ -1536,7 +1522,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 
 @endphp
 
-<td style="min-width:90px; padding:2.5px;">
+<td class="ads-td" style="min-width:90px;">
   <button type="button"
           class="btn btn-sm {{ $hasAddons ? 'btn-info' : 'btn-warning' }} addon-btn"
           data-customer="{{ $wa }}"
@@ -1554,7 +1540,7 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </td>
 
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
   <span class="admin-name"
         data-ad-id="{{ $ad->id }}"
         data-toggle="tooltip"
@@ -1564,11 +1550,11 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </span>
 </td>
 
-              <td style="padding: 2.5px;">
+              <td class="ads-td">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-check-square"></i></button>
               </td>
             </form>
-            <td style="padding: 2.5px;">
+            <td class="ads-td">
               <div class="dropdown">
                 <button class="dropdown-button" onclick="toggleDropdown_({{$ad->id}})"><i class="fas fa-tasks"></i></button>
                 <div id="menu_{{$ad->id}}" class="horizontal-menu">
@@ -1597,7 +1583,6 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
 </div>
 <marquee id="marqueeTag" scrollamount="10" loop="infinite"></marquee>
 {{ $ads->withQueryString()->links('pagination::bootstrap-5') }}
-</div>
 <!-- Global Add-on Modal -->
 <div class="modal fade" id="addonModal" tabindex="-1" role="dialog" aria-labelledby="addonModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -1633,13 +1618,6 @@ _*Thank you.*_') }}" target="_blank" style="text-decoration: none; color: inheri
   </div>
 </div>
 
-<!-- jQuery (full or slim works; we use slim since we use fetch) -->
-
-<!-- ✅ Popper v1 for Bootstrap 4.x -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-
-<!-- Bootstrap 4.5.2 -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
   // (optional) tooltips
@@ -3358,8 +3336,4 @@ function fetchCustomerRate() {
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 @endsection
