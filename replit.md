@@ -83,3 +83,9 @@ php artisan db:import-mysql <dump.sql> [--clear] [--dry-run] [--tables=tbl1,tbl2
 - customers: city, assigned_admin_id, is_vip, last_interaction_at, last_note_at, created_by
 - invoices: customer, salesperson, invoice_number, description, date
 - Several other tables: see migration history
+
+## Production Monitoring
+
+A public health-check endpoint is available:
+- **URL:** `GET /health` → returns `{"status":"ok","db_ok":true,"driver":"mysql","db_name":"..."}` (HTTP 200) or HTTP 503 on DB failure
+- **Setup guide:** `docs/monitoring.md` — step-by-step instructions to wire `/health` to a free UptimeRobot monitor for automatic email/SMS alerts
