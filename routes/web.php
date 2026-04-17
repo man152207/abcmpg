@@ -216,13 +216,9 @@ Route::middleware('auth:admin')->group(function () {
 });
 
     Route::middleware(['auth:customer'])->group(function () {
-    Route::get('/customer/{customer}/requirements', [CustomerController::class, 'getRequirements'])->name('customer.requirements');
+    Route::get('/customer/{customer}/requirements', [CustomerController::class, 'getRequirements'])->name('customer.portal.requirements');
     Route::put('/customer/requirements/{requirementId}', [CustomerController::class, 'updateRequirement'])->name('customer.requirements.update');
 });
-    
-    Route::get('/quotation/generate', function () {
-    return view('item.quotation_generate');
-    })->name('quotation.generate');
     
     Route::get('/quotation/generate', [QuotationController::class, 'create'])->name('quotation.generate');
     Route::post('/quotation/store', [QuotationController::class, 'store'])->name('quotation.store');
@@ -350,11 +346,9 @@ Route::prefix('admin/recp')
     Route::get('/daily-card-spends', [DailyCardSpendController::class, 'index'])->name('daily-card-spends.index');
     Route::post('/daily-card-spends', [DailyCardSpendController::class, 'store'])->name('daily-card-spends.store');
     Route::resource('daily-card-spends', \App\Http\Controllers\DailyCardSpendController::class);
-    Route::get('/daily-card-spends/download/{cardName}', [DailyCardSpendController::class, 'downloadCardRecords']) ->name('daily-card-spends.download');
-    Route::get('/daily-card-spends/{cardName}', [DailyCardSpendController::class, 'showCardRecords']);
     Route::get('daily-card-spends/view/{cardName}', [DailyCardSpendController::class, 'viewCard'])->name('daily-card-spends.view');
-    Route::get('/daily-card-spends/{cardName}', [DailyCardSpendController::class, 'viewCard'])->name('daily-card-spends.view');
     Route::get('/daily-card-spends/download/{cardName}', [DailyCardSpendController::class, 'downloadCardRecords'])->name('daily-card-spends.download');
+    Route::get('/daily-card-spends/{cardName}', [DailyCardSpendController::class, 'showCardRecords']);
     Route::post('daily-card-spends/clear/{cardName}', [DailyCardSpendController::class, 'clearCardTotal']);
     Route::post('daily-card-spends/undo/{cardName}', [DailyCardSpendController::class, 'undoClear']);
     Route::post('daily-card-spends/redo/{cardName}', [DailyCardSpendController::class, 'redoClear']);
@@ -643,7 +637,7 @@ Route::get('/admin/dashboard/export_customers', [CustomerController::class, 'exp
     Route::post('/admin/dashboard/user/add', [UserPrivilegeController::class, 'register'])->name('admin.user.store');
     Route::get('/admin/dashboard/user/list', [UserPrivilegeController::class, 'show'])->name('admin.user.show');
     Route::get('/admin/dashboard/user/delete/{id}', [UserPrivilegeController::class, 'delete'])->name('admin.user.delete');
-    Route::get('/admin/dashboard/user/search', [UserPrivilegeController::class, 'search'])->name('search_user');
+    Route::get('/admin/dashboard/user/search', [UserPrivilegeController::class, 'search'])->name('admin.user.search');
     Route::get('/admin/dashboard/user/edit/{id}', [UserPrivilegeController::class, 'edit'])->name('admin.user.edit');
     Route::put('/admin/dashboard/user/update/{id}', [UserPrivilegeController::class, 'update'])->name('admin.user.update');
     Route::get('/admin/dashboard/user/privilege/{id}', [UserPrivilegeController::class, 'privilege'])->name('admin.user.privilege');
