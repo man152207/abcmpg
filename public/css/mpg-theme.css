@@ -1910,7 +1910,8 @@ html.mpg-layout, body.mpg-layout {
 /* Status-group row colors */
 .mpg-layout .tr-pending  { background-color: #f9a52c6e !important; color: #000206 !important; }
 .mpg-layout .tr-paused   { background-color: #c4a35a   !important; }
-.mpg-layout .tr-baki     { background-color: #c66b3d91 !important; color: black   !important; }
+.mpg-layout .tr-baki,
+.mpg-layout .tr-incomplete { background-color: #c66b3d91 !important; color: black   !important; }
 .mpg-layout .tr-done     { background-color: #e5e5dc   !important; }
 
 /* Card body flush (ad table wrapper) */
