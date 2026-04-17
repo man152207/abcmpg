@@ -98,8 +98,8 @@ class CardDebitController extends Controller
         try {
             $monthlySummaries = DB::table('card_debit_info')
                 ->select(
-                    DB::table('card_debit_info')->raw('SUM(USD) as totalUSD'),
-                    DB::table('card_debit_info')->raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                    DB::table('card_debit_info')->raw('SUM("USD") as totalUSD'),
+                    DB::table('card_debit_info')->raw("TO_CHAR(created_at, 'YYYY-MM') as monthYear")
                 )
                 ->groupBy('monthYear')
                 ->paginate(12);
@@ -116,8 +116,8 @@ class CardDebitController extends Controller
             $monthlySummaries = DB::table('card_debit_info')
                 ->where('card_number', $request->search)
                 ->select(
-                    DB::table('card_debit_info')->raw('SUM(USD) as totalUSD'),
-                    DB::table('card_debit_info')->raw("DATE_FORMAT(created_at, '%Y-%m') as monthYear")
+                    DB::table('card_debit_info')->raw('SUM("USD") as totalUSD'),
+                    DB::table('card_debit_info')->raw("TO_CHAR(created_at, 'YYYY-MM') as monthYear")
                 )
                 ->groupBy('monthYear')
                 ->paginate(12);

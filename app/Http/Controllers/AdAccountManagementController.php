@@ -14,7 +14,7 @@ class AdAccountManagementController extends Controller
     // Fetch ad accounts with calculated fields
     $adAccountsWithUSD = AdAccount::select('ad_accounts.*')
         ->selectRaw("(
-            SELECT SUM(USD)
+            SELECT SUM("USD")
             FROM ads
             WHERE SUBSTRING_INDEX(Ad_Account, '/', -1) = ad_accounts.account_name
             AND DATE(created_at) >= ad_accounts.active_since
@@ -23,13 +23,13 @@ class AdAccountManagementController extends Controller
         ->selectRaw("(
             CASE 
                 WHEN (
-                    SELECT SUM(USD)
+                    SELECT SUM("USD")
                     FROM ads
                     WHERE SUBSTRING_INDEX(Ad_Account, '/', -1) = ad_accounts.account_name
                     AND DATE(created_at) >= ad_accounts.active_since
                 ) IS NOT NULL
                 THEN running_ads_balance + (
-                    SELECT SUM(USD)
+                    SELECT SUM("USD")
                     FROM ads
                     WHERE SUBSTRING_INDEX(Ad_Account, '/', -1) = ad_accounts.account_name
                     AND DATE(created_at) >= ad_accounts.active_since
@@ -40,13 +40,13 @@ class AdAccountManagementController extends Controller
         ->selectRaw("(
             CASE 
                 WHEN (
-                    SELECT SUM(USD)
+                    SELECT SUM("USD")
                     FROM ads
                     WHERE SUBSTRING_INDEX(Ad_Account, '/', -1) = ad_accounts.account_name
                     AND DATE(created_at) >= ad_accounts.active_since
                 ) IS NOT NULL
                 THEN account_threshold - (running_ads_balance + (
-                    SELECT SUM(USD)
+                    SELECT SUM("USD")
                     FROM ads
                     WHERE SUBSTRING_INDEX(Ad_Account, '/', -1) = ad_accounts.account_name
                     AND DATE(created_at) >= ad_accounts.active_since

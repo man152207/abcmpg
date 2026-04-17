@@ -7,9 +7,7 @@ $startDate = Carbon::now()->startOfMonth();
 $endDate   = Carbon::today();
 
 $rows = \App\Models\Ad::whereBetween('created_at', [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()])
-    ->selectRaw("DATE(created_at) as d,
-                 SUM(COALESCE(USD,0)) AS totalUSD,
-                 SUM(COALESCE(CAST(REPLACE(NRP, ',', '') AS DECIMAL(18,2)),0)) AS totalNRP")
+    ->selectRaw("created_at::date as d, SUM(COALESCE(\"USD\",0)) AS totalUSD, SUM(COALESCE(\"NRP\",0)) AS totalNRP")
     ->groupBy('d')
     ->orderBy('d')
     ->get();

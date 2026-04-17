@@ -36,7 +36,7 @@ class OtherExpController extends Controller
     public function show()
 {
     // Fetch monthly summary with pagination
-    $monthlySummary = Other_Exp::selectRaw('DATE_FORMAT(date, "%Y-%m") as month, SUM(amount) as total_amount')
+    $monthlySummary = Other_Exp::selectRaw("TO_CHAR(date, 'YYYY-MM') as month, SUM(amount) as total_amount")
         ->groupBy('month')
         ->orderBy('month', 'desc')
         ->paginate(5); // Show 5 rows per page

@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Cache;
 $today = Carbon::today();
 
 /** ====== TODAY SUMMARY (same logic) ====== */
-$totalNPR = Ad::whereDate('created_at', $today)
-  ->selectRaw('SUM(COALESCE(CAST(REPLACE(NRP, ",", "") AS DECIMAL(18,2)),0)) AS totalNPR')
-  ->value('totalNPR');
+$totalNPR = Ad::whereDate('created_at', $today)->sum('NRP');
 $totalUSD = Ad::whereDate('created_at', $today)->sum('USD');
 
 /** ====== USER / PRIVILEGE / RECEPTION FLAGS (same logic) ====== */

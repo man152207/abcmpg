@@ -127,14 +127,7 @@ public function showUserDetails($id)
     $clientsAdded7    = (clone $cliBase)->where('created_at','>=',$since7)->count();
 
     $adsMoney7 = (clone $adsBase)->where('created_at','>=',$since7)
-        ->selectRaw("
-            SUM(
-              CASE WHEN NRP IS NULL OR NRP='' THEN 0
-                   ELSE CAST(REPLACE(NRP, ',', '') AS DECIMAL(18,2))
-              END
-            ) as total_nrp,
-            SUM(COALESCE(USD,0)) as total_usd
-        ")
+        ->selectRaw("SUM(COALESCE(\"NRP\",0)) as total_nrp, SUM(COALESCE(\"USD\",0)) as total_usd")
         ->first();
 
     $kpis = [
