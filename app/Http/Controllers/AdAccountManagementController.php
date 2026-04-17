@@ -67,9 +67,11 @@ class AdAccountManagementController extends Controller
         ->paginate(15);
 
     // Fetch unique Ad_Account values for the dropdown
+    // Group by the raw Ad_Account column to satisfy MySQL ONLY_FULL_GROUP_BY;
+    // SUBSTRING_INDEX is functionally determined by Ad_Account so the SELECT is valid.
     $adAccountOptions = DB::table('ads')
         ->selectRaw(DbSql::alias($rexAcc, 'Ad_Account_Display') . ', MAX(updated_at) as latest_update')
-        ->groupByRaw($rexAcc)
+        ->groupBy('Ad_Account')
         ->orderBy('latest_update', 'DESC')
         ->get();
 

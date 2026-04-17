@@ -369,7 +369,7 @@ Route::prefix('admin/recp')
 
     
     // Group routes under a prefix for better organization
-    Route::prefix('ad-management')->group(function () {
+    Route::prefix('ad-management')->middleware(['auth:admin'])->group(function () {
     // Ad Account-related routes
     Route::get('/', [AdAccountManagementController::class, 'index'])->name('adAccount.index'); // View Ad Account list
     Route::post('/adaccount/store', [AdAccountManagementController::class, 'storeAdAccount'])->name('adAccount.store'); // Add a new Ad Account
