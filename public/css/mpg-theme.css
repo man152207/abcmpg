@@ -2814,34 +2814,19 @@ html.mpg-layout, body.mpg-layout{
    25b. TASK-43 — POP-OUT SUBMENUS in collapsed sidebar
    ============================================================= */
 
-/* Allow children of the sidebar to escape the rail without being clipped. */
-.mpg-layout.sidebar-collapse .main-sidebar,
-.mpg-layout.sidebar-collapse .main-sidebar .sidebar,
-.mpg-layout.sidebar-collapse .main-sidebar .os-host,
-.mpg-layout.sidebar-collapse .main-sidebar .os-padding,
-.mpg-layout.sidebar-collapse .main-sidebar .os-viewport,
-.mpg-layout.sidebar-collapse .main-sidebar .nav-sidebar{
-  overflow: visible !important;
-}
-
-/* Anchor for the floating popover. */
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview{
-  position: relative;
-}
-
-/* In collapsed mode, ignore AdminLTE's inline `.menu-open` and keep
-   the submenu hidden by default; show it ONLY on hover / keyboard focus. */
+/* In collapsed mode, hide treeview by default (override AdminLTE's inline
+   `.menu-open` so submenus don't stretch the rail). They're revealed only
+   when JS adds the `.mpg-popover-open` class on the parent <li>. */
 .mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview > .nav-treeview{
   display: none !important;
 }
 
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview{
+/* Floating popover — uses position:fixed so it escapes the sidebar's
+   vertical scroll container WITHOUT us having to override overflow.
+   Its top/left are set inline by JS based on the parent's bounding rect. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview{
   display: block !important;
-  position: absolute;
-  left: 100%;
-  top: 0;
-  margin-left: 8px;
+  position: fixed;
   min-width: 230px;
   max-width: 290px;
   padding: .4rem 0;
@@ -2857,9 +2842,8 @@ html.mpg-layout, body.mpg-layout{
   to  { opacity: 1; transform: translateX(0);    }
 }
 
-/* Re-style child rows inside the popover (override the icon-only collapsed look). */
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link{
+/* Child row styling inside the popover. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-link{
   padding: .5rem .85rem !important;
   justify-content: flex-start;
   color: #d4dce8;
@@ -2867,24 +2851,21 @@ html.mpg-layout, body.mpg-layout{
   margin: 1px 6px;
   min-height: 34px;
 }
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link p,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link p{
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-link p{
   display: inline-block !important;
   margin: 0 0 0 .5rem;
   font-size: .82rem;
   font-weight: 500;
   white-space: nowrap;
 }
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-icon,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-icon{
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-icon{
   font-size: .85rem;
   width: 1.2rem;
   text-align: center;
 }
 
-/* Re-show the right caret inside the popover for nested treeview indicators. */
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link > p > .right,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link > p > .right{
+/* Re-show right-caret for nested treeview indicators inside the popover. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-link > p > .right{
   display: inline-block !important;
   margin-left: auto;
   font-size: .7rem;
@@ -2892,19 +2873,17 @@ html.mpg-layout, body.mpg-layout{
 }
 
 /* Hover + active states inside the popover. */
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link:hover,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link:focus,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link:hover{
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-link:hover,
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-link:focus{
   background: rgba(94,234,212,.12);
   color: #fff;
 }
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:hover > .nav-treeview .nav-link.active,
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview:focus-within > .nav-treeview .nav-link.active{
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-treeview .nav-link.active{
   background: linear-gradient(135deg, rgba(20,184,166,.30), rgba(59,130,246,.18));
   color: #fff;
 }
 
-/* Nested treeviews inside the popover: render inline, indented (no second-level pop-out). */
+/* Nested treeviews inside the popover: render inline-indented, no nested pop-out. */
 .mpg-layout.sidebar-collapse .nav-sidebar .nav-treeview .nav-treeview{
   position: static;
   display: none;
@@ -2922,8 +2901,7 @@ html.mpg-layout, body.mpg-layout{
   padding-left: 1.7rem !important;
 }
 
-/* Suppress the icon-only tooltip pill on parents that already pop a submenu
-   (avoids tooltip + popover stacking on the same hover). */
-.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview > .nav-link[data-tooltip]:hover::after{
+/* Suppress the icon-only tooltip pill on parents whose popover is open. */
+.mpg-layout.sidebar-collapse .nav-sidebar > .nav-item.has-treeview.mpg-popover-open > .nav-link[data-tooltip]:hover::after{
   opacity: 0;
 }

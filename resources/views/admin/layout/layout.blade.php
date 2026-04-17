@@ -1000,9 +1000,109 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
+  // 4) TASK-43: Pop-out submenu positioning when sidebar is collapsed.
+  //    Uses position:fixed (set inline) so the popover escapes the sidebar's
+  //    vertical scroll container without us having to override overflow.
+  //    Detects bottom-of-viewport collisions and flips upward when needed.
+  function initSubmenuPopovers(){
+    var SIDEBAR_WIDTH = 4.6 * 16; // 4.6rem in px (matches CSS)
+    var GAP = 8;
+    var openLi = null;
+    var closeTimer = null;
+
+    function isCollapsed(){
+      return body.classList.contains('sidebar-collapse')
+          && window.innerWidth >= 992;
+    }
+
+    function position(li){
+      var panel = li.querySelector(':scope > .nav-treeview');
+      if (!panel) return;
+      var rect = li.getBoundingClientRect();
+      // Reset before measuring (so we get natural height)
+      panel.style.top = '-9999px';
+      panel.style.left = '-9999px';
+      // Force reflow & measure
+      var ph = panel.offsetHeight;
+      var pw = panel.offsetWidth;
+      var vh = window.innerHeight;
+      var top = rect.top;
+      // Flip upward if it would overflow bottom
+      if (top + ph + 8 > vh) {
+        top = Math.max(8, vh - ph - 8);
+      }
+      var left = SIDEBAR_WIDTH + GAP;
+      // If popover would overflow right edge, clamp
+      if (left + pw + 8 > window.innerWidth) {
+        left = Math.max(8, window.innerWidth - pw - 8);
+      }
+      panel.style.top  = top  + 'px';
+      panel.style.left = left + 'px';
+    }
+
+    function open(li){
+      if (!isCollapsed() || !li || !li.classList.contains('has-treeview')) return;
+      if (openLi && openLi !== li) close(openLi);
+      clearTimeout(closeTimer);
+      li.classList.add('mpg-popover-open');
+      openLi = li;
+      // position on next frame so the panel is laid out
+      requestAnimationFrame(function(){ position(li); });
+    }
+
+    function close(li){
+      if (!li) return;
+      li.classList.remove('mpg-popover-open');
+      var panel = li.querySelector(':scope > .nav-treeview');
+      if (panel) { panel.style.top = ''; panel.style.left = ''; }
+      if (openLi === li) openLi = null;
+    }
+
+    function scheduleClose(li){
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(function(){ close(li); }, 120);
+    }
+
+    document.querySelectorAll('.main-sidebar .nav-sidebar > .nav-item.has-treeview').forEach(function(li){
+      li.addEventListener('mouseenter', function(){ open(li); });
+      li.addEventListener('mouseleave', function(){ scheduleClose(li); });
+      // Keyboard focus support
+      li.addEventListener('focusin',  function(){ open(li); });
+      li.addEventListener('focusout', function(e){
+        if (!li.contains(e.relatedTarget)) scheduleClose(li);
+      });
+    });
+
+    // Reposition / close on scroll & resize
+    window.addEventListener('scroll', function(){
+      if (openLi) position(openLi);
+    }, true);
+    window.addEventListener('resize', function(){
+      if (openLi) {
+        if (!isCollapsed()) close(openLi);
+        else position(openLi);
+      }
+    });
+
+    // Esc closes any open popover
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && openLi) close(openLi);
+    });
+
+    // Close popovers if sidebar is expanded back
+    document.querySelectorAll('[data-widget="pushmenu"]').forEach(function(b){
+      b.addEventListener('click', function(){
+        setTimeout(function(){
+          if (!isCollapsed() && openLi) close(openLi);
+        }, 60);
+      });
+    });
+  }
+
   function init(){
     annotateTooltips();
     watchToggle();
+    initSubmenuPopovers();
   }
 
   if (document.readyState === 'loading') {
