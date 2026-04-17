@@ -548,30 +548,30 @@ $previousMonthName = \Carbon\Carbon::now()->subMonth()->format('F Y');
             <tbody>
                 <tr>
                     <td>Gross Ads Sales of <?php echo $previousMonthName; ?></td>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format($previousMonthlyAdIncomeSummaries->totalUSD ?? 0, 2) }}</td></span>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format($previousMonthlyAdIncomeSummaries->totalNRP ?? 0, 2) }}</td></span>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format($previousMonthlyAdIncomeSummaries->totalUSD ?? 0, 2) }}</span></td>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format($previousMonthlyAdIncomeSummaries->totalNRP ?? 0, 2) }}</span></td>
                 </tr>
                 <tr>
                     <td>Expenditures of <?php echo $previousMonthName; ?></td>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format($previousMonthlyClientSummaries->totalUSD ?? 0, 2) }}</td></span>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format(($previousMonthlyClientSummaries->totalNRP ?? 0) + ($previousMonthlyExp->totalAmt ?? 0), 2) }}</td></span>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format($previousMonthlyClientSummaries->totalUSD ?? 0, 2) }}</span></td>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format(($previousMonthlyClientSummaries->totalNRP ?? 0) + ($previousMonthlyExp->totalAmt ?? 0), 2) }}</span></td>
                 </tr>
                 <tr>
                     <td>Profit of <?php echo $previousMonthName; ?></td>
                     <td>-</td>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format(($previousMonthlyAdIncomeSummaries->totalNRP ?? 0) - (($previousMonthlyClientSummaries->totalNRP ?? 0) + ($previousMonthlyExp->totalAmt ?? 0)), 2) }}</td></span>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format(($previousMonthlyAdIncomeSummaries->totalNRP ?? 0) - (($previousMonthlyClientSummaries->totalNRP ?? 0) + ($previousMonthlyExp->totalAmt ?? 0)), 2) }}</span></td>
                 </tr>
                 <tr>
                     <td>To be Loaded USD</td>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format(($previousMonthlyAdIncomeSummaries->totalUSD ?? 0) - ($previousMonthlyClientSummaries->totalUSD ?? 0), 2) }}</td></span>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format(($previousMonthlyAdIncomeSummaries->totalUSD ?? 0) - ($previousMonthlyClientSummaries->totalUSD ?? 0), 2) }}</span></td>
                     <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">Rs {{ number_format(
                         ($previousMonthlyClientSummaries->totalUSD ?? 0) > 0 ? 
                         ($previousMonthlyClientSummaries->totalNRP ?? 0) / ($previousMonthlyClientSummaries->totalUSD ?? 0) * (($previousMonthlyAdIncomeSummaries->totalUSD ?? 0) - ($previousMonthlyClientSummaries->totalUSD ?? 0)) 
-                        : 0, 2) }}</td></span>
+                        : 0, 2) }}</span></td>
                 </tr>
                 <tr>
                     <td>USD Balance</td>
-                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format($previousCardsummary->totalUSD ?? 0, 2) }}</td></span>
+                    <td><span class="amount hidden-number">xxxx.xx</span> <span class="amount revealed-number usd" style="display: none;">$ {{ number_format($previousCardsummary->totalUSD ?? 0, 2) }}</span></td>
                     <td>-</td>
                 </tr>
             </tbody>

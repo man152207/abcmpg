@@ -187,6 +187,17 @@ $bankData = [
           <a href="{{ $isReceptionOnly ? route('recp.dashboard') : route('admin.dashboard') }}" class="nav-link">Home</a>
         </li>
       </ul>
+      @if($adminUser)
+        @php
+          $h = (int) \Carbon\Carbon::now()->setTimezone('Asia/Kathmandu')->format('H');
+          $greet = $h < 12 ? 'Good morning' : ($h < 17 ? 'Good afternoon' : 'Good evening');
+          $firstName = trim(strtok($adminUser->name ?? '', ' ')) ?: 'there';
+        @endphp
+        <div class="d-none d-lg-flex flex-column ml-3" style="line-height:1.1;">
+          <span style="font-size:.7rem; color:#94a3b8; font-weight:600; letter-spacing:.4px; text-transform:uppercase;">{{ $greet }}</span>
+          <span style="font-size:.92rem; color:#0f172a; font-weight:700;">{{ $firstName }} 👋</span>
+        </div>
+      @endif
     </div>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse"
