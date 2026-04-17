@@ -27,24 +27,11 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.page-header {
-    margin-bottom: 19px;
-    margin-top: 7px;
-    background: #3d536e;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: white;
-}
-
 .page-header h2 {
     color: #ffffff;
-    font-size: 2em;
+    font-size: 1.2em;
     font-weight: bold;
 }
-    .content-wrapper>.content {
-    padding: 0 .5rem;
-    background: #3d536e;
-    }
 .summary-crd {
     background: linear-gradient(135deg, #fff, #e0e7ff);
     border-radius: 10px;

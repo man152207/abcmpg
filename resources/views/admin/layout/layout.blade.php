@@ -290,6 +290,8 @@ $bankData = [
       }
     }
   </style>
+  {{-- MPG custom theme (loaded last to override everything) --}}
+  <link rel="stylesheet" href="{{ asset('css/mpg-theme.css') }}?v={{ filemtime(public_path('css/mpg-theme.css')) }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed mpg-layout">
