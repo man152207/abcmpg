@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
  *
  * Checks:
  *  1. Row counts in every table (pgsql vs mysql)
- *  2. Spot-check of key business records (customers, invoices, ads)
- *  3. NULL / coercion anomaly spot-checks (boolean, JSON, timestamp columns)
+ *  2. Spot-check of key business records (customers, invoices, ads, packages, …)
+ *  3. Coercion-risk columns: boolean (→ 0/1), JSON fields, timestamp fields
  *
  * Usage:
  *   php artisan db:validate-migration               # full validation
@@ -35,22 +35,56 @@ class ValidateMigration extends Command
     ];
 
     /**
-     * Key tables: columns checked in spot-check.
-     * Format: table => [column that must never be NULL after migration]
+     * Key tables with columns to spot-check.
+     * Includes coercion-risk fields:
+     *   - boolean columns (pgsql true/false → mysql 1/0)
+     *   - json columns    (pgsql json → mysql json string)
+     *   - timestamp cols  (both should survive migration as-is)
      */
     private const SPOT_CHECK_TABLES = [
-        'customers'    => ['id', 'name', 'email'],
-        'invoices'     => ['id', 'customer_id', 'total_amount'],
-        'ads'          => ['id', 'customer_id', 'ad_name'],
-        'admins'       => ['id', 'email'],
-        'clients'      => ['id', 'name'],
-        'packages'     => ['id', 'name'],
-        'card_credit_info' => ['id', 'customer_id'],
-        'card_debit_info'  => ['id', 'customer_id'],
+        'customers' => [
+            'id', 'name', 'email',
+            'requires_bill',        // boolean coercion risk
+            'is_vip',               // boolean coercion risk
+            'created_at',           // timestamp coercion risk
+        ],
+        'invoices' => [
+            'id', 'customer_id', 'amount',
+            'created_at',           // timestamp coercion risk
+            'invoice_date',         // date coercion risk
+        ],
+        'ads' => [
+            'id', 'customer_id', 'customer',
+            'add_on',               // JSON coercion risk
+            'created_at',           // timestamp coercion risk
+        ],
+        'admins' => [
+            'id', 'email',
+            'created_at',           // timestamp coercion risk
+        ],
+        'clients' => [
+            'id', 'name',
+            'created_at',           // timestamp coercion risk
+        ],
+        'packages' => [
+            'id', 'name',
+            'features',             // JSON coercion risk
+            'active',               // boolean coercion risk
+            'is_popular',           // boolean coercion risk
+            'created_at',           // timestamp coercion risk
+        ],
+        'card_credit_info' => [
+            'id', 'card_id',
+            'created_at',           // timestamp coercion risk
+        ],
+        'card_debit_info' => [
+            'id', 'card_id',
+            'created_at',           // timestamp coercion risk
+        ],
     ];
 
-    private array $countResults  = [];
-    private array $spotResults   = [];
+    private array $countResults    = [];
+    private array $spotResults     = [];
     private int   $countMismatches = 0;
     private int   $spotFailures    = 0;
 
@@ -79,15 +113,22 @@ class ValidateMigration extends Command
 
         $this->newLine();
 
-        // ── 2. Discover tables ─────────────────────────────────────────
-        $allTables = $this->discoverPgsqlTables();
-        $allTables = array_diff($allTables, self::SKIP_TABLES);
+        // ── 2. Discover tables & validate --tables argument ───────────
+        $allPgsqlTables = $this->discoverPgsqlTables();
+        $dataTablesPgsql = array_diff($allPgsqlTables, self::SKIP_TABLES);
 
-        $only = $this->option('tables')
-            ? array_map('trim', explode(',', $this->option('tables')))
-            : [];
+        $only = [];
+        if ($this->option('tables')) {
+            $requested = array_map('trim', explode(',', $this->option('tables')));
+            $unknown   = array_diff($requested, $allPgsqlTables);
+            if (!empty($unknown)) {
+                $this->error('Unknown table(s) not found in PostgreSQL: ' . implode(', ', $unknown));
+                return 1;
+            }
+            $only = $requested;
+        }
 
-        $tables = $only ? array_intersect($allTables, $only) : $allTables;
+        $tables = $only ? array_intersect($dataTablesPgsql, $only) : $dataTablesPgsql;
 
         if (empty($tables)) {
             $this->warn('No tables found to validate.');
@@ -113,7 +154,7 @@ class ValidateMigration extends Command
             : self::SPOT_CHECK_TABLES;
 
         if (!empty($spotTables)) {
-            $this->info('Running spot-checks on key tables…');
+            $this->info('Running spot-checks on key tables (incl. boolean/JSON/timestamp columns)…');
             foreach ($spotTables as $table => $columns) {
                 if (in_array($table, $tables, true)) {
                     $this->spotCheck($table, $columns);
@@ -166,16 +207,16 @@ class ValidateMigration extends Command
         }
 
         $this->countResults[] = [
-            'table'      => $table,
-            'pgsql'      => $pgsqlCount,
-            'mysql'      => $mysqlCount,
-            'status'     => $status,
-            'note'       => $note,
+            'table'  => $table,
+            'pgsql'  => $pgsqlCount,
+            'mysql'  => $mysqlCount,
+            'status' => $status,
+            'note'   => $note,
         ];
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // Spot-checks: first 5 IDs must exist in both with non-NULL key cols
+    // Spot-checks: first 5 IDs, coercion-aware comparison
     // ─────────────────────────────────────────────────────────────────
 
     private function spotCheck(string $table, array $columns): void
@@ -221,16 +262,36 @@ class ValidateMigration extends Command
 
                 foreach ($columns as $col) {
                     if ($col === 'id') continue;
+
                     $pVal = $pArr[$col] ?? null;
                     $mVal = $mArr[$col] ?? null;
 
-                    // Normalize: booleans were coerced to 1/0
+                    // Normalize boolean (pgsql bool → mysql 1/0)
                     if (is_bool($pVal)) {
                         $pVal = $pVal ? 1 : 0;
                     }
+                    if ($pVal === 't') $pVal = 1;
+                    if ($pVal === 'f') $pVal = 0;
 
-                    if ((string) $pVal !== (string) $mVal && !($pVal === null && $mVal === null)) {
-                        $issues[] = "id={$id} col={$col}: pgsql=" . json_encode($pVal) . " mysql=" . json_encode($mVal);
+                    // Normalize JSON (compare decoded, not raw string)
+                    $decodedP = json_decode((string) $pVal, true);
+                    $decodedM = json_decode((string) $mVal, true);
+                    if ($decodedP !== null || $decodedM !== null) {
+                        if (json_encode($decodedP) !== json_encode($decodedM)) {
+                            $issues[] = "id={$id} col={$col} [JSON mismatch]: pgsql=" .
+                                substr(json_encode($decodedP), 0, 60) . ' mysql=' .
+                                substr(json_encode($decodedM), 0, 60);
+                        }
+                        continue;
+                    }
+
+                    // Normalize timestamps (trim microseconds for comparison)
+                    $tsP = $this->normalizeTimestamp($pVal);
+                    $tsM = $this->normalizeTimestamp($mVal);
+
+                    if ($tsP !== $tsM) {
+                        $issues[] = "id={$id} col={$col}: pgsql=" . json_encode($pVal) .
+                            ' mysql=' . json_encode($mVal);
                     }
                 }
             }
@@ -239,14 +300,15 @@ class ValidateMigration extends Command
                 $this->spotResults[] = [
                     'table'  => $table,
                     'status' => 'OK',
-                    'detail' => 'First ' . count($pgsqlRows) . ' rows match',
+                    'detail' => 'First ' . count($pgsqlRows) . ' rows match (incl. coercion-risk columns)',
                 ];
             } else {
                 $this->spotFailures++;
                 $this->spotResults[] = [
                     'table'  => $table,
                     'status' => 'FAIL',
-                    'detail' => implode('; ', array_slice($issues, 0, 3)) . (count($issues) > 3 ? ' (+more)' : ''),
+                    'detail' => implode('; ', array_slice($issues, 0, 3)) .
+                        (count($issues) > 3 ? ' (+' . (count($issues) - 3) . ' more)' : ''),
                 ];
             }
         } catch (\Exception $e) {
@@ -259,13 +321,22 @@ class ValidateMigration extends Command
         }
     }
 
+    /**
+     * Trim microseconds and timezone suffix so "2024-01-01 10:00:00.000000"
+     * compares equal to "2024-01-01 10:00:00".
+     */
+    private function normalizeTimestamp(?string $value): ?string
+    {
+        if ($value === null) return null;
+        return preg_replace('/\.\d+(\+\d{2}:\d{2})?$/', '', $value);
+    }
+
     // ─────────────────────────────────────────────────────────────────
     // Output
     // ─────────────────────────────────────────────────────────────────
 
     private function outputReport(): void
     {
-        // Row-count table
         $this->info('── Row Count Comparison ──────────────────────────────');
         $this->table(
             ['Table', 'PostgreSQL', 'MySQL', 'Status', 'Note'],
@@ -278,7 +349,6 @@ class ValidateMigration extends Command
             ], $this->countResults)
         );
 
-        // Spot-check table
         if (!empty($this->spotResults)) {
             $this->info('── Spot-Check Results ────────────────────────────────');
             $this->table(
@@ -287,21 +357,21 @@ class ValidateMigration extends Command
             );
         }
 
-        // Summary
-        $total       = count($this->countResults);
-        $okCount     = count(array_filter($this->countResults, fn($r) => $r['status'] === 'OK'));
-        $emptyCount  = count(array_filter($this->countResults, fn($r) => $r['pgsql'] === 0));
+        $total      = count($this->countResults);
+        $okCount    = count(array_filter($this->countResults, fn($r) => $r['status'] === 'OK'));
+        $emptyCount = count(array_filter($this->countResults, fn($r) => $r['pgsql'] === 0));
 
         $this->info('── Summary ───────────────────────────────────────────');
         $this->table(
             ['Metric', 'Value'],
             [
-                ['Tables checked',          $total],
-                ['Tables matching',         $okCount],
-                ['Empty tables',            $emptyCount],
-                ['Count mismatches',        $this->countMismatches],
-                ['Spot-check failures',     $this->spotFailures],
-                ['Overall result',          ($this->countMismatches + $this->spotFailures) === 0 ? '✓ PASS' : '✗ FAIL'],
+                ['Tables checked',      $total],
+                ['Tables matching',     $okCount],
+                ['Empty tables',        $emptyCount],
+                ['Count mismatches',    $this->countMismatches],
+                ['Spot-check failures', $this->spotFailures],
+                ['Overall result',      ($this->countMismatches + $this->spotFailures) === 0
+                    ? '✓ PASS' : '✗ FAIL — investigate items above'],
             ]
         );
     }
@@ -309,8 +379,8 @@ class ValidateMigration extends Command
     private function outputJson(): void
     {
         $this->line(json_encode([
-            'row_counts'     => $this->countResults,
-            'spot_checks'    => $this->spotResults,
+            'row_counts'  => $this->countResults,
+            'spot_checks' => $this->spotResults,
             'summary' => [
                 'count_mismatches' => $this->countMismatches,
                 'spot_failures'    => $this->spotFailures,
