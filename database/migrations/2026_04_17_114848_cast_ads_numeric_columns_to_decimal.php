@@ -14,8 +14,13 @@ return new class extends Migration {
         // Set empty strings to NULL before type conversion
         DB::statement("UPDATE ads SET advance = NULL WHERE advance = '' OR advance IS NULL");
 
-        // Cast varchar → numeric (USING clause handles the conversion)
-        DB::statement('ALTER TABLE ads ALTER COLUMN advance TYPE numeric(15,2) USING advance::numeric');
+        if (DB::getDriverName() === 'pgsql') {
+            // Cast varchar → numeric (USING clause handles the conversion, pgsql only)
+            DB::statement('ALTER TABLE ads ALTER COLUMN advance TYPE numeric(15,2) USING advance::numeric');
+        } else {
+            // MySQL: MODIFY COLUMN handles the conversion
+            DB::statement('ALTER TABLE ads MODIFY COLUMN advance DECIMAL(15,2) NULL');
+        }
     }
 
     public function down(): void
@@ -24,6 +29,10 @@ return new class extends Migration {
             return;
         }
 
-        DB::statement('ALTER TABLE ads ALTER COLUMN advance TYPE character varying(255) USING advance::text');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE ads ALTER COLUMN advance TYPE character varying(255) USING advance::text');
+        } else {
+            DB::statement('ALTER TABLE ads MODIFY COLUMN advance VARCHAR(255) NULL');
+        }
     }
 };

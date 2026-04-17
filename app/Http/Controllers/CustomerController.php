@@ -406,7 +406,7 @@ class CustomerController extends Controller
             $rate      = $percent / 100;                                 // e.g. 0.20
             $threshold = (float) ($activeBonusSeason->min_spend ?? 0);   // e.g. 300
 
-            $adTotals = Ad::selectRaw("TO_CHAR(created_at, 'YYYY-MM') as ym, SUM(\"USD\") as total_usd")
+            $adTotals = Ad::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, SUM(USD) as total_usd")
                 ->where('customer', $customer->phone)
                 ->whereBetween('created_at', [$start, $end])
                 ->groupBy('ym')

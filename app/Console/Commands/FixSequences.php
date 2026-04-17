@@ -31,6 +31,11 @@ class FixSequences extends Command
 
     public function handle(): int
     {
+        if (config('database.default') !== 'pgsql') {
+            $this->info('db:fix-sequences is only applicable to PostgreSQL. Current connection: ' . config('database.default') . '. Skipping.');
+            return 0;
+        }
+
         $dryRun = $this->option('dry-run');
         $onlyTables = $this->option('tables')
             ? array_map('trim', explode(',', $this->option('tables')))

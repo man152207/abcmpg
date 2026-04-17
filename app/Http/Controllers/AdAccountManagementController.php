@@ -14,25 +14,25 @@ class AdAccountManagementController extends Controller
     // Fetch ad accounts with calculated fields
     $adAccountsWithUSD = AdAccount::select('ad_accounts.*')
         ->selectRaw('(
-            SELECT SUM("USD")
+            SELECT SUM(USD)
             FROM ads
-            WHERE regexp_replace("Ad_Account", \'^.*/\', \'\') = ad_accounts.account_name
-            AND created_at::date >= ad_accounts.active_since
+            WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
+            AND DATE(created_at) >= ad_accounts.active_since
         ) AS usd_value')
-        ->selectRaw('GREATEST(initial_remaining_days - (CURRENT_DATE - active_since::date), 0) AS remaining_days')
+        ->selectRaw('GREATEST(initial_remaining_days - DATEDIFF(CURDATE(), DATE(active_since)), 0) AS remaining_days')
         ->selectRaw('(
             CASE
                 WHEN (
-                    SELECT SUM("USD")
+                    SELECT SUM(USD)
                     FROM ads
-                    WHERE regexp_replace("Ad_Account", \'^.*/\', \'\') = ad_accounts.account_name
-                    AND created_at::date >= ad_accounts.active_since
+                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
+                    AND DATE(created_at) >= ad_accounts.active_since
                 ) IS NOT NULL
                 THEN running_ads_balance + (
-                    SELECT SUM("USD")
+                    SELECT SUM(USD)
                     FROM ads
-                    WHERE regexp_replace("Ad_Account", \'^.*/\', \'\') = ad_accounts.account_name
-                    AND created_at::date >= ad_accounts.active_since
+                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
+                    AND DATE(created_at) >= ad_accounts.active_since
                 )
                 ELSE running_ads_balance
             END
@@ -40,16 +40,16 @@ class AdAccountManagementController extends Controller
         ->selectRaw('(
             CASE
                 WHEN (
-                    SELECT SUM("USD")
+                    SELECT SUM(USD)
                     FROM ads
-                    WHERE regexp_replace("Ad_Account", \'^.*/\', \'\') = ad_accounts.account_name
-                    AND created_at::date >= ad_accounts.active_since
+                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
+                    AND DATE(created_at) >= ad_accounts.active_since
                 ) IS NOT NULL
                 THEN account_threshold - (running_ads_balance + (
-                    SELECT SUM("USD")
+                    SELECT SUM(USD)
                     FROM ads
-                    WHERE regexp_replace("Ad_Account", \'^.*/\', \'\') = ad_accounts.account_name
-                    AND created_at::date >= ad_accounts.active_since
+                    WHERE REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') = ad_accounts.account_name
+                    AND DATE(created_at) >= ad_accounts.active_since
                 ))
                 ELSE account_threshold - running_ads_balance
             END
@@ -59,7 +59,7 @@ class AdAccountManagementController extends Controller
 
     // Fetch unique Ad_Account values for the dropdown
     $adAccountOptions = DB::table('ads')
-        ->selectRaw('regexp_replace("Ad_Account", \'^.*/\', \'\') AS "Ad_Account_Display", MAX(updated_at) as latest_update')
+        ->selectRaw('REGEXP_REPLACE(Ad_Account, \'^.*/\', \'\') AS Ad_Account_Display, MAX(updated_at) as latest_update')
         ->groupBy('Ad_Account_Display')
         ->orderBy('latest_update', 'DESC')
         ->get();
