@@ -76,97 +76,6 @@ $bankData = [
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <style>
-    /* Only layout-specific bits live here. All theme styling is in mpg-theme.css */
-
-    /* QR Modal */
-    #qrOverlay{
-      position:fixed; inset:0;
-      background:rgba(15,23,42,.55);
-      backdrop-filter:blur(4px) saturate(140%);
-      display:none;
-      z-index:2500;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-    }
-    #qrModal{
-      width:100%; max-width:900px;
-      background:#fff;
-      border-radius:14px;
-      box-shadow:0 24px 48px rgba(15,23,42,.25);
-      overflow:hidden;
-      border:1px solid #e5e9f0;
-      max-height:82vh;
-      display:flex; flex-direction:column;
-    }
-    #qrModalHead{
-      display:flex;align-items:flex-start;justify-content:space-between;
-      padding:14px 16px;
-      background:#ecfdf5;
-      border-bottom:1px solid #e5e9f0;
-      color:#0f766e;
-    }
-    #qrCloseBtn{
-      border:0;
-      background:#0f766e;
-      color:#fff;
-      padding:6px 12px;
-      border-radius:8px;
-      font-weight:700;
-      cursor:pointer;
-      font-size:.8rem;
-    }
-    #qrCloseBtn:hover{background:#115e59;}
-    #qrModalBody{padding:16px; overflow:auto;}
-    .qr-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-      gap:14px;
-    }
-    .qr-item{
-      background:#fff;
-      border:1px solid #e5e9f0;
-      border-radius:10px;
-      padding:12px;
-      cursor:pointer;
-      transition:.14s ease;
-      text-align:center;
-    }
-    .qr-item:hover{
-      border-color:#0f766e;
-      box-shadow:0 4px 12px rgba(15,118,110,.12);
-    }
-    .qr-item img{
-      width:100%; max-width:210px; max-height:210px;
-      object-fit:contain;
-      border-radius:8px;
-      background:#fff;
-    }
-    .qr-label{margin-top:8px;font-weight:700;font-size:.8rem;color:#0f172a}
-    .qr-hint{margin-top:10px;text-align:center;font-size:.75rem;color:#64748b}
-
-    /* Navbar responsive collapse */
-    @media (max-width: 991.98px){
-      #mpgNavbarCollapse{
-        position:absolute;
-        top:100%; left:0; right:0;
-        background:#fff;
-        border-top:1px solid #e5e9f0;
-        box-shadow:0 10px 24px rgba(15,23,42,.08);
-        padding:12px;
-        max-height:70vh;
-        overflow:auto;
-        z-index:2000;
-      }
-      .mpg-layout .mpg-action-btn{
-        justify-content:flex-start;
-        border:1px solid #e5e9f0 !important;
-        margin:.15rem 0;
-        width:100%;
-      }
-    }
-  </style>
   {{-- MPG custom theme (loaded last to override everything) --}}
   <link rel="stylesheet" href="{{ asset('css/mpg-theme.css') }}?v={{ filemtime(public_path('css/mpg-theme.css')) }}">
 </head>
@@ -193,9 +102,9 @@ $bankData = [
           $greet = $h < 12 ? 'Good morning' : ($h < 17 ? 'Good afternoon' : 'Good evening');
           $firstName = trim(strtok($adminUser->name ?? '', ' ')) ?: 'there';
         @endphp
-        <div class="d-none d-lg-flex flex-column ml-3" style="line-height:1.1;">
-          <span style="font-size:.7rem; color:#94a3b8; font-weight:600; letter-spacing:.4px; text-transform:uppercase;">{{ $greet }}</span>
-          <span style="font-size:.92rem; color:#0f172a; font-weight:700;">{{ $firstName }} 👋</span>
+        <div class="mpg-greet">
+          <span class="mpg-greet-label">{{ $greet }}</span>
+          <span class="mpg-greet-name">{{ $firstName }} 👋</span>
         </div>
       @endif
     </div>

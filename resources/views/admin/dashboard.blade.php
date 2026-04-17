@@ -522,7 +522,7 @@ $accountBalance = $openingBalance + $totalIncome - $totalExpenses - $formattedTo
             Rs {{ number_format($currentMonthProfitNRP, 2) }}
         </span>
     </div>
-    <i class="fa fa-piggy-bank {{ $iconClass }}" style="animation-duration: 1s; color: {{ $fontColor }} !important; background: {{ $isLoss ? '#fef2f2' : '#ecfdf5' }} !important; border-color: {{ $isLoss ? '#fecaca' : '#a7f3d0' }} !important;"></i>
+    <i class="fa fa-piggy-bank {{ $iconClass }}"></i>
 </div>
 
 
