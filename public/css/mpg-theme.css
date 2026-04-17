@@ -2067,3 +2067,545 @@ html.mpg-layout, body.mpg-layout {
 /* ── User details: profile picture ── */
 .user-profile-pic  { height: 150px; width: 150px; object-fit: cover; border-radius: 50%; border: 1px solid #ddd; }
 .user-profile-icon { font-size: 150px; color: rgba(0,0,0,0.7); }
+
+/* =============================================================
+   24.  TASK-40 — PREMIUM VISUAL OVERHAUL
+   Loaded LAST. Pure visual upgrade. No layout/business changes.
+   ============================================================= */
+
+:root{
+  --mpg-grad-primary  : linear-gradient(135deg,#0f766e 0%,#14b8a6 100%);
+  --mpg-grad-primary-soft: linear-gradient(135deg,#ecfdf5 0%,#cffafe 100%);
+  --mpg-grad-accent   : linear-gradient(135deg,#0ea5e9 0%,#38bdf8 100%);
+  --mpg-grad-success  : linear-gradient(135deg,#059669 0%,#10b981 100%);
+  --mpg-grad-warning  : linear-gradient(135deg,#d97706 0%,#fbbf24 100%);
+  --mpg-grad-danger   : linear-gradient(135deg,#e11d48 0%,#fb7185 100%);
+  --mpg-grad-sidebar  : linear-gradient(180deg,#0b1220 0%,#0f1b2d 55%,#0c2724 100%);
+  --mpg-shadow-glow   : 0 8px 24px rgba(15,118,110,.18);
+  --mpg-shadow-card   : 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
+  --mpg-shadow-hover  : 0 2px 4px rgba(15,23,42,.06), 0 16px 40px rgba(15,23,42,.10);
+  --mpg-ring          : 0 0 0 4px rgba(15,118,110,.14);
+  --mpg-bg-app        : radial-gradient(1200px 700px at 8% -10%, #ecfeff 0%, transparent 55%),
+                        radial-gradient(1100px 700px at 100% 110%, #ecfdf5 0%, transparent 60%),
+                        #f4f7fb;
+}
+
+/* ── App background: subtle radial wash ─────────────────────── */
+html.mpg-layout, body.mpg-layout{
+  background: var(--mpg-bg-app) !important;
+  background-attachment: fixed;
+}
+.mpg-layout .content-wrapper{
+  background: transparent !important;
+}
+
+/* ── DARK GRADIENT SIDEBAR ──────────────────────────────────── */
+.mpg-layout .main-sidebar,
+.mpg-layout .main-sidebar.sidebar-dark-primary,
+.mpg-layout .main-sidebar.sidebar-light-primary{
+  background       : var(--mpg-grad-sidebar) !important;
+  background-image : var(--mpg-grad-sidebar) !important;
+  box-shadow       : 0 0 0 1px rgba(255,255,255,.04), 4px 0 24px rgba(2,6,23,.20) !important;
+  border-right     : 0 !important;
+}
+
+/* Decorative glow blob behind brand */
+.mpg-layout .main-sidebar::before{
+  content:""; position:absolute; inset:0 0 auto 0; height:200px;
+  background: radial-gradient(360px 160px at 30% 0%, rgba(20,184,166,.22), transparent 70%);
+  pointer-events:none; z-index:0;
+}
+.mpg-layout .main-sidebar > *{ position:relative; z-index:1; }
+
+/* Brand */
+.mpg-layout .brand-link{
+  background      : transparent !important;
+  border-bottom   : 1px solid rgba(255,255,255,.06) !important;
+  padding         : 1.1rem 1.15rem !important;
+}
+.mpg-layout .brand-image{
+  background  : rgba(255,255,255,.08) !important;
+  border      : 1px solid rgba(255,255,255,.12) !important;
+  box-shadow  : 0 4px 12px rgba(0,0,0,.25) !important;
+}
+.mpg-layout .brand-text{
+  color         : #fff !important;
+  letter-spacing: -.3px;
+  text-shadow   : 0 1px 2px rgba(0,0,0,.3);
+}
+
+/* Section header */
+.mpg-layout .nav-sidebar .nav-header{
+  color         : rgba(148,163,184,.75) !important;
+  font-size     : .65rem;
+  letter-spacing: 1.8px;
+  padding       : 1.2rem 1.15rem .4rem !important;
+}
+
+/* Nav items */
+.mpg-layout .nav-sidebar .nav-link{
+  color      : rgba(226,232,240,.78) !important;
+  font-weight: 500;
+  margin-bottom: 1px;
+  border-radius: 9px !important;
+}
+.mpg-layout .nav-sidebar .nav-link p{ color: inherit; }
+.mpg-layout .nav-sidebar .nav-link:hover{
+  background : rgba(255,255,255,.06) !important;
+  color      : #fff !important;
+  transform  : translateX(2px);
+}
+.mpg-layout .nav-sidebar .nav-link.active{
+  background : linear-gradient(135deg, rgba(20,184,166,.22) 0%, rgba(15,118,110,.18) 100%) !important;
+  color      : #fff !important;
+  font-weight: 600;
+  box-shadow : inset 0 0 0 1px rgba(20,184,166,.30), 0 4px 14px rgba(20,184,166,.18) !important;
+}
+.mpg-layout .nav-sidebar .nav-link.active::before{
+  background: linear-gradient(180deg,#5eead4 0%,#14b8a6 100%);
+  width: 3px; height: 70%;
+  box-shadow: 0 0 8px rgba(94,234,212,.6);
+}
+
+/* Icons */
+.mpg-layout .nav-sidebar .nav-icon{
+  color: rgba(148,163,184,.75) !important;
+}
+.mpg-layout .nav-sidebar .nav-link:hover .nav-icon,
+.mpg-layout .nav-sidebar .nav-link.active .nav-icon{
+  color: #5eead4 !important;
+}
+
+/* Treeview */
+.mpg-layout .nav-treeview > .nav-item > .nav-link{
+  color: rgba(203,213,225,.65) !important;
+}
+.mpg-layout .nav-treeview > .nav-item > .nav-link:hover,
+.mpg-layout .nav-treeview > .nav-item > .nav-link.active{
+  background: rgba(255,255,255,.04) !important;
+  color    : #fff !important;
+}
+
+/* Right caret */
+.mpg-layout .nav-sidebar .nav-link > p > .right{
+  color: rgba(148,163,184,.6) !important;
+}
+
+/* Sidebar scrollbar dark */
+.mpg-layout .sidebar::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.10);
+}
+.mpg-layout .sidebar::-webkit-scrollbar-thumb:hover{
+  background: rgba(255,255,255,.18);
+}
+
+/* ── PREMIUM NAVBAR (glass) ─────────────────────────────────── */
+.mpg-layout .main-header.navbar{
+  background      : rgba(255,255,255,.85) !important;
+  backdrop-filter : saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom   : 1px solid rgba(15,23,42,.06) !important;
+  box-shadow      : 0 1px 0 rgba(15,23,42,.02), 0 8px 24px rgba(15,23,42,.04) !important;
+}
+
+/* ── ELEVATED CARDS w/ gradient hover accent ────────────────── */
+.mpg-layout .card{
+  border-radius: 12px !important;
+  border-color : rgba(15,23,42,.06) !important;
+  box-shadow   : var(--mpg-shadow-card) !important;
+  transition   : transform .25s ease, box-shadow .25s ease, border-color .25s ease !important;
+  position     : relative;
+  overflow     : hidden;
+}
+.mpg-layout .card::before{
+  content: ""; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--mpg-grad-primary);
+  opacity: 0; transition: opacity .25s ease;
+}
+.mpg-layout .card:hover{
+  transform   : translateY(-2px);
+  box-shadow  : var(--mpg-shadow-hover) !important;
+  border-color: rgba(15,118,110,.18) !important;
+}
+.mpg-layout .card:hover::before{ opacity: 1; }
+
+.mpg-layout .card-header{
+  padding: 1rem 1.25rem !important;
+  font-size: .95rem !important;
+}
+
+/* ── DASHBOARD SUMMARY CARDS — premium ──────────────────────── */
+.mpg-layout .summary-card,
+.mpg-layout .summary-crd{
+  border-radius: 14px !important;
+  padding      : 1.15rem 1.25rem !important;
+  box-shadow   : var(--mpg-shadow-card) !important;
+  transition   : transform .25s ease, box-shadow .25s ease !important;
+  border-color : rgba(15,23,42,.06) !important;
+}
+.mpg-layout .summary-card:hover,
+.mpg-layout .summary-crd:hover{
+  transform : translateY(-3px) !important;
+  box-shadow: var(--mpg-shadow-hover) !important;
+}
+.mpg-layout .summary-card h6,
+.mpg-layout .summary-crd  h6{
+  color: var(--mpg-text-soft) !important;
+  font-size: .68rem !important;
+}
+.mpg-layout .summary-card .amount,
+.mpg-layout .summary-crd  .amount{
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.4px;
+}
+.mpg-layout .summary-card .amount .usd,
+.mpg-layout .summary-card .amount .npr{
+  background: var(--mpg-grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800 !important;
+}
+.mpg-layout .summary-card .amount .npr{
+  background: var(--mpg-grad-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Premium icon circle */
+.mpg-layout .summary-card > i,
+.mpg-layout .summary-crd  > i{
+  width: 48px !important; height: 48px !important;
+  font-size: 1.15rem !important;
+  border-radius: 14px !important;
+  background: var(--mpg-grad-primary-soft) !important;
+  color: var(--mpg-primary) !important;
+  border: 1px solid rgba(15,118,110,.15) !important;
+  box-shadow: 0 6px 14px rgba(15,118,110,.12), inset 0 1px 0 rgba(255,255,255,.6) !important;
+}
+
+/* Profit/Loss accent */
+.mpg-layout .summary-crd{
+  border-left: 0 !important;
+  position: relative;
+}
+.mpg-layout .summary-crd::after{
+  content:""; position:absolute; left:0; top:14px; bottom:14px; width:4px;
+  background: var(--mpg-grad-success); border-radius: 0 4px 4px 0;
+}
+.mpg-layout .summary-crd[data-loss="true"]::after{
+  background: var(--mpg-grad-danger);
+}
+.mpg-layout .summary-crd .profit-amount{
+  background: var(--mpg-grad-success);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800 !important;
+}
+.mpg-layout .summary-crd[data-loss="true"] .profit-amount{
+  background: var(--mpg-grad-danger);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── ACCOUNT BALANCE PILL — premium gradient ────────────────── */
+.mpg-layout .account-balance .account-balance-pill,
+.mpg-layout .account-balance .amount.account-balance-pill{
+  background   : var(--mpg-grad-success) !important;
+  color        : #fff !important;
+  padding      : .6rem 1.15rem !important;
+  border-radius: 999px !important;
+  font-size    : .95rem !important;
+  font-weight  : 800 !important;
+  letter-spacing: .2px;
+  border       : 0 !important;
+  box-shadow   : 0 8px 22px rgba(16,185,129,.30), inset 0 1px 0 rgba(255,255,255,.25) !important;
+  display      : inline-flex;
+  align-items  : center;
+  gap          : .35rem;
+}
+
+/* ── PAGE HEADER — subtle gradient surface ──────────────────── */
+.mpg-layout .page-header{
+  background    : linear-gradient(135deg,#ffffff 0%,#f8fafc 100%) !important;
+  border-color  : rgba(15,23,42,.06) !important;
+  border-radius : 12px !important;
+  padding       : 1rem 1.25rem !important;
+  box-shadow    : var(--mpg-shadow-card) !important;
+  position      : relative;
+  overflow      : hidden;
+}
+.mpg-layout .page-header::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+  background: var(--mpg-grad-primary);
+}
+.mpg-layout .page-header h2{
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.3px;
+}
+
+/* ── BUTTONS — premium gradient primary ─────────────────────── */
+.mpg-layout .btn{
+  border-radius: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: .15px;
+  transition: transform .12s ease, box-shadow .2s ease, filter .2s ease, background .2s ease !important;
+}
+.mpg-layout .btn:active{ transform: translateY(1px); }
+
+.mpg-layout .btn-primary{
+  background  : var(--mpg-grad-primary) !important;
+  border-color: transparent !important;
+  box-shadow  : 0 6px 16px rgba(15,118,110,.22), inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+.mpg-layout .btn-primary:hover{
+  filter: brightness(1.06);
+  box-shadow: 0 10px 22px rgba(15,118,110,.30), inset 0 1px 0 rgba(255,255,255,.22) !important;
+}
+.mpg-layout .btn-success{
+  background: var(--mpg-grad-success) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 16px rgba(16,185,129,.22) !important;
+}
+.mpg-layout .btn-info{
+  background: var(--mpg-grad-accent) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 16px rgba(14,165,233,.22) !important;
+}
+.mpg-layout .btn-warning{
+  background: var(--mpg-grad-warning) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 16px rgba(245,158,11,.22) !important;
+}
+.mpg-layout .btn-danger{
+  background: var(--mpg-grad-danger) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 16px rgba(244,63,94,.22) !important;
+}
+.mpg-layout .btn-secondary{
+  background: #fff !important;
+  border-color: rgba(15,23,42,.10) !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.04) !important;
+}
+.mpg-layout .btn-secondary:hover{
+  border-color: var(--mpg-primary) !important;
+  color: var(--mpg-primary) !important;
+  box-shadow: 0 6px 14px rgba(15,118,110,.10) !important;
+}
+
+/* ── FORMS — refined focus ring ─────────────────────────────── */
+.mpg-layout .form-control,
+.mpg-layout .form-select{
+  border-radius: 9px !important;
+  border-color : rgba(15,23,42,.10) !important;
+  transition   : border-color .15s ease, box-shadow .15s ease, background .15s ease !important;
+}
+.mpg-layout .form-control:hover,
+.mpg-layout .form-select:hover{
+  border-color: rgba(15,118,110,.30) !important;
+}
+.mpg-layout .form-control:focus,
+.mpg-layout .form-select:focus{
+  border-color: var(--mpg-primary) !important;
+  box-shadow  : var(--mpg-ring) !important;
+}
+
+/* ── TABLES — softer header, refined hover ──────────────────── */
+.mpg-layout .table thead th,
+.mpg-layout .table > thead > tr > th,
+.mpg-layout .thead-light th,
+.mpg-layout .thead-dark th{
+  background: linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%) !important;
+  font-size: .72rem !important;
+  letter-spacing: .8px !important;
+  color: #475569 !important;
+}
+.mpg-layout .table tbody tr{ transition: background .15s ease; }
+.mpg-layout .table tbody tr:hover td{
+  background: rgba(15,118,110,.04) !important;
+  filter: none !important;
+}
+.mpg-layout .table-responsive{
+  border-radius: 12px !important;
+  box-shadow: var(--mpg-shadow-card) !important;
+  border-color: rgba(15,23,42,.06) !important;
+}
+
+/* ── STAT CARDS (packages, etc.) ────────────────────────────── */
+.mpg-layout .stat-card{
+  border-radius: 14px !important;
+  border-color: rgba(15,23,42,.06) !important;
+  padding: 1.15rem 1.25rem !important;
+  box-shadow: var(--mpg-shadow-card) !important;
+  transition: transform .25s ease, box-shadow .25s ease !important;
+}
+.mpg-layout .stat-card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--mpg-shadow-hover) !important;
+}
+.mpg-layout .stat-icon{
+  width: 52px !important; height: 52px !important;
+  border-radius: 14px !important;
+  font-size: 1.25rem !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+.mpg-layout .stat-icon.primary{ background: var(--mpg-grad-primary-soft); color: var(--mpg-primary); }
+.mpg-layout .stat-icon.success{ background: linear-gradient(135deg,#ecfdf5,#d1fae5); }
+.mpg-layout .stat-icon.warning{ background: linear-gradient(135deg,#fffbeb,#fef3c7); }
+.mpg-layout .stat-icon.info   { background: linear-gradient(135deg,#eff6ff,#dbeafe); }
+.mpg-layout .stat-icon.danger { background: linear-gradient(135deg,#fef2f2,#fee2e2); }
+.mpg-layout .stat-value{
+  font-size: 1.5rem !important;
+  letter-spacing: -.4px;
+}
+
+/* ── BADGES — pill style, soft ──────────────────────────────── */
+.mpg-layout .badge{
+  border-radius: 999px !important;
+  padding: .32rem .65rem !important;
+  font-size: .68rem !important;
+  letter-spacing: .4px;
+}
+.mpg-layout .mpg-status{
+  box-shadow: inset 0 0 0 1px rgba(15,23,42,.02);
+}
+
+/* ── MODALS — premium ───────────────────────────────────────── */
+.mpg-layout .modal-content{
+  border-radius: 16px !important;
+  box-shadow: 0 30px 80px rgba(15,23,42,.25) !important;
+  border-color: rgba(15,23,42,.06) !important;
+}
+.mpg-layout .modal-header{
+  background: linear-gradient(135deg,#ecfdf5 0%,#cffafe 100%) !important;
+  border-bottom-color: rgba(15,118,110,.10) !important;
+}
+
+/* ── DROPDOWNS ──────────────────────────────────────────────── */
+.mpg-layout .dropdown-menu{
+  border-radius: 12px !important;
+  box-shadow: 0 20px 50px rgba(15,23,42,.14) !important;
+  border-color: rgba(15,23,42,.06) !important;
+}
+
+/* ── ACTION BUTTONS in navbar ───────────────────────────────── */
+.mpg-layout .mpg-action-btn{
+  border-radius: 9px !important;
+}
+.mpg-layout .mpg-action-btn:hover{
+  box-shadow: 0 4px 10px rgba(15,118,110,.10);
+}
+
+/* ── CHIPS pill polish ──────────────────────────────────────── */
+.mpg-layout .mpg-chip,
+.mpg-layout .wxbox{
+  box-shadow: 0 1px 2px rgba(15,23,42,.04);
+}
+.mpg-layout .mpg-chip-info{
+  background: var(--mpg-grad-primary) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 12px rgba(15,118,110,.22) !important;
+}
+
+/* ── USER DROPDOWN ──────────────────────────────────────────── */
+.mpg-layout .mpg-user-dropdown{
+  box-shadow: 0 1px 2px rgba(15,23,42,.04);
+}
+.mpg-layout .mpg-user-avatar{
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(15,118,110,.20), 0 4px 8px rgba(15,23,42,.08);
+}
+
+/* ── SECTION TITLES ─────────────────────────────────────────── */
+.mpg-layout .mpg-section-title{
+  border-bottom: 0;
+  padding-bottom: 0;
+  position: relative;
+  padding-left: .85rem;
+}
+.mpg-layout .mpg-section-title::before{
+  content:""; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:4px; height:1.1rem; border-radius:2px;
+  background: var(--mpg-grad-primary);
+}
+
+/* ── PAGINATION active gradient ─────────────────────────────── */
+.mpg-layout .pagination .page-item.active .page-link{
+  background: var(--mpg-grad-primary) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 12px rgba(15,118,110,.22) !important;
+}
+
+/* ── PROGRESS ───────────────────────────────────────────────── */
+.mpg-layout .progress-bar{
+  background: var(--mpg-grad-primary) !important;
+}
+
+/* ── MICRO-ANIMATIONS — smoother stagger ────────────────────── */
+@keyframes mpgFadeUp{
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.mpg-layout .content-wrapper > *{
+  animation: mpgFadeUp .35s cubic-bezier(.2,.7,.2,1) both;
+}
+.mpg-layout .card-grid .summary-card,
+.mpg-layout .card-grid .summary-crd,
+.mpg-layout .stats-container .stat-card{
+  animation: mpgFadeUp .4s cubic-bezier(.2,.7,.2,1) both;
+}
+.mpg-layout .card-row .summary-card:nth-child(1){ animation-delay:.02s; }
+.mpg-layout .card-row .summary-card:nth-child(2){ animation-delay:.06s; }
+.mpg-layout .card-row .summary-card:nth-child(3){ animation-delay:.10s; }
+.mpg-layout .card-row .summary-card:nth-child(4){ animation-delay:.14s; }
+.mpg-layout .card-row .summary-card:nth-child(5){ animation-delay:.18s; }
+.mpg-layout .card-row .summary-crd               { animation-delay:.22s; }
+
+/* Subtle "shimmer" sweep on primary buttons (one-shot on hover) */
+.mpg-layout .btn-primary{ position: relative; overflow: hidden; }
+.mpg-layout .btn-primary::after{
+  content:""; position:absolute; top:0; left:-60%;
+  width:40%; height:100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.28) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  transition: left .55s ease;
+  pointer-events:none;
+}
+.mpg-layout .btn-primary:hover::after{ left: 120%; }
+
+/* Active item subtle pulse on sidebar */
+@keyframes mpgPulseDot{
+  0%,100%{ box-shadow: 0 0 0 0 rgba(94,234,212,.45); }
+  50%    { box-shadow: 0 0 0 6px rgba(94,234,212,0); }
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+.mpg-layout .main-footer{
+  background: rgba(255,255,255,.7) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top-color: rgba(15,23,42,.06) !important;
+}
+
+/* ── RESPONSIVE polish ──────────────────────────────────────── */
+@media (max-width: 991.98px){
+  .mpg-layout .summary-card,
+  .mpg-layout .summary-crd{ padding: 1rem 1.1rem !important; }
+  .mpg-layout .summary-card .amount,
+  .mpg-layout .summary-crd  .amount{ font-size: 1.2rem !important; }
+  .mpg-layout .page-header h2{ font-size: 1rem !important; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .mpg-layout *,
+  .mpg-layout *::before,
+  .mpg-layout *::after{
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}

@@ -92,7 +92,7 @@ $accountBalance = $openingBalance + $totalIncome - $totalExpenses - $formattedTo
 
             <!-- Account Balance -->
 <div class="account-balance d-flex align-items-center">
-    <span class="amount revealed-number" style="background: linear-gradient(to right, #4caf50, #81c784); color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 1.2em; font-weight: bold;">
+    <span class="amount revealed-number account-balance-pill">
         Account Balance: Rs {{ number_format($accountBalance, 2) }}
     </span>
 </div>

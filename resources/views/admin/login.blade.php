@@ -39,9 +39,9 @@
     .shell{
       width:min(1040px,96vw);
       background:var(--card);
-      border-radius:18px;
-      box-shadow:0 20px 50px rgba(15,23,42,.12);
-      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 30px 80px rgba(15,23,42,.18), 0 2px 6px rgba(15,23,42,.04);
+      border:1px solid rgba(15,23,42,.06);
       overflow:hidden;
       display:grid;
       grid-template-columns:1.05fr 1fr;
@@ -102,7 +102,8 @@
       transition:border-color .15s ease, box-shadow .15s ease;
     }
     .field input::placeholder{color:#94a3b8}
-    .field input:focus{ border-color:var(--primary); box-shadow:0 0 0 3px rgba(15,118,110,.12) }
+    .field input:hover{ border-color:rgba(15,118,110,.30) }
+    .field input:focus{ border-color:var(--primary); box-shadow:0 0 0 4px rgba(15,118,110,.14) }
 
     .row{display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--muted); margin-top:-4px}
     .row label{display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-weight:500}
@@ -111,17 +112,29 @@
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      background:var(--primary);
+      background:linear-gradient(135deg,#0f766e 0%,#14b8a6 100%);
       color:#fff; border:0;
-      padding:12px 16px;
-      border-radius:10px;
+      padding:13px 16px;
+      border-radius:11px;
       cursor:pointer;
       font-weight:700;
       font-size:14px;
-      letter-spacing:.2px;
-      transition:background .15s ease, transform .15s ease, box-shadow .15s ease;
+      letter-spacing:.3px;
+      box-shadow:0 8px 22px rgba(15,118,110,.28), inset 0 1px 0 rgba(255,255,255,.18);
+      transition:transform .12s ease, box-shadow .2s ease, filter .2s ease;
+      position:relative; overflow:hidden;
     }
-    .btn:hover{background:var(--primary-dk); box-shadow:0 8px 20px rgba(15,118,110,.18)}
+    .btn::after{
+      content:""; position:absolute; top:0; left:-60%;
+      width:40%; height:100%;
+      background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.28) 50%,transparent 100%);
+      transform:skewX(-20deg);
+      transition:left .55s ease;
+      pointer-events:none;
+    }
+    .btn:hover{filter:brightness(1.06); box-shadow:0 12px 28px rgba(15,118,110,.34), inset 0 1px 0 rgba(255,255,255,.22)}
+    .btn:hover::after{left:120%}
+    .btn:active{transform:translateY(1px)}
 
     .err{color:#dc2626; font-size:12px; margin-top:4px}
     .fine{font-size:11.5px; color:var(--muted); text-align:center; margin-top:4px}
