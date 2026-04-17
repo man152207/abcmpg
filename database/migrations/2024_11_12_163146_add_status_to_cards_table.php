@@ -4,11 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::table('cards', function (Blueprint $table) {
-            $table->boolean('status')->default(true); // true for active, false for suspended
+            if (!Schema::hasColumn('cards', 'status')) {
+                $table->boolean('status')->default(true);
+            }
         });
     }
 

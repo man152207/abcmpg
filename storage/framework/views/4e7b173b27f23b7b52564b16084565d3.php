@@ -1,1 +1,0 @@
-<?php /**PATH /home/mpgcomnp/app.mpg.com.np/resources/views/admin/chat/partials/messages.blade.php ENDPATH**/ ?>

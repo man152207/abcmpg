@@ -7,17 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-{
-    Schema::table('cards', function (Blueprint $table) {
-        $table->decimal('total_spent', 15, 2)->default(0);
-    });
-}
+    {
+        Schema::table('cards', function (Blueprint $table) {
+            if (!Schema::hasColumn('cards', 'total_spent')) {
+                $table->decimal('total_spent', 15, 2)->default(0);
+            }
+        });
+    }
 
-public function down(): void
-{
-    Schema::table('cards', function (Blueprint $table) {
-        $table->dropColumn('total_spent');
-    });
-}
-
+    public function down(): void
+    {
+        Schema::table('cards', function (Blueprint $table) {
+            $table->dropColumn('total_spent');
+        });
+    }
 };

@@ -14,3 +14,35 @@ DB_PORT = "5432"
 DB_DATABASE = "heliumdb"
 DB_USERNAME = "postgres"
 APP_URL = "https://2886d36d-b2a1-46ef-8839-e02b4fcfec6a-00-2riexz0quqodp.sisko.replit.dev"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "php artisan serve --host=0.0.0.0 --port=5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["php", "artisan", "serve", "--host=0.0.0.0", "--port=5000"]

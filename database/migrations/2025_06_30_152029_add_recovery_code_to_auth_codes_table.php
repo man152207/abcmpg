@@ -4,12 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRecoveryCodeToAuthCodesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
         Schema::table('auth_codes', function (Blueprint $table) {
-            $table->string('recovery_code')->nullable()->after('auth_token_code');
+            if (!Schema::hasColumn('auth_codes', 'recovery_code')) {
+                $table->string('recovery_code')->nullable();
+            }
         });
     }
 
@@ -19,4 +21,4 @@ class AddRecoveryCodeToAuthCodesTable extends Migration
             $table->dropColumn('recovery_code');
         });
     }
-}
+};

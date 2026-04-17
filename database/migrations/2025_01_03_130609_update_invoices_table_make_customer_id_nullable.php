@@ -7,17 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-{
-    Schema::table('invoices', function (Blueprint $table) {
-        $table->unsignedBigInteger('customer_id')->nullable()->change();
-    });
-}
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            if (Schema::hasColumn('invoices', 'customer_id')) {
+                $table->unsignedBigInteger('customer_id')->nullable()->change();
+            }
+        });
+    }
 
-public function down()
-{
-    Schema::table('invoices', function (Blueprint $table) {
-        $table->unsignedBigInteger('customer_id')->nullable(false)->change();
-    });
-}
-
+    public function down()
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            if (Schema::hasColumn('invoices', 'customer_id')) {
+                $table->unsignedBigInteger('customer_id')->nullable(false)->change();
+            }
+        });
+    }
 };

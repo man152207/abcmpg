@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-{
-    Schema::table('customers', function (Blueprint $table) {
-        $table->string('profile_picture')->nullable();
-    });
-}
+    {
+        Schema::table('customers', function (Blueprint $table) {
+            if (!Schema::hasColumn('customers', 'profile_picture')) {
+                $table->string('profile_picture')->nullable();
+            }
+        });
+    }
 
-public function down()
-{
-    Schema::table('customers', function (Blueprint $table) {
-        $table->dropColumn('profile_picture');
-    });
-}
-
-    
+    public function down()
+    {
+        Schema::table('customers', function (Blueprint $table) {
+            $table->dropColumn('profile_picture');
+        });
+    }
 };

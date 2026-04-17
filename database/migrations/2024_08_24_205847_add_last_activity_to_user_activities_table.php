@@ -4,29 +4,27 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLastActivityToUserActivitiesTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
+        if (!Schema::hasTable('user_activities')) {
+            Schema::create('user_activities', function (Blueprint $table) {
+                $table->id();
+                $table->timestamps();
+            });
+        }
         Schema::table('user_activities', function (Blueprint $table) {
-            $table->timestamp('last_activity')->nullable()->after('daily_data_entries');
+            if (!Schema::hasColumn('user_activities', 'last_activity')) {
+                $table->timestamp('last_activity')->nullable();
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('user_activities', function (Blueprint $table) {
             $table->dropColumn('last_activity');
         });
     }
-}
+};

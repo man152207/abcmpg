@@ -6,22 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
-{
-    Schema::table('ad_accounts', function (Blueprint $table) {
-        $table->integer('initial_remaining_days')->nullable()->after('new_applied_budget');
-    });
-}
-    /**
-     * Reverse the migrations.
-     */
+    {
+        Schema::table('ad_accounts', function (Blueprint $table) {
+            if (!Schema::hasColumn('ad_accounts', 'initial_remaining_days')) {
+                $table->integer('initial_remaining_days')->nullable();
+            }
+        });
+    }
+
     public function down(): void
     {
         Schema::table('ad_accounts', function (Blueprint $table) {
-            //
+            $table->dropColumn('initial_remaining_days');
         });
     }
 };

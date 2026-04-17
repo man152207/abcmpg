@@ -4,13 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddThresholdReachedAndNewAppliedHistoryToAdAccountsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
         Schema::table('ad_accounts', function (Blueprint $table) {
-            $table->date('threshold_reached_date')->nullable()->after('active_since');
-            $table->text('new_applied_history')->nullable()->after('targeted_budget');
+            if (!Schema::hasColumn('ad_accounts', 'threshold_reached_date')) {
+                $table->date('threshold_reached_date')->nullable();
+            }
+            if (!Schema::hasColumn('ad_accounts', 'new_applied_history')) {
+                $table->text('new_applied_history')->nullable();
+            }
         });
     }
 
@@ -21,4 +25,4 @@ class AddThresholdReachedAndNewAppliedHistoryToAdAccountsTable extends Migration
             $table->dropColumn('new_applied_history');
         });
     }
-}
+};

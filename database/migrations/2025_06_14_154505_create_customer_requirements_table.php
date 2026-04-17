@@ -5,21 +5,25 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-class ChangeNoteTypeToStringInCustomerRequirementsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
+        if (!Schema::hasTable('customer_requirements')) {
+            Schema::create('customer_requirements', function (Blueprint $table) {
+                $table->id();
+                $table->timestamps();
+            });
+        }
         Schema::table('customer_requirements', function (Blueprint $table) {
-            $table->string('note_type', 50)->default('requirement')->change();
+            if (Schema::hasColumn('customer_requirements', 'note_type')) {
+                $table->string('note_type', 50)->default('requirement')->change();
+            }
         });
     }
 
     public function down()
     {
-        Schema::table('customer_requirements', function (Blueprint $table) {
-            $table->enum('note_type', ['requirement','suggestion'])
-                  ->default('requirement')
-                  ->change();
-        });
+        // no-op
     }
-}
+};

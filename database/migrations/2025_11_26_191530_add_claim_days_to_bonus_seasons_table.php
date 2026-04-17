@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bonus_seasons', function (Blueprint $table) {
-            $table->unsignedInteger('claim_days')
-                  ->default(7)
-                  ->after('min_spend'); // min_spend पछि राखेको
+            if (!Schema::hasColumn('bonus_seasons', 'claim_days')) {
+                $table->unsignedInteger('claim_days')->default(7);
+            }
         });
     }
 

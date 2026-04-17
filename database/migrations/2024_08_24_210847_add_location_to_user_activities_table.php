@@ -6,22 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
-{
-    Schema::table('user_activities', function (Blueprint $table) {
-        $table->decimal('latitude', 10, 8)->nullable()->after('last_activity');
-        $table->decimal('longitude', 11, 8)->nullable()->after('latitude');
-    });
-}
+    {
+        Schema::table('user_activities', function (Blueprint $table) {
+            if (!Schema::hasColumn('user_activities', 'latitude')) {
+                $table->decimal('latitude', 10, 8)->nullable();
+            }
+            if (!Schema::hasColumn('user_activities', 'longitude')) {
+                $table->decimal('longitude', 11, 8)->nullable();
+            }
+        });
+    }
 
-public function down()
-{
-    Schema::table('user_activities', function (Blueprint $table) {
-        $table->dropColumn(['latitude', 'longitude']);
-    });
-}
-
+    public function down()
+    {
+        Schema::table('user_activities', function (Blueprint $table) {
+            $table->dropColumn(['latitude', 'longitude']);
+        });
+    }
 };

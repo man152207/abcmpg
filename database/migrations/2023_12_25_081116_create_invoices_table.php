@@ -6,26 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        if (!Schema::hasTable('invoices')) {
+            Schema::create('invoices', function (Blueprint $table) {
+                $table->id();
+                $table->timestamps();
+            });
+        }
+
         Schema::table('invoices', function (Blueprint $table) {
-            $table->unsignedBigInteger('ad_id')->nullable()->after('customer'); // Link to ads table
-            $table->decimal('amount', 10, 2)->nullable()->after('description'); // Amount of the invoice
-            $table->string('status')->default('Generated')->after('amount'); // Invoice status
-            $table->foreign('ad_id')->references('id')->on('ads')->onDelete('cascade'); // Foreign key constraint
+            if (!Schema::hasColumn('invoices', 'ad_id')) {
+                $table->unsignedBigInteger('ad_id')->nullable();
+            }
+            if (!Schema::hasColumn('invoices', 'amount')) {
+                $table->decimal('amount', 10, 2)->nullable();
+            }
+            if (!Schema::hasColumn('invoices', 'status')) {
+                $table->string('status')->default('Generated');
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->dropForeign(['ad_id']);
             $table->dropColumn(['ad_id', 'amount', 'status']);
         });
     }

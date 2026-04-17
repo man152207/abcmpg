@@ -9,13 +9,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('duty_schedules', function (Blueprint $table) {
-            // main date of that row (required by controller queries)
-            $table->date('duty_date')->after('id');
-
-            // who is on duty that day (controller create() / saveMonth() fills these)
-            $table->string('staff1')->nullable()->after('duty_date');
-            $table->string('staff2')->nullable()->after('staff1');
-            $table->string('staff3')->nullable()->after('staff2');
+            if (!Schema::hasColumn('duty_schedules', 'duty_date')) {
+                $table->date('duty_date')->nullable();
+            }
+            if (!Schema::hasColumn('duty_schedules', 'staff1')) {
+                $table->string('staff1')->nullable();
+            }
+            if (!Schema::hasColumn('duty_schedules', 'staff2')) {
+                $table->string('staff2')->nullable();
+            }
+            if (!Schema::hasColumn('duty_schedules', 'staff3')) {
+                $table->string('staff3')->nullable();
+            }
         });
     }
 

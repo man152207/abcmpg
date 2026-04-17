@@ -1,1 +1,0 @@
-<?php /**PATH /home/mpgcomnp/app.mpg.com.np/resources/views/email/on_schedule.blade.php ENDPATH**/ ?>

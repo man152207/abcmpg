@@ -7,21 +7,24 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-{
-    Schema::table('invoices', function (Blueprint $table) {
-        $table->unsignedBigInteger('ad_id')->nullable()->after('customer');
-        $table->decimal('amount', 10, 2)->nullable()->after('description');
-        $table->string('status')->default('Generated')->after('amount');
-        $table->foreign('ad_id')->references('id')->on('ads')->onDelete('cascade');
-    });
-}
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            if (!Schema::hasColumn('invoices', 'ad_id')) {
+                $table->unsignedBigInteger('ad_id')->nullable();
+            }
+            if (!Schema::hasColumn('invoices', 'amount')) {
+                $table->decimal('amount', 10, 2)->nullable();
+            }
+            if (!Schema::hasColumn('invoices', 'status')) {
+                $table->string('status')->default('Generated');
+            }
+        });
+    }
 
-public function down(): void
-{
-    Schema::table('invoices', function (Blueprint $table) {
-        $table->dropForeign(['ad_id']);
-        $table->dropColumn(['ad_id', 'amount', 'status']);
-    });
-}
-
+    public function down(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropColumn(['ad_id', 'amount', 'status']);
+        });
+    }
 };
