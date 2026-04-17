@@ -1,0 +1,356 @@
+Stack
+Context
+Flare
+Share
+Share with Flare
+Docs
+
+Stack
+
+Context
+
+Debug
+Create Share
+Docs
+
+Ignition Settings
+Docs
+Editor
+
+PhpStorm
+Theme
+auto
+Save settings
+Settings will be saved locally in ~/.ignition.json.
+
+SQLSTATE[08006] [7] could not translate host name "helium" to address: Temporary failure in name resolution (Connection: pgsql, SQL: select * from "admins" where "email" = info@adsmpg.com limit 1)
+Illuminate
+ \ 
+Database
+ \ 
+QueryException
+PHP 8.2.23
+10.50.2
+SQLSTATE[08006] [7] could not translate host name "helium" to address: Temporary failure in name resolution
+select * from "admins" where "email" = info@adsmpg.com limit 1
+
+
+
+Expand vendor frames
+14 vendor frames
+App
+ \ 
+Http
+ \ 
+Controllers
+ \ 
+AdminController
+ 
+: 64
+login
+6 vendor frames
+App
+ \ 
+Http
+ \ 
+Middleware
+ \ 
+TrackPageView
+ 
+: 13
+handle
+38 vendor frames
+public
+ / 
+index
+.php
+ 
+: 51
+require_once
+1 vendor frame
+app
+ / 
+Http
+ / 
+Controllers
+ / 
+AdminController
+.php
+ 
+: 64
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            'phone' => $request->phone,
+
+        ]);
+
+
+
+        Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'));
+
+
+
+        return redirect()->route('ads.showAllAds');
+
+    }
+
+
+
+    public function login(Request $request)
+
+    {
+
+        $request->validate([
+
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+
+            'password' => ['required', 'string', 'max:255'],
+
+        ]);
+
+
+
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            $this->trackUserActivity(new Request(['activity_type' => 'login']));
+
+            return redirect()->route('ads.showAllAds');
+
+        } else {
+
+            return back()->withErrors(['email' => 'Invalid credentials.']);
+
+        }
+
+    }
+
+
+
+    public function logout()
+
+    {
+
+        Auth::guard('admin')->logout();
+
+        return redirect('/');
+
+    }
+
+public function showUserDetails($id)
+
+{
+arguments
+$credentials:array
+{
+    "email": "info@adsmpg.com",
+    "password": "Pokhara@1"
+}
+
+$remember:null
+null
+
+App
+Routing
+Request
+Browser
+Headers
+Body
+Context
+Versions
+Exception
+App
+Routing
+Controller
+App\Http\Controllers\AdminController@login
+
+Route name
+admin.login
+
+Middleware
+web
+
+Request
+https://abcmpg.replit.app/admin/login
+POST
+curl "https://abcmpg.replit.app/admin/login" \
+   -X POST \
+   -H 'host: abcmpg.replit.app' \
+   -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36' \
+   -H 'content-length: 92' \
+   -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+   -H 'accept-encoding: gzip, deflate, br, zstd' \
+   -H 'accept-language: en-US,en;q=0.9' \
+   -H 'cache-control: max-age=0' \
+   -H 'content-type: application/x-www-form-urlencoded' \
+   -H 'cookie: <CENSORED>' \
+   -H 'origin: https://abcmpg.replit.app' \
+   -H 'priority: u=0, i' \
+   -H 'referer: https://abcmpg.replit.app/' \
+   -H 'sec-ch-ua: "Google Chrome";v="147", "Not.A/Brand";v="8", "Chromium";v="147"' \
+   -H 'sec-ch-ua-mobile: ?0' \
+   -H 'sec-ch-ua-platform: "Windows"' \
+   -H 'sec-fetch-dest: document' \
+   -H 'sec-fetch-mode: navigate' \
+   -H 'sec-fetch-site: same-origin' \
+   -H 'sec-fetch-user: ?1' \
+   -H 'server-timing: depproxy;dur=1776411506188' \
+   -H 'traceparent: 00-e701617a0061bc42ddf636ebd2873287-ca9c1cf0465b9726-01' \
+   -H 'upgrade-insecure-requests: 1' \
+   -H 'via: 1.1 google' \
+   -H 'x-cloud-trace-context: e701617a0061bc42ddf636ebd2873287/14599575910326441766;o=1' \
+   -H 'x-forwarded-for: 27.34.72.246, 34.117.33.233, 35.191.67.255,34.142.141.89' \
+   -H 'x-forwarded-host: abcmpg.replit.app' \
+   -H 'x-forwarded-proto: https' \
+   -F '_token=N5uRJmU17Zq4BQws9QVgUBlASIJCTcl4e7C7ClzF' -F 'email=info@adsmpg.com' -F 'password=<CENSORED>'
+
+
+Browser
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36
+
+Headers
+host
+abcmpg.replit.app
+
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36
+
+content-length
+92
+
+accept
+text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+accept-encoding
+gzip, deflate, br, zstd
+
+accept-language
+en-US,en;q=0.9
+
+cache-control
+max-age=0
+
+content-type
+application/x-www-form-urlencoded
+
+cookie
+<CENSORED>
+
+origin
+https://abcmpg.replit.app
+
+priority
+u=0, i
+
+referer
+https://abcmpg.replit.app/
+
+sec-ch-ua
+"Google Chrome";v="147", "Not.A/Brand";v="8", "Chromium";v="147"
+
+sec-ch-ua-mobile
+?0
+
+sec-ch-ua-platform
+"Windows"
+
+sec-fetch-dest
+document
+
+sec-fetch-mode
+navigate
+
+sec-fetch-site
+same-origin
+
+sec-fetch-user
+?1
+
+server-timing
+depproxy;dur=1776411506188
+
+traceparent
+00-e701617a0061bc42ddf636ebd2873287-ca9c1cf0465b9726-01
+
+upgrade-insecure-requests
+1
+
+via
+1.1 google
+
+x-cloud-trace-context
+e701617a0061bc42ddf636ebd2873287/14599575910326441766;o=1
+
+x-forwarded-for
+27.34.72.246, 34.117.33.233, 35.191.67.255,34.142.141.89
+
+x-forwarded-host
+abcmpg.replit.app
+
+x-forwarded-proto
+https
+
+Body
+{
+    "_token": "N5uRJmU17Zq4BQws9QVgUBlASIJCTcl4e7C7ClzF",
+    "email": "info@adsmpg.com",
+    "password": "<CENSORED>"
+}
+
+Context
+Versions
+Php Version
+8.2.23
+
+Laravel Version
+10.50.2
+
+Laravel Locale
+en
+
+Laravel Config Cached
+false
+App Debug
+true
+App Env
+local
+
+Exception
+Raw Sql
+select * from "admins" where "email" = ? limit 1
+
+·
+Source
+·
+Docs
+·
+Laravel
+Ignition is built byFlare, the Laravel error reporting service.
