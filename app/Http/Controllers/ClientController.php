@@ -161,16 +161,16 @@ class ClientController extends Controller
                 DB::raw(DbSql::as($sumNRP, 'totalNRP')),
                 DB::raw(DbSql::as($dfCreated, 'monthYear'))
             )
-                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
-                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
+                ->groupByRaw($dfCreated)
+                ->orderByRaw($dfCreated . ' desc')
                 ->get();
 
             $monthlyExp = Other_Exp::select(
-                DB::raw('SUM(amount) as totalAmt'),
+                DB::raw(DbSql::as('SUM(amount)', 'totalAmt')),
                 DB::raw(DbSql::as($dfDate, 'monthYear'))
             )
-                ->groupByRaw(DbSql::dateFormat('created_at', '%Y-%m'))
-                ->orderByRaw(DbSql::dateFormat('created_at', '%Y-%m') . ' desc')
+                ->groupByRaw($dfDate)
+                ->orderByRaw($dfDate . ' desc')
                 ->get();
 
             return view('client.summary', compact('monthlySummaries', 'monthlyExp'));
