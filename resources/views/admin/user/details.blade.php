@@ -35,7 +35,7 @@
     <table class="table table-sm table-striped">
       <thead>
         <tr>
-          <th style="width:65%;">Page</th>
+          <th>Page</th>
           <th class="text-right">Visits</th>
         </tr>
       </thead>
@@ -224,21 +224,17 @@
 
 @if($img)
     <img src="{{ $img }}" alt="{{ $user->name }}" class="profile-picture-large"
-         style="height:150px;width:150px;object-fit:cover;border-radius:50%;border:1px solid #ddd;">
+         class="user-profile-pic">
 @else
-    <i class="fas fa-user-circle" style="font-size: 150px; color: rgba(0, 0, 0, 0.7);"></i>
+    <i class="fas fa-user-circle user-profile-icon"></i>
 @endif
                     <div class="user-details">
                         <label>Status:</label>
                         <span id="userStatus">
                             @if($isOnline)
-                                <span style="color: green; font-weight: bold;">
-                                    <i class="fas fa-circle" style="animation: blink 1s infinite;"></i> Online
-                                </span>
+                                <span class="status-online"><i class="fas fa-circle"></i> Online</span>
                             @else
-                                <span style="color: red; font-weight: bold;">
-                                    <i class="fas fa-circle"></i> Offline
-                                </span>
+                                <span class="status-offline"><i class="fas fa-circle"></i> Offline</span>
                             @endif
                         </span>
                     </div>
@@ -268,7 +264,7 @@
 </div>
                     <div class="mt-4">
                         <a href="{{ url('/admin/dashboard/user/edit/' . $user->id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
-                        <form action="{{ url('/admin/dashboard/user/delete/' . $user->id) }}" method="post" style="display:inline;">
+                        <form action="{{ url('/admin/dashboard/user/delete/' . $user->id) }}" method="post" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -287,9 +283,9 @@
             url: '/admin/dashboard/user/check-status/{{ $user->id }}',
             success: function(data) {
                 if (data.isOnline) {
-                    $('#userStatus').html('<span style="color: green; font-weight: bold;"><i class="fas fa-circle" style="animation: blink 1s infinite;"></i> Online</span>');
+                    $('#userStatus').html('<span class="status-online"><i class="fas fa-circle"></i> Online</span>');
                 } else {
-                    $('#userStatus').html('<span style="color: red; font-weight: bold;"><i class="fas fa-circle"></i> Offline</span>');
+                    $('#userStatus').html('<span class="status-offline"><i class="fas fa-circle"></i> Offline</span>');
                 }
             }
         });

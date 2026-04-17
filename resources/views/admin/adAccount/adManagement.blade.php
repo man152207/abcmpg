@@ -12,18 +12,18 @@
     @csrf
     <h5 class="mb-3">New Target</h5>
     <div class="d-flex flex-wrap gap-2 align-items-center">
-        <select name="account_name" class="js-example-basic-multiple form-control" style="min-width:200px;" required>
+        <select name="account_name" class="js-example-basic-multiple form-control adm-select" required>
             <option value="">Select Ad Account</option>
             @foreach($adAccountOptions as $option)
                 <option value="{{ $option->Ad_Account_Display }}">{{ $option->Ad_Account_Display }}</option>
             @endforeach
         </select>
-        <input type="date" name="active_since" class="form-control" style="max-width:160px;" value="{{ date('Y-m-d') }}">
-        <input type="date" name="threshold_reached_date" class="form-control" style="max-width:180px;" placeholder="Threshold Reached Date" oninput="calculateRemainingDays()">
-        <input type="number" name="initial_remaining_days" class="form-control" style="max-width:150px;" placeholder="Remaining Days" required readonly>
-        <input type="number" name="account_threshold" class="form-control" style="max-width:160px;" placeholder="Account Threshold" step="0.01" oninput="updateBudget()">
-        <input type="number" name="running_ads_balance" class="form-control" style="max-width:170px;" placeholder="Running Ads Balance" step="0.01" oninput="updateBudget()">
-        <input type="number" name="targeted_budget" class="form-control" style="max-width:150px;" placeholder="Targeted Budget" step="0.01" readonly>
+        <input type="date" name="active_since" class="form-control adm-w-160" value="{{ date('Y-m-d') }}">
+        <input type="date" name="threshold_reached_date" class="form-control adm-w-180" placeholder="Threshold Reached Date" oninput="calculateRemainingDays()">
+        <input type="number" name="initial_remaining_days" class="form-control adm-w-150" placeholder="Remaining Days" required readonly>
+        <input type="number" name="account_threshold" class="form-control adm-w-160" placeholder="Account Threshold" step="0.01" oninput="updateBudget()">
+        <input type="number" name="running_ads_balance" class="form-control adm-w-170" placeholder="Running Ads Balance" step="0.01" oninput="updateBudget()">
+        <input type="number" name="targeted_budget" class="form-control adm-w-150" placeholder="Targeted Budget" step="0.01" readonly>
         <button type="submit" class="btn btn-success">Add</button>
     </div>
 </form>
@@ -64,8 +64,8 @@
                     <td>{{ $adAccount->new_applied_history ?? 'N/A' }}</td>
                     <td>
                         <button class="btn btn-primary btn-sm edit-btn" onclick="editRow({{ $adAccount->id }})">Edit</button>
-                        <button class="btn btn-success btn-sm save-btn" onclick="saveRow({{ $adAccount->id }})" style="display:none;">Save</button>
-                        <form method="POST" action="/ad-management/adaccount/{{ $adAccount->id }}" style="display:inline;">
+                        <button class="btn btn-success btn-sm save-btn d-none" onclick="saveRow({{ $adAccount->id }})">Save</button>
+                        <form method="POST" action="/ad-management/adaccount/{{ $adAccount->id }}" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -143,7 +143,7 @@
             <tr>
                 <td>{{ $account->ad_account_name }}</td>
                 <td>
-                    <form method="POST" action="{{ route('adaccount.grouped.delete', $account->id) }}" style="display:inline;">
+                    <form method="POST" action="{{ route('adaccount.grouped.delete', $account->id) }}" class="d-inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -226,8 +226,8 @@ function editRow(id) {
         }
         field.contentEditable = "true";
     });
-    row.querySelector(".edit-btn").style.display = "none";
-    row.querySelector(".save-btn").style.display = "inline-block";
+    row.querySelector(".edit-btn").classList.add("d-none");
+    row.querySelector(".save-btn").classList.remove("d-none");
 }
 
 function saveRow(id) {
@@ -264,8 +264,8 @@ function saveRow(id) {
     .catch(() => alert('Error updating row.'));
 
     fields.forEach(field => { field.contentEditable = "false"; });
-    row.querySelector(".edit-btn").style.display = "inline-block";
-    row.querySelector(".save-btn").style.display = "none";
+    row.querySelector(".edit-btn").classList.remove("d-none");
+    row.querySelector(".save-btn").classList.add("d-none");
 }
 
 function toggleAll(source) {

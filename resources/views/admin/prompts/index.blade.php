@@ -55,7 +55,7 @@
       <input id="client" type="text" placeholder="e.g., Sheetal Property Pvt. Ltd.">
 
       <!-- live hint + suggestions dropdown -->
-      <div id="clientHint" style="margin-top:6px; font-size:12px; color:#475569;"></div>
+      <div id="clientHint" class="prmpt-client-hint"></div>
       <div id="clientSuggest" class="prmpt-suggest"></div>
     </div>
 
@@ -76,14 +76,14 @@
     <div class="prmpt-form-group">
       <label for="charCount">Characters</label>
       <input id="charCount" type="text" value="0" readonly>
-      <span class="prmpt-muted" style="font-size: 0.75rem; color: var(--prmpt-muted); margin-left: 0.5rem;">
+      <span class="prmpt-muted prmpt-tip-row">
         Tips:
-        <span class="prmpt-kbd" style="font-size: 0.6875rem; border: 1px solid var(--prmpt-border); padding: 0.125rem 0.375rem; border-radius: 6px; color: #334155; background: #f1f5f9;">Ctrl/⌘ + Enter</span> add •
-        <span class="prmpt-kbd" style="font-size: 0.6875rem; border: 1px solid var(--prmpt-border); padding: 0.125rem 0.375rem; border-radius: 6px; color: #334155; background: #f1f5f9;">/</span> focus search
+        <span class="prmpt-kbd">Ctrl/⌘ + Enter</span> add •
+        <span class="prmpt-kbd">/</span> focus search
       </span>
     </div>
 
-    <div style="display: flex; gap: 0.5rem;">
+    <div class="prmpt-btn-row">
       <button class="prmpt-btn prmpt-btn-primary" id="addBtn">➕ Add Prompt</button>
       <button class="prmpt-btn prmpt-btn-ghost" id="clearBtn">🧹 Clear</button>
     </div>
@@ -93,24 +93,24 @@
   <div class="prmpt-card">
     <div class="prmpt-card-header">Saved Prompts</div>
     <div class="prmpt-card-body">
-      <div class="prmpt-toolbar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-        <h2 style="margin: 0; font-size: 1rem; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">Saved Prompts</h2>
+      <div class="prmpt-toolbar">
+        <h2 class="prmpt-toolbar-h2">Saved Prompts</h2>
         <div class="prmpt-muted" id="totalCount">0 items</div>
       </div>
 
       <div id="list" class="prmpt-prompt-list"></div>
 
-      <div id="empty" class="prmpt-prompt-item" style="display: none; text-align: center; color: var(--prmpt-muted); border-style: dashed; border-radius: 8px; padding: 1.5rem;">
+      <div id="empty" class="prmpt-prompt-item prmpt-empty" style="display: none;">
         No prompts yet. Use the form above to add one.
       </div>
 
-      <div id="pager" style="display: none; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+      <div id="pager" class="prmpt-pager" style="display: none;">
         <button class="prmpt-btn prmpt-btn-ghost" id="prevPage">← Previous</button>
-        <span class="prmpt-hint" id="pageInfo" style="font-size: 0.75rem; color: var(--prmpt-muted);">Page 1</span>
+        <span class="prmpt-hint" id="pageInfo">Page 1</span>
         <button class="prmpt-btn prmpt-btn-ghost" id="nextPage">Next →</button>
       </div>
 
-      <div style="margin-top: 0.75rem;">
+      <div class="prmpt-wipe-row">
         <button class="prmpt-btn prmpt-btn-danger" id="wipeBtn">🗑️ Wipe All (Hard delete)</button>
       </div>
     </div>
