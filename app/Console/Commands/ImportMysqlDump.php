@@ -200,6 +200,14 @@ class ImportMysqlDump extends Command
         return max(1, $rowCount);
     }
 
+    /** Tables that must never be imported (Laravel system tables or security-sensitive) */
+    private const SKIP_TABLES = [
+        'migrations',
+        'personal_access_tokens',
+        'password_reset_tokens',
+        'password_resets',
+    ];
+
     private function extractInserts(string $sql, array $onlyTables): array
     {
         $inserts = [];
@@ -228,7 +236,11 @@ class ImportMysqlDump extends Command
                 if ($pos !== false) {
                     $stmt = substr($stmt, $pos);
                     $table = $this->extractTableName($stmt);
-                    if ($table && (empty($onlyTables) || in_array($table, $onlyTables))) {
+                    if (
+                        $table
+                        && !in_array($table, self::SKIP_TABLES, true)
+                        && (empty($onlyTables) || in_array($table, $onlyTables))
+                    ) {
                         $inserts[$table][] = $stmt;
                     }
                 }
