@@ -11,7 +11,7 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    timeout-minutes: 1000
 
     steps:
       - name: Checkout code
